@@ -1,0 +1,59 @@
+{
+  "name": "ts-gremlin-test",
+  "version": "1.0.0",
+  "description": "Unit tests for gremlin (TinkerPop3) written directly to the node-java API in Typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "keywords": [
+    "typescript",
+    "java",
+    "tinkerpop",
+    "ts-java",
+    "node-java"
+  ],
+  "author": "Jim Lloyd <jim.lloyd@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "async": "^0.9.0",
+    "bluebird": "^2.9.9",
+    "chai": "^2.0.0",
+    "glob": "^4.4.0",
+    "json-stable-stringify": "^1.0.0",
+    "lodash": "^3.2.0",
+    "mocha": "^2.1.0",
+    "semaphore": "^1.0.1",
+    "should": "^5.0.0",
+    "temp": "^0.8.1",
+    "ts-java": "git://github.lab.redseal.net/redseal/ts-java.git#dddcf76",
+    "tsd": ">=0.6.0-beta.5",
+    "tslint": "^2.1.1",
+    "typescript": "^1.4.1"
+  },
+  "dependencies": {
+    "java": "^0.4.6",
+    "source-map-support": "^0.2.9"
+  },
+  "tsjava": {
+    "classpath": [
+      "target/dependency/**/*.jar"
+    ],
+    "seedClasses": [
+      "com.tinkerpop.gremlin.structure.Graph",
+      "com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph",
+      "com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory",
+      "com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda",
+      "java.lang.ClassLoader",
+      "java.lang.Long",
+      "java.lang.reflect.Array",
+      "java.util.ArrayList"
+    ],
+    "whiteList": [
+      "java.util.",
+      "java.math.",
+      "java.lang.",
+      "com.tinkerpop.gremlin."
+    ]
+  }
+}
