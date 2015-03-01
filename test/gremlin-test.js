@@ -25,7 +25,7 @@ require('source-map-support').install();
 var chai = require('chai');
 var glob = require('glob');
 var java = require('java');
-var noargs;
+var J = require('../index');
 before(function (done) {
     java.asyncOptions = {
         promiseSuffix: 'Promise',
@@ -35,7 +35,7 @@ before(function (done) {
     filenames.forEach(function (name) {
         java.classpath.push(name);
     });
-    noargs = java.newArray('java.lang.Object', []);
+    J.initialize();
     done();
 });
 describe('Gremlin', function () {
@@ -46,18 +46,16 @@ describe('Gremlin', function () {
     var temp = require('temp');
     // Cleanup temp files at exit.
     temp.track();
-    var TinkerGraph;
     var graph;
     before(function (done) {
-        TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
-        expect(TinkerGraph).to.be.ok;
+        expect(J.TinkerGraph).to.be.ok;
         done();
     });
     // ## TinkerGraph in-memory
     // Tests using an empty in-memory TinkerGraph database instance.
     describe('TinkerGraph empty', function () {
         before(function () {
-            graph = TinkerGraph.openSync();
+            graph = J.TinkerGraph.openSync();
             expect(graph).to.be.ok;
         });
         after(function (done) {
@@ -77,14 +75,14 @@ describe('Gremlin', function () {
         // Check that the Gremlin statements `graph.V.count()` and `graph.E.count()` return `0`.
         it('should be empty', function (done) {
             // Count vertices.
-            var allVerticesTraversal = graph.VSync(noargs);
+            var allVerticesTraversal = graph.VSync(J.noargs);
             // The "count" method applies to a Traversal, destructively measuring the number of
             // elements in it.
             allVerticesTraversal.countSync().next(function (err, count) {
                 expect(err).to.not.exist;
                 expect(count.valueOf()).to.equal(0);
                 // Count edges.
-                var allEdgesTraversal = graph.ESync(noargs);
+                var allEdgesTraversal = graph.ESync(J.noargs);
                 allEdgesTraversal.countSync().next(function (err, count) {
                     expect(err).to.not.exist;
                     expect(count.valueOf()).to.equal(0);
@@ -97,12 +95,10 @@ describe('Gremlin', function () {
     // Tests using the graph referenced in Gremlin documentation examples like
     // https://github.com/tinkerpop/gremlin/wiki/Basic-Graph-Traversals
     describe('TinkerGraph built-in example', function () {
-        var TinkerFactory;
         var graph;
         before(function () {
-            TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
-            expect(TinkerFactory).to.be.ok;
-            graph = TinkerFactory.createClassicSync();
+            expect(J.TinkerFactory).to.be.ok;
+            graph = J.TinkerFactory.createClassicSync();
             expect(graph).to.be.ok;
         });
         after(function (done) {
@@ -123,8 +119,7 @@ describe('Gremlin', function () {
         // Gremlin would be `graph.V.value('name').dedup`.  However, it can also be written with
         // the shortcut syntax for property access: `graph.V.name.dedup`.
         it('has certain names', function () {
-            var props = java.newArray('java.lang.String', ['name']);
-            var distinctNamesTraversal = graph.VSync(noargs).valuesSync(props).dedupSync();
+            var distinctNamesTraversal = graph.VSync(J.noargs).valuesSync(J.S(['name'])).dedupSync();
             expect(distinctNamesTraversal).to.be.ok;
             return distinctNamesTraversal.toListPromise().then(function (list) { return list.toArrayPromise(); }).then(function (data) {
                 var expected = ['lop', 'vadas', 'marko', 'peter', 'ripple', 'josh'];
@@ -132,6 +127,35 @@ describe('Gremlin', function () {
                 expected.sort();
                 data.sort();
                 expect(data).to.deep.equal(expected);
+            });
+        });
+        // See http://gremlindocs.com/#recipes/shortest-path, first method
+        it('can inefficiently find many paths between two nodes', function (done) {
+            var traversal = graph.VSync(J.ids([2]));
+            traversal = traversal.asSync('x');
+            traversal = traversal.bothSync(J.noargs);
+            //       traversal = traversal.repeatSync();
+            //         .jump('x', function (it) { return it.object.id != "6" && it.loops < 6; }).path();
+            //       traversal.toJSON(function(err, data) {
+            //         should.not.exist(err);
+            //         expect(data).to.be.ok;
+            //         expect(data).to.have.length(39);
+            //         done();
+            //       });
+            expect(traversal).to.be.ok;
+            done();
+        });
+        it('g.V().has("name", "marko") -> v.value("name")', function () {
+            return graph.VSync(J.noargs).hasSync('name', 'marko').nextPromise().then(function (v) {
+                expect(v).to.be.ok;
+                var name = v.valueSync('name');
+                expect(name).to.be.equal('marko');
+            });
+        });
+        it('g.V().valueSync("name")', function () {
+            return graph.VSync(J.noargs).valuesSync(J.S(['name'])).toListPromise().then(function (list) { return list.toArrayPromise(); }).then(function (data) {
+                expect(data).to.be.ok;
+                console.log(data);
             });
         });
     });

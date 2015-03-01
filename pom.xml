@@ -6,14 +6,24 @@
   <groupId>com.redseal</groupId>
   <artifactId>tinkerpop</artifactId>
   <packaging>jar</packaging>
-  <version>3.0.0.M7</version>
+  <version>0.0.0.SNAPSHOT</version>
   <name>tinkerpop</name>
 
   <properties>
     <junit.version>4.11</junit.version>
-    <gremlin.version>3.0.0.M7</gremlin.version>
+    <gremlin.version>3.0.0-SNAPSHOT</gremlin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <!-- Point to the SonaType snapshot repo, so that we don't depend on Maven environment -->
+  <repositories>
+    <repository>
+      <snapshots />
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+  </repositories>
 
   <dependencies>
 

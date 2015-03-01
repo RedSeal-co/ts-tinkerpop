@@ -101,7 +101,7 @@ $(JAVA_D_TS) : o/all-installed.lastran package.json
 	node_modules/.bin/ts-java
 
 clean-ts-java:
-	rm $(JAVA_D_TS)
+	rm -f $(JAVA_D_TS)
 
 .PHONY: ts-java java.d.ts
 

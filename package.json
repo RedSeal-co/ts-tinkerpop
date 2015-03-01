@@ -26,13 +26,14 @@
     "semaphore": "^1.0.1",
     "should": "^5.0.0",
     "temp": "^0.8.1",
-    "ts-java": "git://github.lab.redseal.net/redseal/ts-java.git#dddcf76",
+    "ts-java": "git://github.lab.redseal.net/redseal/ts-java.git#cb240e8",
     "tsd": ">=0.6.0-beta.5",
     "tslint": "^2.1.1",
     "typescript": "^1.4.1"
   },
   "dependencies": {
     "java": "^0.4.6",
+    "lodash": "^3.3.1",
     "source-map-support": "^0.2.9"
   },
   "tsjava": {
@@ -40,10 +41,11 @@
       "target/dependency/**/*.jar"
     ],
     "seedClasses": [
-      "com.tinkerpop.gremlin.structure.Graph",
-      "com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph",
-      "com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory",
       "com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda",
+      "com.tinkerpop.gremlin.process.graph.traversal.__",
+      "com.tinkerpop.gremlin.structure.Graph",
+      "com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory",
+      "com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph",
       "java.lang.ClassLoader",
       "java.lang.Long",
       "java.lang.reflect.Array",
