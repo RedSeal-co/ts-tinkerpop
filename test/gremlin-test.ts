@@ -1,5 +1,6 @@
 // # gremlin-test.ts
 /// <reference path='../typings/chai/chai.d.ts'/>
+/// <reference path='../typings/debug/debug.d.ts' />
 /// <reference path='../typings/glob/glob.d.ts' />
 /// <reference path='../typings/java/java.d.ts' />
 /// <reference path='../typings/lodash/lodash.d.ts' />
@@ -29,10 +30,13 @@ require('source-map-support').install();
 
 import _ = require('lodash');
 import chai = require('chai');
+import debug = require('debug');
 import should = require('should');
 import glob = require('glob');
 import java = require('java');
 import J = require('../index');
+
+var dlog = debug('ts-gremlin-test');
 
 before((done: MochaDone) => {
   java.asyncOptions = {
@@ -40,8 +44,8 @@ before((done: MochaDone) => {
     promisify: require('bluebird').promisify
   };
 
-  var filenames = glob.sync('target/dependency/**/*.jar');
-  filenames.forEach((name: string) => { java.classpath.push(name); });
+  var filenames = glob.sync('target/**/*.jar');
+  filenames.forEach((name: string) => { dlog(name); java.classpath.push(name); });
 
   J.initialize();
   done();
