@@ -15,9 +15,11 @@ JAVA_D_TS=typings/java/java.d.ts
 
 ### Maven
 
+JAVA_SRC=$(shell find src -name '*.java')
+
 install-maven: o/maven-installed.lastran
 
-o/maven-installed.lastran: pom.xml
+o/maven-installed.lastran: pom.xml $(JAVA_SRC)
 	mvn clean package
 	mkdir -p $(dir $@) && touch $@
 
