@@ -7,7 +7,9 @@ var J;
     'use strict';
     J.__;
     J.noargs;
+    J.GroovyLambda;
     J.NULL;
+    J.ScriptEngineLambda;
     J.T;
     J.TinkerFactory;
     J.TinkerGraph;
@@ -19,8 +21,10 @@ var J;
     // It is wasteful, but not an error, to call this method more than once.
     function initialize() {
         J.__ = java.import('com.tinkerpop.gremlin.process.graph.traversal.__');
+        J.GroovyLambda = java.import('co.redseal.gremlinnode.function.GroovyLambda');
         J.noargs = java.newArray('java.lang.String', []);
         J.NULL = java.callStaticMethodSync('org.codehaus.groovy.runtime.NullObject', 'getNullObject');
+        J.ScriptEngineLambda = java.import('com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda');
         J.T = java.import('com.tinkerpop.gremlin.process.T');
         J.TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
         J.TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
@@ -38,6 +42,18 @@ var J;
         return java.newArray('java.lang.String', strs);
     }
     J.S = S;
+    function newJavaScriptLambda(javascript) {
+        return new J.ScriptEngineLambda(_javaScriptEngineName, javascript); //
+    }
+    J.newJavaScriptLambda = newJavaScriptLambda;
+    ;
+    function newGroovyLambda(groovy) {
+        return new J.ScriptEngineLambda(_groovyScriptEngineName, groovy);
+    }
+    J.newGroovyLambda = newGroovyLambda;
+    ;
+    var _groovyScriptEngineName = 'Groovy';
+    var _javaScriptEngineName = 'JavaScript';
 })(J || (J = {}));
 module.exports = J;
 //# sourceMappingURL=index.js.map

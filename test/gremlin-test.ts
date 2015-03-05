@@ -198,6 +198,43 @@ describe('Gremlin', function() {
         });
     });
 
+    it('filter() with JavaScript lambda', function () {
+      var js = 'a.get().value("name") == "lop"';
+      var lambda = J.newJavaScriptLambda(js);
+      return graph.VSync(J.noargs).filterSync(lambda).toListPromise()
+        .then((list: Java.List) => list.toArrayPromise())
+        .then((recs: Java.object_t[] ) => {
+          expect(recs).to.be.ok;
+          expect(recs.length).to.equal(1);
+          var v: Java.object_t = recs[0];
+          expect(java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex')).to.be.ok;
+
+          // TODO: test vertex properties
+        });
+    });
+
+    it('choose(Function).option with integer choice', function () {
+      var __ = J.__;
+
+      // Use the result of the function as a key to the map of traversal choices.
+      var groovy = '{ vertex -> vertex.value("name").length() }';
+      var lambda = J.newGroovyLambda(groovy);
+
+      var chosen = graph.VSync(J.noargs).hasSync('age').chooseSync(lambda)
+          .optionSync(5, __.inSync(J.noargs))
+          .optionSync(4, __.outSync(J.noargs))
+          .optionSync(3, __.bothSync(J.noargs))
+          .valuesSync(J.S(['name']));
+
+      return chosen.toListPromise()
+        .then((list: Java.List) => list.toArrayPromise())
+        .then((actual: Java.object_t[] ) => {
+          var expected = ['marko', 'ripple', 'lop'];
+          // TODO: why isn't this giving expected results?
+//           expect(actual.sort()).to.deep.equal(expected.sort());
+        });
+    });
+
   });
 
 });

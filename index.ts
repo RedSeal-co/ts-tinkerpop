@@ -10,7 +10,9 @@ module J {
 
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
   export var noargs: Java.array_t<Java.String>;
+  export var GroovyLambda: Java.GroovyLambda.Static;
   export var NULL: Java.org.codehaus.groovy.runtime.NullObject;
+  export var ScriptEngineLambda: Java.com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda.Static;
   export var T: Java.T.Static;
   export var TinkerFactory: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory.Static;
   export var TinkerGraph: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.Static;
@@ -23,8 +25,10 @@ module J {
   // It is wasteful, but not an error, to call this method more than once.
   export function initialize() {
     __ = java.import('com.tinkerpop.gremlin.process.graph.traversal.__');
+    GroovyLambda = java.import('co.redseal.gremlinnode.function.GroovyLambda');
     noargs = java.newArray<Java.String>('java.lang.String', []);
     NULL = java.callStaticMethodSync('org.codehaus.groovy.runtime.NullObject', 'getNullObject');
+    ScriptEngineLambda = java.import('com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda');
     T = java.import('com.tinkerpop.gremlin.process.T');
     TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
     TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
@@ -41,6 +45,17 @@ module J {
   export function S(strs: string[]) : Java.array_t<Java.String> {
     return java.newArray<Java.String>('java.lang.String', strs);
   }
+
+  export function newJavaScriptLambda(javascript: string): Java.ScriptEngineLambda {
+    return new ScriptEngineLambda(_javaScriptEngineName, javascript);   //
+  };
+
+  export function newGroovyLambda(groovy: string): Java.ScriptEngineLambda {
+    return new ScriptEngineLambda(_groovyScriptEngineName, groovy);
+  };
+
+  var _groovyScriptEngineName: string = 'Groovy';
+  var _javaScriptEngineName: string = 'JavaScript';
 }
 
 export = J;
