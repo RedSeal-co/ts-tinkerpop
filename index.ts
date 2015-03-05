@@ -10,6 +10,7 @@ module J {
 
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
   export var noargs: Java.array_t<Java.String>;
+  export var NULL: Java.org.codehaus.groovy.runtime.NullObject;
   export var T: Java.T.Static;
   export var TinkerFactory: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory.Static;
   export var TinkerGraph: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.Static;
@@ -23,6 +24,7 @@ module J {
   export function initialize() {
     __ = java.import('com.tinkerpop.gremlin.process.graph.traversal.__');
     noargs = java.newArray<Java.String>('java.lang.String', []);
+    NULL = java.callStaticMethodSync('org.codehaus.groovy.runtime.NullObject', 'getNullObject');
     T = java.import('com.tinkerpop.gremlin.process.T');
     TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
     TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');

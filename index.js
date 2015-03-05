@@ -7,6 +7,7 @@ var J;
     'use strict';
     J.__;
     J.noargs;
+    J.NULL;
     J.T;
     J.TinkerFactory;
     J.TinkerGraph;
@@ -19,6 +20,7 @@ var J;
     function initialize() {
         J.__ = java.import('com.tinkerpop.gremlin.process.graph.traversal.__');
         J.noargs = java.newArray('java.lang.String', []);
+        J.NULL = java.callStaticMethodSync('org.codehaus.groovy.runtime.NullObject', 'getNullObject');
         J.T = java.import('com.tinkerpop.gremlin.process.T');
         J.TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
         J.TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
