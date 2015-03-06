@@ -40,7 +40,7 @@ $(UNIT_TEST_RAN): o/%.lastran: %.js o/all-installed.lastran
 
 test: $(UNIT_TEST_RAN)
 
-test/gremlin-test.js : index.js $(JAVA_D_TS)
+test/tinkerpop-test.js : index.js $(JAVA_D_TS)
 
 clean-test:
 	rm -f test/*.js test/*.js.map

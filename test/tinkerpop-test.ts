@@ -1,4 +1,4 @@
-// # gremlin-test.ts
+// # tinkerpop-test.ts
 /// <reference path='../typings/chai/chai.d.ts'/>
 /// <reference path='../typings/debug/debug.d.ts' />
 /// <reference path='../typings/glob/glob.d.ts' />
