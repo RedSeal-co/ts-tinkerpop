@@ -79,8 +79,12 @@ module Tinkerpop {
     return JSON.parse(vertexStringify(vertex));
   }
 
+  export function isVertex(v: any): boolean {
+    return java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex');
+  }
+
   export function asVertex(v: Java.object_t): Java.Vertex {
-    if (java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex')) {
+    if (isVertex(v)) {
       return <Java.Vertex> v;
     } else {
       throw new Error('asVertex given an object that is not a Vertex');

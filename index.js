@@ -76,8 +76,12 @@ var Tinkerpop;
         return JSON.parse(vertexStringify(vertex));
     }
     Tinkerpop.vertexToJson = vertexToJson;
+    function isVertex(v) {
+        return java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex');
+    }
+    Tinkerpop.isVertex = isVertex;
     function asVertex(v) {
-        if (java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex')) {
+        if (isVertex(v)) {
             return v;
         }
         else {
