@@ -4,7 +4,7 @@
 import _ = require('lodash');
 import java = require('java');
 
-module J {
+module Tinkerpop {
 
   'use strict';
 
@@ -84,4 +84,4 @@ module J {
   var _javaScriptEngineName: string = 'JavaScript';
 }
 
-export = J;
+export = Tinkerpop;

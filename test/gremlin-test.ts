@@ -34,7 +34,7 @@ import debug = require('debug');
 import should = require('should');
 import glob = require('glob');
 import java = require('java');
-import J = require('../index');
+import T = require('../index');
 import util = require('util');
 
 var dlog = debug('ts-gremlin-test');
@@ -48,7 +48,7 @@ before((done: MochaDone) => {
   var filenames = glob.sync('target/**/*.jar');
   filenames.forEach((name: string) => { dlog(name); java.classpath.push(name); });
 
-  J.initialize();
+  T.initialize();
   done();
 });
 
@@ -65,7 +65,7 @@ describe('Gremlin', function() {
   var graph: Java.TinkerGraph;
 
   before((done: MochaDone) => {
-    expect(J.TinkerGraph).to.be.ok;
+    expect(T.TinkerGraph).to.be.ok;
     done();
   });
 
@@ -74,7 +74,7 @@ describe('Gremlin', function() {
   describe('TinkerGraph empty', function() {
 
     before(() => {
-      graph = J.TinkerGraph.openSync();
+      graph = T.TinkerGraph.openSync();
       expect(graph).to.be.ok;
     });
 
@@ -96,7 +96,7 @@ describe('Gremlin', function() {
     // Check that the Gremlin statements `graph.V.count()` and `graph.E.count()` return `0`.
     it('should be empty', function(done: MochaDone) {
       // Count vertices.
-      var allVerticesTraversal = graph.VSync(J.noargs);
+      var allVerticesTraversal = graph.VSync(T.noargs);
 
       // The "count" method applies to a Traversal, destructively measuring the number of
       // elements in it.
@@ -105,7 +105,7 @@ describe('Gremlin', function() {
         expect(count.valueOf()).to.equal(0);
 
         // Count edges.
-        var allEdgesTraversal = graph.ESync(J.noargs);
+        var allEdgesTraversal = graph.ESync(T.noargs);
 
         allEdgesTraversal.countSync().next(function(err: Error, count: Java.Object) {
           expect(err).to.not.exist;
@@ -125,8 +125,8 @@ describe('Gremlin', function() {
     var graph: Java.TinkerGraph;
 
     before(function() {
-      expect(J.TinkerFactory).to.be.ok;
-      graph = J.TinkerFactory.createClassicSync();
+      expect(T.TinkerFactory).to.be.ok;
+      graph = T.TinkerFactory.createClassicSync();
       expect(graph).to.be.ok;
     });
 
@@ -149,7 +149,7 @@ describe('Gremlin', function() {
     // Gremlin would be `graph.V.value('name').dedup`.  However, it can also be written with
     // the shortcut syntax for property access: `graph.V.name.dedup`.
     it('has certain names', function() {
-      var distinctNamesTraversal: Java.GraphTraversal = graph.VSync(J.noargs).valuesSync(J.S(['name'])).dedupSync();
+      var distinctNamesTraversal: Java.GraphTraversal = graph.VSync(T.noargs).valuesSync(T.S(['name'])).dedupSync();
       expect(distinctNamesTraversal).to.be.ok;
       return distinctNamesTraversal
         .toListPromise()
@@ -165,9 +165,9 @@ describe('Gremlin', function() {
 
     // See http://gremlindocs.com/#recipes/shortest-path, first method
     it('can inefficiently find many paths between two nodes', function(done: MochaDone) {
-      var traversal: Java.GraphTraversal = graph.VSync(J.ids([2]));
+      var traversal: Java.GraphTraversal = graph.VSync(T.ids([2]));
       traversal = traversal.asSync('x');
-      traversal = traversal.bothSync(J.noargs);
+      traversal = traversal.bothSync(T.noargs);
 //       traversal = traversal.repeatSync();
 //         .jump('x', function (it) { return it.object.id != "6" && it.loops < 6; }).path();
 //       traversal.toJSON(function(err, data) {
@@ -181,7 +181,7 @@ describe('Gremlin', function() {
     });
 
     it('g.V().has("name", "marko") -> v.value("name")',  function() {
-      return graph.VSync(J.noargs).hasSync('name', 'marko')
+      return graph.VSync(T.noargs).hasSync('name', 'marko')
         .nextPromise()
         .then((v: Java.Vertex) => {
           expect(v).to.be.ok;
@@ -191,7 +191,7 @@ describe('Gremlin', function() {
     });
 
     it('g.V().valueSync("name")',  function() {
-      return graph.VSync(J.noargs).valuesSync(J.S(['name'])).toListPromise()
+      return graph.VSync(T.noargs).valuesSync(T.S(['name'])).toListPromise()
         .then((list: Java.List) => list.toArrayPromise())
         .then((data: Java.object_t[] ) => {
           expect(data).to.be.ok;
@@ -202,14 +202,14 @@ describe('Gremlin', function() {
 
     it('filter() with JavaScript lambda', function () {
       var js = 'a.get().value("name") == "lop"';
-      var lambda = J.newJavaScriptLambda(js);
-      return graph.VSync(J.noargs).filterSync(lambda).toListPromise()
+      var lambda = T.newJavaScriptLambda(js);
+      return graph.VSync(T.noargs).filterSync(lambda).toListPromise()
         .then((list: Java.List) => list.toArrayPromise())
         .then((recs: Java.object_t[] ) => {
           expect(recs).to.be.ok;
           expect(recs.length).to.equal(1);
-          var v: Java.Vertex = J.asVertex(recs[0]);
-          var vertexObj: any = J.vertexToJson(v);
+          var v: Java.Vertex = T.asVertex(recs[0]);
+          var vertexObj: any = T.vertexToJson(v);
           var expected = {
             id: 3,
             label: 'vertex',
@@ -224,17 +224,17 @@ describe('Gremlin', function() {
     });
 
     it('choose(Function).option with integer choice', function () {
-      var __ = J.__;
+      var __ = T.__;
 
       // Use the result of the function as a key to the map of traversal choices.
       var groovy = '{ vertex -> vertex.value("name").length() }';
-      var lambda = J.newGroovyLambda(groovy);
+      var lambda = T.newGroovyLambda(groovy);
 
-      var chosen = graph.VSync(J.noargs).hasSync('age').chooseSync(lambda)
-          .optionSync(5, __.inSync(J.noargs))
-          .optionSync(4, __.outSync(J.noargs))
-          .optionSync(3, __.bothSync(J.noargs))
-          .valuesSync(J.S(['name']));
+      var chosen = graph.VSync(T.noargs).hasSync('age').chooseSync(lambda)
+          .optionSync(5, __.inSync(T.noargs))
+          .optionSync(4, __.outSync(T.noargs))
+          .optionSync(3, __.bothSync(T.noargs))
+          .valuesSync(T.S(['name']));
 
       return chosen.toListPromise()
         .then((list: Java.List) => list.toArrayPromise())

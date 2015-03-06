@@ -2,20 +2,20 @@
 /// <reference path='typings/lodash/lodash.d.ts' />
 var _ = require('lodash');
 var java = require('java');
-var J;
-(function (J) {
+var Tinkerpop;
+(function (Tinkerpop) {
     'use strict';
-    J.__;
-    J.ByteArrayOutputStream;
-    J.GraphSONWriter;
-    J.GroovyLambda;
-    J.noargs;
-    J.NULL;
-    J.ScriptEngineLambda;
-    J.T;
-    J.TinkerFactory;
-    J.TinkerGraph;
-    J.UTF8;
+    Tinkerpop.__;
+    Tinkerpop.ByteArrayOutputStream;
+    Tinkerpop.GraphSONWriter;
+    Tinkerpop.GroovyLambda;
+    Tinkerpop.noargs;
+    Tinkerpop.NULL;
+    Tinkerpop.ScriptEngineLambda;
+    Tinkerpop.T;
+    Tinkerpop.TinkerFactory;
+    Tinkerpop.TinkerGraph;
+    Tinkerpop.UTF8;
     // ### *initialize()* should be called once just after java has been configured.
     // Java configuration includes classpath, options, and asyncOptions.
     // If this method is called before configuration, the java.import calls will likely
@@ -23,53 +23,53 @@ var J;
     // This method must be called before any of the exported vars above are accessed.
     // It is wasteful, but not an error, to call this method more than once.
     function initialize() {
-        J.__ = java.import('com.tinkerpop.gremlin.process.graph.traversal.__');
-        J.ByteArrayOutputStream = java.import('java.io.ByteArrayOutputStream');
-        J.GraphSONWriter = java.import('com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter');
-        J.GroovyLambda = java.import('co.redseal.gremlinnode.function.GroovyLambda');
-        J.noargs = java.newArray('java.lang.String', []);
-        J.NULL = java.callStaticMethodSync('org.codehaus.groovy.runtime.NullObject', 'getNullObject');
-        J.ScriptEngineLambda = java.import('com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda');
-        J.T = java.import('com.tinkerpop.gremlin.process.T');
-        J.TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
-        J.TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
-        J.UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.nameSync();
+        Tinkerpop.__ = java.import('com.tinkerpop.gremlin.process.graph.traversal.__');
+        Tinkerpop.ByteArrayOutputStream = java.import('java.io.ByteArrayOutputStream');
+        Tinkerpop.GraphSONWriter = java.import('com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter');
+        Tinkerpop.GroovyLambda = java.import('co.redseal.gremlinnode.function.GroovyLambda');
+        Tinkerpop.noargs = java.newArray('java.lang.String', []);
+        Tinkerpop.NULL = java.callStaticMethodSync('org.codehaus.groovy.runtime.NullObject', 'getNullObject');
+        Tinkerpop.ScriptEngineLambda = java.import('com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda');
+        Tinkerpop.T = java.import('com.tinkerpop.gremlin.process.T');
+        Tinkerpop.TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
+        Tinkerpop.TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
+        Tinkerpop.UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.nameSync();
     }
-    J.initialize = initialize;
+    Tinkerpop.initialize = initialize;
     function id(n) {
         return java.newLong(n);
     }
-    J.id = id;
+    Tinkerpop.id = id;
     function ids(a) {
         return java.newArray('java.lang.Object', _.map(a, function (n) { return id(n); }));
     }
-    J.ids = ids;
+    Tinkerpop.ids = ids;
     function S(strs) {
         return java.newArray('java.lang.String', strs);
     }
-    J.S = S;
+    Tinkerpop.S = S;
     function newJavaScriptLambda(javascript) {
-        return new J.ScriptEngineLambda(_javaScriptEngineName, javascript); //
+        return new Tinkerpop.ScriptEngineLambda(_javaScriptEngineName, javascript); //
     }
-    J.newJavaScriptLambda = newJavaScriptLambda;
+    Tinkerpop.newJavaScriptLambda = newJavaScriptLambda;
     ;
     function newGroovyLambda(groovy) {
-        return new J.ScriptEngineLambda(_groovyScriptEngineName, groovy);
+        return new Tinkerpop.ScriptEngineLambda(_groovyScriptEngineName, groovy);
     }
-    J.newGroovyLambda = newGroovyLambda;
+    Tinkerpop.newGroovyLambda = newGroovyLambda;
     ;
     function vertexStringify(vertex) {
-        var stream = new J.ByteArrayOutputStream();
-        var builder = J.GraphSONWriter.buildSync();
+        var stream = new Tinkerpop.ByteArrayOutputStream();
+        var builder = Tinkerpop.GraphSONWriter.buildSync();
         var writer = builder.createSync();
         writer.writeVertexSync(stream, vertex);
-        return stream.toStringSync(J.UTF8);
+        return stream.toStringSync(Tinkerpop.UTF8);
     }
-    J.vertexStringify = vertexStringify;
+    Tinkerpop.vertexStringify = vertexStringify;
     function vertexToJson(vertex) {
         return JSON.parse(vertexStringify(vertex));
     }
-    J.vertexToJson = vertexToJson;
+    Tinkerpop.vertexToJson = vertexToJson;
     function asVertex(v) {
         if (java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex')) {
             return v;
@@ -78,9 +78,9 @@ var J;
             throw new Error('asVertex given an object that is not a Vertex');
         }
     }
-    J.asVertex = asVertex;
+    Tinkerpop.asVertex = asVertex;
     var _groovyScriptEngineName = 'Groovy';
     var _javaScriptEngineName = 'JavaScript';
-})(J || (J = {}));
-module.exports = J;
+})(Tinkerpop || (Tinkerpop = {}));
+module.exports = Tinkerpop;
 //# sourceMappingURL=index.js.map
