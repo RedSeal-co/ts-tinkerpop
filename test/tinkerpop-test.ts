@@ -236,9 +236,9 @@ describe('Gremlin', function() {
       var traversal = graph.VSync(T.noargs);
       return T.forEach(traversal, (obj: Java.Object): BluePromise<void> => {
         var v: Java.Vertex = T.asVertex(obj);
-        var vertexObj: any = T.vertexToJson(v);
-        expect(vertexObj).to.include.keys(['id', 'label', 'type', 'properties']);
-        expect(vertexObj.type).to.equal('vertex');
+        var json: any = T.vertexToJson(v);
+        expect(json).to.include.keys(['id', 'label', 'type', 'properties']);
+        expect(json.type).to.equal('vertex');
         return BluePromise.resolve();
       });
     });
@@ -247,8 +247,9 @@ describe('Gremlin', function() {
       var traversal = graph.ESync(T.noargs);
       return T.forEach(traversal, (obj: Java.Object): BluePromise<void> => {
         var e: Java.Edge = T.asEdge(obj);
-        // asEdge will throw exception if the object is not an edge.
-        // TODO: implement edgeToJson and test edge properties.
+        var json: any = T.edgeToJson(e);
+        expect(json).to.include.keys(['id', 'label', 'type', 'properties', 'inV', 'outV', 'inVLabel', 'outVLabel']);
+        expect(json.type).to.equal('edge');
         return BluePromise.resolve();
       });
     });

@@ -79,6 +79,18 @@ module Tinkerpop {
     return JSON.parse(vertexStringify(vertex));
   }
 
+  export function edgeStringify(edge: Java.Edge) {
+    var stream: Java.ByteArrayOutputStream = new ByteArrayOutputStream();
+    var builder: Java.GraphSONWriter$Builder = GraphSONWriter.buildSync();
+    var writer: Java.GraphSONWriter = builder.createSync();
+    writer.writeEdgeSync(stream, edge);
+    return stream.toStringSync(UTF8);
+  };
+
+  export function edgeToJson(edge: Java.Edge): any {
+    return JSON.parse(edgeStringify(edge));
+  };
+
   export function isVertex(v: any): boolean {
     return java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex');
   }
