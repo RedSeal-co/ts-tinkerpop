@@ -1,16 +1,18 @@
+/// <reference path='typings/bluebird/bluebird.d.ts' />
 /// <reference path='typings/debug/debug.d.ts' />
 /// <reference path='typings/java/java.d.ts' />
 /// <reference path='typings/lodash/lodash.d.ts' />
 
 import _ = require('lodash');
-import java = require('java');
+import BluePromise = require('bluebird');
 import debug = require('debug');
+import java = require('java');
 
 module Tinkerpop {
 
   'use strict';
 
-  var dlog = debug('ts-tinkerpop');
+  var dlog = debug('ts-tinkerpop:index');
 
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
   export var ByteArrayOutputStream: Java.java.io.ByteArrayOutputStream.Static;
@@ -42,6 +44,7 @@ module Tinkerpop {
     TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
     TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
     UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.nameSync();
+    dlog('Tinkerpop helper initialized.');
   }
 
   export function id(n: number): Java.Object {
@@ -83,6 +86,31 @@ module Tinkerpop {
       throw new Error('asVertex given an object that is not a Vertex');
     }
   }
+
+  interface ConsumeObject {
+    (item: Java.Object): BluePromise<void>;
+  }
+
+  // Applies *consumer* to each Java.Object returned by the *javaIterator*.
+  // *javaIterator* may be any type that implements java.util.Iterator, including a tinkerpop Traversal.
+  // *consumer* is function that will do some work on a Java.Object asychronously, returning a Promise for its completion.
+  // Returns a promise that is resolved when all objects have been consumed.
+  export function forEach(javaIterator: Java.Iterator, consumer: ConsumeObject): BluePromise<void> {
+    function _eachIterator(javaIterator: Java.Iterator, consumer: ConsumeObject): BluePromise<void> {
+      return javaIterator.hasNextPromise()
+        .then((hasNext: boolean): BluePromise<void> => {
+          if (!hasNext) {
+            dlog('forEach: done');
+            return BluePromise.resolve();
+          } else {
+            return javaIterator.nextPromise()
+              .then((obj: Java.Object) => { dlog('forEach: consuming'); return consumer(obj); })
+              .then(() => { dlog('forEach: recursing'); return _eachIterator(javaIterator, consumer); });
+          }
+        });
+    }
+    return _eachIterator(javaIterator, consumer);
+};
 
   var _groovyScriptEngineName: string = 'Groovy';
   var _javaScriptEngineName: string = 'JavaScript';

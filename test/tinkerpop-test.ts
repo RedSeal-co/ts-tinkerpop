@@ -1,4 +1,5 @@
 // # tinkerpop-test.ts
+/// <reference path='../typings/bluebird/bluebird.d.ts' />
 /// <reference path='../typings/chai/chai.d.ts'/>
 /// <reference path='../typings/debug/debug.d.ts' />
 /// <reference path='../typings/glob/glob.d.ts' />
@@ -14,6 +15,7 @@ declare function require(name: string): any;
 require('source-map-support').install();
 
 import _ = require('lodash');
+import BluePromise = require('bluebird');
 import chai = require('chai');
 import debug = require('debug');
 import should = require('should');
@@ -228,6 +230,17 @@ describe('Gremlin', function() {
           // TODO: why isn't this giving expected results?
 //           expect(actual.sort()).to.deep.equal(expected.sort());
         });
+    });
+
+    it('T.forEach(g.V())', () => {
+      var traversal = graph.VSync(T.noargs);
+      return T.forEach(traversal, (obj: Java.Object): BluePromise<void> => {
+        var v: Java.Vertex = T.asVertex(obj);
+        var vertexObj: any = T.vertexToJson(v);
+        expect(vertexObj).to.include.keys(['id', 'label', 'type', 'properties']);
+        expect(vertexObj.type).to.equal('vertex');
+        return BluePromise.resolve();
+      });
     });
 
   });

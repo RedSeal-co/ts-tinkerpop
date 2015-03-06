@@ -1,4 +1,5 @@
 // # tinkerpop-test.ts
+/// <reference path='../typings/bluebird/bluebird.d.ts' />
 /// <reference path='../typings/chai/chai.d.ts'/>
 /// <reference path='../typings/debug/debug.d.ts' />
 /// <reference path='../typings/glob/glob.d.ts' />
@@ -9,6 +10,7 @@
 /// <reference path='../typings/should/should.d.ts'/>
 'use strict';
 require('source-map-support').install();
+var BluePromise = require('bluebird');
 var chai = require('chai');
 var debug = require('debug');
 var glob = require('glob');
@@ -179,6 +181,16 @@ describe('Gremlin', function () {
                 var expected = ['marko', 'ripple', 'lop'];
                 // TODO: why isn't this giving expected results?
                 //           expect(actual.sort()).to.deep.equal(expected.sort());
+            });
+        });
+        it('T.forEach(g.V())', function () {
+            var traversal = graph.VSync(T.noargs);
+            return T.forEach(traversal, function (obj) {
+                var v = T.asVertex(obj);
+                var vertexObj = T.vertexToJson(v);
+                expect(vertexObj).to.include.keys(['id', 'label', 'type', 'properties']);
+                expect(vertexObj.type).to.equal('vertex');
+                return BluePromise.resolve();
             });
         });
     });

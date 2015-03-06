@@ -1,13 +1,15 @@
+/// <reference path='typings/bluebird/bluebird.d.ts' />
 /// <reference path='typings/debug/debug.d.ts' />
 /// <reference path='typings/java/java.d.ts' />
 /// <reference path='typings/lodash/lodash.d.ts' />
 var _ = require('lodash');
-var java = require('java');
+var BluePromise = require('bluebird');
 var debug = require('debug');
+var java = require('java');
 var Tinkerpop;
 (function (Tinkerpop) {
     'use strict';
-    var dlog = debug('ts-tinkerpop');
+    var dlog = debug('ts-tinkerpop:index');
     Tinkerpop.__;
     Tinkerpop.ByteArrayOutputStream;
     Tinkerpop.GraphSONWriter;
@@ -37,6 +39,7 @@ var Tinkerpop;
         Tinkerpop.TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
         Tinkerpop.TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
         Tinkerpop.UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.nameSync();
+        dlog('Tinkerpop helper initialized.');
     }
     Tinkerpop.initialize = initialize;
     function id(n) {
@@ -82,6 +85,32 @@ var Tinkerpop;
         }
     }
     Tinkerpop.asVertex = asVertex;
+    // Applies *consumer* to each Java.Object returned by the *javaIterator*.
+    // *javaIterator* may be any type that implements java.util.Iterator, including a tinkerpop Traversal.
+    // *consumer* is function that will do some work on a Java.Object asychronously, returning a Promise for its completion.
+    // Returns a promise that is resolved when all objects have been consumed.
+    function forEach(javaIterator, consumer) {
+        function _eachIterator(javaIterator, consumer) {
+            return javaIterator.hasNextPromise().then(function (hasNext) {
+                if (!hasNext) {
+                    dlog('forEach: done');
+                    return BluePromise.resolve();
+                }
+                else {
+                    return javaIterator.nextPromise().then(function (obj) {
+                        dlog('forEach: consuming');
+                        return consumer(obj);
+                    }).then(function () {
+                        dlog('forEach: recursing');
+                        return _eachIterator(javaIterator, consumer);
+                    });
+                }
+            });
+        }
+        return _eachIterator(javaIterator, consumer);
+    }
+    Tinkerpop.forEach = forEach;
+    ;
     var _groovyScriptEngineName = 'Groovy';
     var _javaScriptEngineName = 'JavaScript';
 })(Tinkerpop || (Tinkerpop = {}));
