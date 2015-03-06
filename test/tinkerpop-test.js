@@ -7,20 +7,6 @@
 /// <reference path='../typings/mocha/mocha.d.ts'/>
 /// <reference path='../typings/node/node.d.ts'/>
 /// <reference path='../typings/should/should.d.ts'/>
-//
-// Tests that gremlin-node is installed and working.  Test based on gremlin-node documentation and
-// the built-in "TinkerGraph" sample graph.
-//
-// See https://github.com/inolen/gremlin-node
-//
-// In many of these tests, one must understand the difference between creating a "traversal", which
-// is the manifestation of a particular sequence of Gremlin steps, and executing that traversal to
-// retrieve the data from the graph.  This distinction is important to understand in the design of
-// efficient applications.  Typically, the desired application logic should be encapsulated in as
-// few traversals as possible in order to make the backend do most of the computation, and to avoid
-// latency between client (Node.js) and server (graph database).  To aid in this understanding, the
-// variables in this test representing traversals are named with a "Traversal" suffix, and are
-// instantiated explicitly.
 'use strict';
 require('source-map-support').install();
 var chai = require('chai');
@@ -28,7 +14,7 @@ var debug = require('debug');
 var glob = require('glob');
 var java = require('java');
 var T = require('../index');
-var dlog = debug('ts-gremlin-test');
+var dlog = debug('ts-tinkerpop:test');
 before(function (done) {
     java.asyncOptions = {
         promiseSuffix: 'Promise',

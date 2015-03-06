@@ -1,10 +1,13 @@
+/// <reference path='typings/debug/debug.d.ts' />
 /// <reference path='typings/java/java.d.ts' />
 /// <reference path='typings/lodash/lodash.d.ts' />
 var _ = require('lodash');
 var java = require('java');
+var debug = require('debug');
 var Tinkerpop;
 (function (Tinkerpop) {
     'use strict';
+    var dlog = debug('ts-tinkerpop');
     Tinkerpop.__;
     Tinkerpop.ByteArrayOutputStream;
     Tinkerpop.GraphSONWriter;

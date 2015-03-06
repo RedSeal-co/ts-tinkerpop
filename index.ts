@@ -1,12 +1,16 @@
+/// <reference path='typings/debug/debug.d.ts' />
 /// <reference path='typings/java/java.d.ts' />
 /// <reference path='typings/lodash/lodash.d.ts' />
 
 import _ = require('lodash');
 import java = require('java');
+import debug = require('debug');
 
 module Tinkerpop {
 
   'use strict';
+
+  var dlog = debug('ts-tinkerpop');
 
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
   export var ByteArrayOutputStream: Java.java.io.ByteArrayOutputStream.Static;
