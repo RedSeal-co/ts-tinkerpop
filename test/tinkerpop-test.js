@@ -193,6 +193,15 @@ describe('Gremlin', function () {
                 return BluePromise.resolve();
             });
         });
+        it('T.forEach(g.E())', function () {
+            var traversal = graph.ESync(T.noargs);
+            return T.forEach(traversal, function (obj) {
+                var e = T.asEdge(obj);
+                // asEdge will throw exception if the object is not an edge.
+                // TODO: implement edgeToJson and test edge properties.
+                return BluePromise.resolve();
+            });
+        });
     });
 });
 //# sourceMappingURL=tinkerpop-test.js.map

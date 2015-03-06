@@ -91,6 +91,18 @@ module Tinkerpop {
     }
   }
 
+  export function isEdge(e: any): boolean {
+    return java.instanceOf(e, 'com.tinkerpop.gremlin.structure.Edge');
+  }
+
+  export function asEdge(e: Java.object_t): Java.Edge {
+    if (isEdge(e)) {
+      return <Java.Edge> e;
+    } else {
+      throw new Error('asEdge given an object that is not an Edge');
+    }
+  }
+
   interface ConsumeObject {
     (item: Java.Object): BluePromise<void>;
   }

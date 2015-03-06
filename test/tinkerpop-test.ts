@@ -243,6 +243,16 @@ describe('Gremlin', function() {
       });
     });
 
+    it('T.forEach(g.E())', () => {
+      var traversal = graph.ESync(T.noargs);
+      return T.forEach(traversal, (obj: Java.Object): BluePromise<void> => {
+        var e: Java.Edge = T.asEdge(obj);
+        // asEdge will throw exception if the object is not an edge.
+        // TODO: implement edgeToJson and test edge properties.
+        return BluePromise.resolve();
+      });
+    });
+
   });
 
 });

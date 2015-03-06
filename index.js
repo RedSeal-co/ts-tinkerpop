@@ -89,6 +89,19 @@ var Tinkerpop;
         }
     }
     Tinkerpop.asVertex = asVertex;
+    function isEdge(e) {
+        return java.instanceOf(e, 'com.tinkerpop.gremlin.structure.Edge');
+    }
+    Tinkerpop.isEdge = isEdge;
+    function asEdge(e) {
+        if (isEdge(e)) {
+            return e;
+        }
+        else {
+            throw new Error('asEdge given an object that is not an Edge');
+        }
+    }
+    Tinkerpop.asEdge = asEdge;
     // Applies *consumer* to each Java.Object returned by the *javaIterator*.
     // *javaIterator* may be any type that implements java.util.Iterator, including a tinkerpop Traversal.
     // *consumer* is function that will do some work on a Java.Object asychronously, returning a Promise for its completion.
