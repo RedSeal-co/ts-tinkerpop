@@ -35,6 +35,7 @@ import should = require('should');
 import glob = require('glob');
 import java = require('java');
 import J = require('../index');
+import util = require('util');
 
 var dlog = debug('ts-gremlin-test');
 
@@ -194,7 +195,8 @@ describe('Gremlin', function() {
         .then((list: Java.List) => list.toArrayPromise())
         .then((data: Java.object_t[] ) => {
           expect(data).to.be.ok;
-          console.log(data);
+          var expected = [ 'marko', 'vadas', 'lop', 'josh', 'ripple', 'peter' ];
+          expect(data).to.deep.equal(expected);
         });
     });
 
@@ -206,10 +208,18 @@ describe('Gremlin', function() {
         .then((recs: Java.object_t[] ) => {
           expect(recs).to.be.ok;
           expect(recs.length).to.equal(1);
-          var v: Java.object_t = recs[0];
-          expect(java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex')).to.be.ok;
-
-          // TODO: test vertex properties
+          var v: Java.Vertex = J.asVertex(recs[0]);
+          var vertexObj: any = J.vertexToJson(v);
+          var expected = {
+            id: 3,
+            label: 'vertex',
+            type: 'vertex',
+            properties: {
+              name: [ { id: 4, value: 'lop', properties: {} } ],
+              lang: [ { id: 5, value: 'java', properties: {} } ]
+            }
+          };
+          expect(vertexObj).to.deep.equal(expected);
         });
     });
 

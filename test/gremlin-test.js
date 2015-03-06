@@ -159,7 +159,8 @@ describe('Gremlin', function () {
         it('g.V().valueSync("name")', function () {
             return graph.VSync(J.noargs).valuesSync(J.S(['name'])).toListPromise().then(function (list) { return list.toArrayPromise(); }).then(function (data) {
                 expect(data).to.be.ok;
-                console.log(data);
+                var expected = ['marko', 'vadas', 'lop', 'josh', 'ripple', 'peter'];
+                expect(data).to.deep.equal(expected);
             });
         });
         it('filter() with JavaScript lambda', function () {
@@ -168,9 +169,18 @@ describe('Gremlin', function () {
             return graph.VSync(J.noargs).filterSync(lambda).toListPromise().then(function (list) { return list.toArrayPromise(); }).then(function (recs) {
                 expect(recs).to.be.ok;
                 expect(recs.length).to.equal(1);
-                var v = recs[0];
-                expect(java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex')).to.be.ok;
-                // TODO: test vertex properties
+                var v = J.asVertex(recs[0]);
+                var vertexObj = J.vertexToJson(v);
+                var expected = {
+                    id: 3,
+                    label: 'vertex',
+                    type: 'vertex',
+                    properties: {
+                        name: [{ id: 4, value: 'lop', properties: {} }],
+                        lang: [{ id: 5, value: 'java', properties: {} }]
+                    }
+                };
+                expect(vertexObj).to.deep.equal(expected);
             });
         });
         it('choose(Function).option with integer choice', function () {

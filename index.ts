@@ -9,13 +9,16 @@ module J {
   'use strict';
 
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
+  export var ByteArrayOutputStream: Java.java.io.ByteArrayOutputStream.Static;
+  export var GraphSONWriter: Java.com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter.Static;
+  export var GroovyLambda: Java.co.redseal.gremlinnode.function_.GroovyLambda.Static;
   export var noargs: Java.array_t<Java.String>;
-  export var GroovyLambda: Java.GroovyLambda.Static;
   export var NULL: Java.org.codehaus.groovy.runtime.NullObject;
   export var ScriptEngineLambda: Java.com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda.Static;
-  export var T: Java.T.Static;
+  export var T: Java.com.tinkerpop.gremlin.process.T.Static;
   export var TinkerFactory: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory.Static;
   export var TinkerGraph: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.Static;
+  export var UTF8: string;
 
   // ### *initialize()* should be called once just after java has been configured.
   // Java configuration includes classpath, options, and asyncOptions.
@@ -25,6 +28,8 @@ module J {
   // It is wasteful, but not an error, to call this method more than once.
   export function initialize() {
     __ = java.import('com.tinkerpop.gremlin.process.graph.traversal.__');
+    ByteArrayOutputStream = java.import('java.io.ByteArrayOutputStream');
+    GraphSONWriter = java.import('com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter');
     GroovyLambda = java.import('co.redseal.gremlinnode.function.GroovyLambda');
     noargs = java.newArray<Java.String>('java.lang.String', []);
     NULL = java.callStaticMethodSync('org.codehaus.groovy.runtime.NullObject', 'getNullObject');
@@ -32,6 +37,7 @@ module J {
     T = java.import('com.tinkerpop.gremlin.process.T');
     TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
     TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
+    UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.nameSync();
   }
 
   export function id(n: number): Java.Object {
@@ -53,6 +59,26 @@ module J {
   export function newGroovyLambda(groovy: string): Java.ScriptEngineLambda {
     return new ScriptEngineLambda(_groovyScriptEngineName, groovy);
   };
+
+  export function vertexStringify(vertex: Java.Vertex): string {
+    var stream: Java.ByteArrayOutputStream = new ByteArrayOutputStream();
+    var builder: Java.GraphSONWriter$Builder = GraphSONWriter.buildSync();
+    var writer: Java.GraphSONWriter = builder.createSync();
+    writer.writeVertexSync(stream, vertex);
+    return stream.toStringSync(UTF8);
+  }
+
+  export function vertexToJson(vertex: Java.Vertex): any {
+    return JSON.parse(vertexStringify(vertex));
+  }
+
+  export function asVertex(v: Java.object_t): Java.Vertex {
+    if (java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex')) {
+      return <Java.Vertex> v;
+    } else {
+      throw new Error('asVertex given an object that is not a Vertex');
+    }
+  }
 
   var _groovyScriptEngineName: string = 'Groovy';
   var _javaScriptEngineName: string = 'JavaScript';
