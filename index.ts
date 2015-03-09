@@ -29,7 +29,7 @@ module Tinkerpop {
   export var TinkerGraph: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.Static;
   export var UTF8: string;
 
-  var _GroovyScriptEngine: Java.com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
+  var _groovyScriptEngine: Java.com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
 
   // ### *initialize()* should be called once just after java has been configured.
   // Java configuration includes classpath, options, and asyncOptions.
@@ -52,7 +52,7 @@ module Tinkerpop {
     UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.nameSync();
 
     // TODO: provide a separate factory class for script engine instances.
-    _GroovyScriptEngine = new GremlinGroovyScriptEngine();
+    _groovyScriptEngine = new GremlinGroovyScriptEngine();
 
     dlog('Tinkerpop helper initialized.');
   }
@@ -88,7 +88,7 @@ module Tinkerpop {
   export function newGroovyClosure(groovyClosureString: string): Java.GroovyLambda {
     // The groovy string must be a closure expression, e.g. '{ x -> println(x) }'.
     assert.ok(_isClosure(groovyClosureString));
-    return new GroovyLambda(groovyClosureString, _GroovyScriptEngine);
+    return new GroovyLambda(groovyClosureString, _groovyScriptEngine);
   };
 
   export function vertexStringify(vertex: Java.Vertex): string {

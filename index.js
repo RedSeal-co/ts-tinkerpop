@@ -24,7 +24,7 @@ var Tinkerpop;
     Tinkerpop.TinkerFactory;
     Tinkerpop.TinkerGraph;
     Tinkerpop.UTF8;
-    var _GroovyScriptEngine;
+    var _groovyScriptEngine;
     // ### *initialize()* should be called once just after java has been configured.
     // Java configuration includes classpath, options, and asyncOptions.
     // If this method is called before configuration, the java.import calls will likely
@@ -45,7 +45,7 @@ var Tinkerpop;
         Tinkerpop.TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
         Tinkerpop.UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.nameSync();
         // TODO: provide a separate factory class for script engine instances.
-        _GroovyScriptEngine = new Tinkerpop.GremlinGroovyScriptEngine();
+        _groovyScriptEngine = new Tinkerpop.GremlinGroovyScriptEngine();
         dlog('Tinkerpop helper initialized.');
     }
     Tinkerpop.initialize = initialize;
@@ -82,7 +82,7 @@ var Tinkerpop;
     function newGroovyClosure(groovyClosureString) {
         // The groovy string must be a closure expression, e.g. '{ x -> println(x) }'.
         assert.ok(_isClosure(groovyClosureString));
-        return new Tinkerpop.GroovyLambda(groovyClosureString, _GroovyScriptEngine);
+        return new Tinkerpop.GroovyLambda(groovyClosureString, _groovyScriptEngine);
     }
     Tinkerpop.newGroovyClosure = newGroovyClosure;
     ;
