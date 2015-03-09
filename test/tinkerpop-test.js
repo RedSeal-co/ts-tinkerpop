@@ -4,10 +4,8 @@
 /// <reference path='../typings/debug/debug.d.ts' />
 /// <reference path='../typings/glob/glob.d.ts' />
 /// <reference path='../typings/java/java.d.ts' />
-/// <reference path='../typings/lodash/lodash.d.ts' />
 /// <reference path='../typings/mocha/mocha.d.ts'/>
 /// <reference path='../typings/node/node.d.ts'/>
-/// <reference path='../typings/should/should.d.ts'/>
 'use strict';
 require('source-map-support').install();
 var BluePromise = require('bluebird');
@@ -31,13 +29,7 @@ before(function (done) {
     done();
 });
 describe('Gremlin', function () {
-    var async = require('async');
     var expect = chai.expect;
-    var semaphore = require('semaphore');
-    var stringify = require('json-stable-stringify');
-    var temp = require('temp');
-    // Cleanup temp files at exit.
-    temp.track();
     var graph;
     before(function (done) {
         expect(T.TinkerGraph).to.be.ok;

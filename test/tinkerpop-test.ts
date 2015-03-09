@@ -4,25 +4,20 @@
 /// <reference path='../typings/debug/debug.d.ts' />
 /// <reference path='../typings/glob/glob.d.ts' />
 /// <reference path='../typings/java/java.d.ts' />
-/// <reference path='../typings/lodash/lodash.d.ts' />
 /// <reference path='../typings/mocha/mocha.d.ts'/>
 /// <reference path='../typings/node/node.d.ts'/>
-/// <reference path='../typings/should/should.d.ts'/>
 
 'use strict';
 
 declare function require(name: string): any;
 require('source-map-support').install();
 
-import _ = require('lodash');
 import BluePromise = require('bluebird');
 import chai = require('chai');
 import debug = require('debug');
-import should = require('should');
 import glob = require('glob');
 import java = require('java');
 import T = require('../index');
-import util = require('util');
 
 var dlog = debug('ts-tinkerpop:test');
 
@@ -41,13 +36,7 @@ before((done: MochaDone): void => {
 
 describe('Gremlin', (): void => {
 
-  var async = require('async');
   var expect = chai.expect;
-  var semaphore = require('semaphore');
-  var stringify = require('json-stable-stringify');
-  var temp = require('temp');
-  // Cleanup temp files at exit.
-  temp.track();
 
   var graph: Java.TinkerGraph;
 
