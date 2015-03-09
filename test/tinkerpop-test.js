@@ -121,22 +121,6 @@ describe('Gremlin', function () {
                 expect(data).to.deep.equal(expected);
             });
         });
-        // See http://gremlindocs.com/#recipes/shortest-path, first method
-        it('can inefficiently find many paths between two nodes', function (done) {
-            var traversal = graph.VSync(T.ids([2]));
-            traversal = traversal.asSync('x');
-            traversal = traversal.bothSync(T.noargs);
-            //       traversal = traversal.repeatSync();
-            //         .jump('x', function (it) { return it.object.id != "6" && it.loops < 6; }).path();
-            //       traversal.toJSON(function(err, data) {
-            //         should.not.exist(err);
-            //         expect(data).to.be.ok;
-            //         expect(data).to.have.length(39);
-            //         done();
-            //       });
-            expect(traversal).to.be.ok;
-            done();
-        });
         it('g.V().has("name", "marko") -> v.value("name")', function () {
             return graph.VSync(T.noargs).hasSync('name', 'marko').nextPromise().then(function (v) {
                 expect(v).to.be.ok;
