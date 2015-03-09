@@ -26,20 +26,20 @@ import util = require('util');
 
 var dlog = debug('ts-tinkerpop:test');
 
-before((done: MochaDone) => {
+before((done: MochaDone): void => {
   java.asyncOptions = {
     promiseSuffix: 'Promise',
     promisify: require('bluebird').promisify
   };
 
   var filenames = glob.sync('target/**/*.jar');
-  filenames.forEach((name: string) => { dlog(name); java.classpath.push(name); });
+  filenames.forEach((name: string): void => { dlog(name); java.classpath.push(name); });
 
   T.initialize();
   done();
 });
 
-describe('Gremlin', function() {
+describe('Gremlin', (): void => {
 
   var async = require('async');
   var expect = chai.expect;
@@ -51,23 +51,23 @@ describe('Gremlin', function() {
 
   var graph: Java.TinkerGraph;
 
-  before((done: MochaDone) => {
+  before((done: MochaDone): void => {
     expect(T.TinkerGraph).to.be.ok;
     done();
   });
 
   // ## TinkerGraph in-memory
   // Tests using an empty in-memory TinkerGraph database instance.
-  describe('TinkerGraph empty', function() {
+  describe('TinkerGraph empty', (): void => {
 
-    before(() => {
+    before((): void => {
       graph = T.TinkerGraph.openSync();
       expect(graph).to.be.ok;
     });
 
-    after((done: MochaDone) => {
+    after((done: MochaDone): void => {
       if (graph) {
-        graph.close(() => {
+        graph.close((): void => {
           graph = null;
           done();
         });
@@ -76,25 +76,25 @@ describe('Gremlin', function() {
       }
     });
 
-    it('should initialize', function() {
+    it('should initialize', (): void => {
       // intentionally blank
     });
 
     // Check that the Gremlin statements `graph.V.count()` and `graph.E.count()` return `0`.
-    it('should be empty', function(done: MochaDone) {
+    it('should be empty', (done: MochaDone): void => {
       // Count vertices.
       var allVerticesTraversal = graph.VSync(T.noargs);
 
       // The "count" method applies to a Traversal, destructively measuring the number of
       // elements in it.
-      allVerticesTraversal.countSync().next(function(err: Error, count: Java.Object) {
+      allVerticesTraversal.countSync().next((err: Error, count: Java.Object): void => {
         expect(err).to.not.exist;
         expect(count.valueOf()).to.equal(0);
 
         // Count edges.
         var allEdgesTraversal = graph.ESync(T.noargs);
 
-        allEdgesTraversal.countSync().next(function(err: Error, count: Java.Object) {
+        allEdgesTraversal.countSync().next((err: Error, count: Java.Object): void => {
           expect(err).to.not.exist;
           expect(count.valueOf()).to.equal(0);
           done();
@@ -107,19 +107,19 @@ describe('Gremlin', function() {
   // ## TinkerGraph built-in example
   // Tests using the graph referenced in Gremlin documentation examples like
   // https://github.com/tinkerpop/gremlin/wiki/Basic-Graph-Traversals
-  describe('TinkerGraph built-in example', function() {
+  describe('TinkerGraph built-in example', (): void => {
 
     var graph: Java.TinkerGraph;
 
-    before(function() {
+    before((): void => {
       expect(T.TinkerFactory).to.be.ok;
       graph = T.TinkerFactory.createClassicSync();
       expect(graph).to.be.ok;
     });
 
-    after(function(done: MochaDone) {
+    after((done: MochaDone): void => {
       if (graph) {
-        graph.close(function() {
+        graph.close((): void => {
           graph = null;
           done();
         });
@@ -128,14 +128,14 @@ describe('Gremlin', function() {
       }
     });
 
-    it('should initialize', function() {
+    it('should initialize', (): void => {
       // intentionally blank
     });
 
     // To extract the unique values of the "name" property from all vertices, the canonical
     // Gremlin would be `graph.V.value('name').dedup`.  However, it can also be written with
     // the shortcut syntax for property access: `graph.V.name.dedup`.
-    it('has certain names', function() {
+    it('has certain names', (): BluePromise<void> => {
       var distinctNamesTraversal: Java.GraphTraversal = graph.VSync(T.noargs).valuesSync(T.S(['name'])).dedupSync();
       expect(distinctNamesTraversal).to.be.ok;
       return distinctNamesTraversal
@@ -150,7 +150,7 @@ describe('Gremlin', function() {
         });
       });
 
-    it('g.V().has("name", "marko") -> v.value("name")',  function() {
+    it('g.V().has("name", "marko") -> v.value("name")', (): BluePromise<void> => {
       return graph.VSync(T.noargs).hasSync('name', 'marko')
         .nextPromise()
         .then((v: Java.Vertex) => {
@@ -160,7 +160,7 @@ describe('Gremlin', function() {
         });
     });
 
-    it('g.V().valueSync("name")',  function() {
+    it('g.V().valueSync("name")', (): BluePromise<void> => {
       return graph.VSync(T.noargs).valuesSync(T.S(['name'])).toListPromise()
         .then((list: Java.List) => list.toArrayPromise())
         .then((data: Java.object_t[] ) => {
@@ -170,7 +170,7 @@ describe('Gremlin', function() {
         });
     });
 
-    it('filter() with JavaScript lambda', function () {
+    it('filter() with JavaScript lambda', (): BluePromise<void> => {
       var js = 'a.get().value("name") == "lop"';
       var lambda = T.newJavaScriptLambda(js);
       return graph.VSync(T.noargs).filterSync(lambda).toListPromise()
@@ -193,7 +193,7 @@ describe('Gremlin', function() {
         });
     });
 
-    it('choose(Function).option with integer choice, groovy fragment', function () {
+    it('choose(Function).option with integer choice, groovy fragment', (): BluePromise<void> => {
       var __ = T.__;
 
       // Use the result of the function as a key to the map of traversal choices.
@@ -214,7 +214,7 @@ describe('Gremlin', function() {
         });
     });
 
-    it('choose(Function).option with integer choice, groovy closure', function () {
+    it('choose(Function).option with integer choice, groovy closure', (): BluePromise<void> => {
       var __ = T.__;
 
       // Use the result of the function as a key to the map of traversal choices.
@@ -235,7 +235,7 @@ describe('Gremlin', function() {
         });
     });
 
-    it('T.forEach(g.V())', () => {
+    it('T.forEach(g.V())', (): BluePromise<void> => {
       var traversal = graph.VSync(T.noargs);
       return T.forEach(traversal, (obj: Java.Object): BluePromise<void> => {
         var v: Java.Vertex = T.asVertex(obj);
@@ -246,7 +246,7 @@ describe('Gremlin', function() {
       });
     });
 
-    it('T.forEach(g.E())', () => {
+    it('T.forEach(g.E())', (): BluePromise<void> => {
       var traversal = graph.ESync(T.noargs);
       return T.forEach(traversal, (obj: Java.Object): BluePromise<void> => {
         var e: Java.Edge = T.asEdge(obj);
