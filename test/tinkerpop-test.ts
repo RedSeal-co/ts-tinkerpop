@@ -214,7 +214,7 @@ describe('Gremlin', function() {
       var __ = T.__;
 
       // Use the result of the function as a key to the map of traversal choices.
-      var groovy = '{ vertex -> vertex.value("name").length() }';
+      var groovy = 'a.value("name").length()';
       var lambda = T.newGroovyLambda(groovy);
 
       var chosen = graph.VSync(T.noargs).hasSync('age').chooseSync(lambda)
@@ -227,8 +227,7 @@ describe('Gremlin', function() {
         .then((list: Java.List) => list.toArrayPromise())
         .then((actual: Java.object_t[] ) => {
           var expected = ['marko', 'ripple', 'lop'];
-          // TODO: why isn't this giving expected results?
-//           expect(actual.sort()).to.deep.equal(expected.sort());
+          expect(actual.sort()).to.deep.equal(expected.sort());
         });
     });
 
