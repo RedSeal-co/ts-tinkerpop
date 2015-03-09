@@ -83,10 +83,11 @@ clean-tsd:
 TSC=./node_modules/.bin/tsc
 TSC_OPTS=--module commonjs --target ES5 --sourceMap --noEmitOnError --noImplicitAny
 
-%.js: %.ts o/all-installed.lastran
-	$(TSC) $(TSC_OPTS) $< || (rm -f $@ && false)
-	stat $@ > /dev/null
-	node_modules/tslint/bin/tslint --config tslint.json --file $<
+LINT=./node_modules/.bin/tslint
+LINT_OPTS=--config tslint.json --file
+
+%.js %.js.map: %.ts o/all-installed.lastran
+	($(TSC) $(TSC_OPTS) $< && $(LINT) $(LINT_OPTS) $<) || (rm -f $*.js* && false)
 
 clean-typescript:
 	rm -f *.js *.js.map
