@@ -2,8 +2,10 @@
 /// <reference path='typings/debug/debug.d.ts' />
 /// <reference path='typings/java/java.d.ts' />
 /// <reference path='typings/lodash/lodash.d.ts' />
+/// <reference path='typings/power-assert/power-assert.d.ts' />
 
 import _ = require('lodash');
+import assert = require('power-assert');
 import BluePromise = require('bluebird');
 import debug = require('debug');
 import java = require('java');
@@ -17,6 +19,7 @@ module Tinkerpop {
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
   export var ByteArrayOutputStream: Java.java.io.ByteArrayOutputStream.Static;
   export var GraphSONWriter: Java.com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter.Static;
+  export var GremlinGroovyScriptEngine: Java.com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine.Static;
   export var GroovyLambda: Java.co.redseal.gremlinnode.function_.GroovyLambda.Static;
   export var noargs: Java.array_t<Java.String>;
   export var NULL: Java.org.codehaus.groovy.runtime.NullObject;
@@ -25,6 +28,8 @@ module Tinkerpop {
   export var TinkerFactory: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory.Static;
   export var TinkerGraph: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.Static;
   export var UTF8: string;
+
+  var _GroovyScriptEngine: Java.com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
 
   // ### *initialize()* should be called once just after java has been configured.
   // Java configuration includes classpath, options, and asyncOptions.
@@ -36,6 +41,7 @@ module Tinkerpop {
     __ = java.import('com.tinkerpop.gremlin.process.graph.traversal.__');
     ByteArrayOutputStream = java.import('java.io.ByteArrayOutputStream');
     GraphSONWriter = java.import('com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter');
+    GremlinGroovyScriptEngine = java.import('com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine');
     GroovyLambda = java.import('co.redseal.gremlinnode.function.GroovyLambda');
     noargs = java.newArray<Java.String>('java.lang.String', []);
     NULL = java.callStaticMethodSync('org.codehaus.groovy.runtime.NullObject', 'getNullObject');
@@ -44,6 +50,10 @@ module Tinkerpop {
     TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
     TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
     UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.nameSync();
+
+    // TODO: provide a separate factory class for script engine instances.
+    _GroovyScriptEngine = new GremlinGroovyScriptEngine();
+
     dlog('Tinkerpop helper initialized.');
   }
 
@@ -60,11 +70,25 @@ module Tinkerpop {
   }
 
   export function newJavaScriptLambda(javascript: string): Java.ScriptEngineLambda {
-    return new ScriptEngineLambda(_javaScriptEngineName, javascript);   //
+    return new ScriptEngineLambda(_javaScriptEngineName, javascript);
   };
 
-  export function newGroovyLambda(groovy: string): Java.ScriptEngineLambda {
-    return new ScriptEngineLambda(_groovyScriptEngineName, groovy);
+  export function newGroovyLambda(groovyFragment: string): Java.ScriptEngineLambda {
+    // The groovy string here is *not* a closure
+    // It is a code fragment with implicit parameters a,b,c, e.g.: 'println(a)'
+    assert.ok(!_isClosure(groovyFragment));
+    return new ScriptEngineLambda(_groovyScriptEngineName, groovyFragment);
+  };
+
+  function _isClosure(val: string): boolean {
+    var closureRegex = /^\{.*\}$/;
+    return _.isString(val) && val.search(closureRegex) > -1;
+  };
+
+  export function newGroovyClosure(groovyClosureString: string): Java.GroovyLambda {
+    // The groovy string must be a closure expression, e.g. '{ x -> println(x) }'.
+    assert.ok(_isClosure(groovyClosureString));
+    return new GroovyLambda(groovyClosureString, _GroovyScriptEngine);
   };
 
   export function vertexStringify(vertex: Java.Vertex): string {
@@ -79,7 +103,7 @@ module Tinkerpop {
     return JSON.parse(vertexStringify(vertex));
   }
 
-  export function edgeStringify(edge: Java.Edge) {
+  export function edgeStringify(edge: Java.Edge): string {
     var stream: Java.ByteArrayOutputStream = new ByteArrayOutputStream();
     var builder: Java.GraphSONWriter$Builder = GraphSONWriter.buildSync();
     var writer: Java.GraphSONWriter = builder.createSync();

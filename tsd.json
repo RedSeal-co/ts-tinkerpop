@@ -37,6 +37,15 @@
     },
     "should/should.d.ts": {
       "commit": "62b2d5c98748ac76630a67ce628c51be09056a8a"
+    },
+    "power-assert/power-assert.d.ts": {
+      "commit": "e20d7e796da57baa25a6372edfec154fe47e218f"
+    },
+    "empower/empower.d.ts": {
+      "commit": "e20d7e796da57baa25a6372edfec154fe47e218f"
+    },
+    "power-assert-formatter/power-assert-formatter.d.ts": {
+      "commit": "e20d7e796da57baa25a6372edfec154fe47e218f"
     }
   }
 }

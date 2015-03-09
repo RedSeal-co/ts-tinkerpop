@@ -171,11 +171,22 @@ describe('Gremlin', function () {
                 expect(vertexObj).to.deep.equal(expected);
             });
         });
-        it('choose(Function).option with integer choice', function () {
+        it('choose(Function).option with integer choice, groovy fragment', function () {
             var __ = T.__;
             // Use the result of the function as a key to the map of traversal choices.
             var groovy = 'a.value("name").length()';
             var lambda = T.newGroovyLambda(groovy);
+            var chosen = graph.VSync(T.noargs).hasSync('age').chooseSync(lambda).optionSync(5, __.inSync(T.noargs)).optionSync(4, __.outSync(T.noargs)).optionSync(3, __.bothSync(T.noargs)).valuesSync(T.S(['name']));
+            return chosen.toListPromise().then(function (list) { return list.toArrayPromise(); }).then(function (actual) {
+                var expected = ['marko', 'ripple', 'lop'];
+                expect(actual.sort()).to.deep.equal(expected.sort());
+            });
+        });
+        it('choose(Function).option with integer choice, groovy closure', function () {
+            var __ = T.__;
+            // Use the result of the function as a key to the map of traversal choices.
+            var groovy = '{ vertex -> vertex.value("name").length() }';
+            var lambda = T.newGroovyClosure(groovy);
             var chosen = graph.VSync(T.noargs).hasSync('age').chooseSync(lambda).optionSync(5, __.inSync(T.noargs)).optionSync(4, __.outSync(T.noargs)).optionSync(3, __.bothSync(T.noargs)).valuesSync(T.S(['name']));
             return chosen.toListPromise().then(function (list) { return list.toArrayPromise(); }).then(function (actual) {
                 var expected = ['marko', 'ripple', 'lop'];

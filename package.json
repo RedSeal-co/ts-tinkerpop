@@ -35,6 +35,7 @@
     "debug": "^2.1.2",
     "java": "^0.4.6",
     "lodash": "^3.3.1",
+    "power-assert": "^0.10.2",
     "source-map-support": "^0.2.9"
   },
   "tsjava": {
@@ -44,6 +45,7 @@
     ],
     "seedClasses": [
       "co.redseal.gremlinnode.function.GroovyLambda",
+      "com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine",
       "com.tinkerpop.gremlin.process.computer.GraphComputer",
       "com.tinkerpop.gremlin.process.computer.MapReduce",
       "com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda",
