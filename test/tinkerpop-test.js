@@ -13,7 +13,7 @@ var chai = require('chai');
 var debug = require('debug');
 var glob = require('glob');
 var java = require('java');
-var TP = require('../index');
+var TP = require('../lib/index');
 var dlog = debug('ts-tinkerpop:test');
 before(function (done) {
     java.asyncOptions = {

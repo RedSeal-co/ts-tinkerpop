@@ -41,7 +41,7 @@ $(UNIT_TEST_RAN): o/%.lastran: %.js o/all-installed.lastran
 
 test: $(UNIT_TEST_RAN)
 
-test/tinkerpop-test.js : index.js $(JAVA_D_TS)
+test/tinkerpop-test.js : lib/index.js $(JAVA_D_TS)
 
 clean-test:
 	rm -f test/*.js test/*.js.map
@@ -95,7 +95,7 @@ clean-typescript:
 
 .PHONY: clean-typescript
 
-index.js: $(JAVA_D_TS)
+lib/index.js: $(JAVA_D_TS)
 
 ### ts-java
 
@@ -113,8 +113,8 @@ clean-ts-java:
 
 documentation : o/documentation.lastran
 
-o/documentation.lastran : o/npm-installed.lastran README.md index.ts $(UNIT_TESTS) | o
-	node_modules/.bin/groc --except "node_modules/**" --except "o/**" --except "**/*.d.ts" index.ts $(UNIT_TESTS) README.md
+o/documentation.lastran : o/npm-installed.lastran README.md lib/index.ts $(UNIT_TESTS) | o
+	node_modules/.bin/groc --except "node_modules/**" --except "o/**" --except "**/*.d.ts" lib/index.ts $(UNIT_TESTS) README.md
 	touch $@
 
 clean-doc:

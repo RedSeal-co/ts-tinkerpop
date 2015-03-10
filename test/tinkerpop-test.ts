@@ -17,7 +17,7 @@ import chai = require('chai');
 import debug = require('debug');
 import glob = require('glob');
 import java = require('java');
-import TP = require('../index');
+import TP = require('../lib/index');
 import util = require('util');
 
 var dlog = debug('ts-tinkerpop:test');
