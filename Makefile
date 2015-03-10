@@ -4,10 +4,11 @@ default: test
 
 install: o/all-installed.lastran
 
-o/all-installed.lastran: o/maven-installed.lastran o/npm-installed.lastran o/tsd-installed.lastran
-	mkdir -p $(dir $@) && touch $@
+o/all-installed.lastran: o/maven-installed.lastran o/npm-installed.lastran o/tsd-installed.lastran o/documentation.lastran
+	touch $@
 
-clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java
+clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java clean-doc
+	rm -rf o
 
 .PHONY: default install clean test
 
@@ -19,9 +20,9 @@ JAVA_SRC=$(shell find src -name '*.java')
 
 install-maven: o/maven-installed.lastran
 
-o/maven-installed.lastran: pom.xml $(JAVA_SRC)
+o/maven-installed.lastran: pom.xml $(JAVA_SRC) | o
 	mvn clean package
-	mkdir -p $(dir $@) && touch $@
+	touch $@
 
 clean-maven:
 	rm -rf target o/maven-installed.lastran
@@ -36,7 +37,7 @@ UNIT_TEST_RAN=$(patsubst %.ts,o/%.lastran,$(UNIT_TESTS))
 
 $(UNIT_TEST_RAN): o/%.lastran: %.js o/all-installed.lastran
 	node_modules/.bin/mocha --timeout 5s --reporter=spec --ui tdd $<
-	mkdir -p $(dir $@) && touch  $@
+	mkdir -p $(dir $@) && touch $@
 
 test: $(UNIT_TEST_RAN)
 
@@ -51,9 +52,9 @@ clean-test:
 
 install-npm: o/npm-installed.lastran
 
-o/npm-installed.lastran:
+o/npm-installed.lastran: | o
 	npm install
-	mkdir -p $(dir $@) && touch $@
+	touch $@
 
 clean-npm:
 	rm -rf node_modules o/npm-installed.lastran
@@ -68,7 +69,7 @@ install-tsd: o/tsd-installed.lastran
 
 o/tsd-installed.lastran: o/npm-installed.lastran
 	$(TSD) reinstall
-	mkdir -p $(dir $@) && touch $@
+	touch $@
 
 update-tsd:
 	$(TSD) update -o -s
@@ -108,4 +109,20 @@ clean-ts-java:
 
 .PHONY: ts-java java.d.ts
 
+### Documentation
 
+documentation : o/documentation.lastran
+
+o/documentation.lastran : o/npm-installed.lastran README.md index.ts $(UNIT_TESTS) | o
+	node_modules/.bin/groc --except "node_modules/**" --except "o/**" --except "**/*.d.ts" index.ts $(UNIT_TESTS) README.md
+	touch $@
+
+clean-doc:
+	rm -rf doc o/documentation.lastran
+
+.PHONY: documentation clean-doc
+
+### o (output) directory
+
+o :
+	mkdir -p o
