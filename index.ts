@@ -215,6 +215,21 @@ module Tinkerpop {
     return JSON.parse(JSON.stringify(array));
   };
 
+  export function simplifyVertexProperties(obj: any): any {
+    // Given *obj* which is a javascript object created by asJSONSync(),
+    // return a simpler representation of the object that is more convenient for unit tests.
+
+    if (_.isArray(obj)) {
+      return _.map(obj, simplifyVertexProperties);
+    }
+
+    obj.properties = _.mapValues(obj.properties, (propValue: any) => {
+      var values = _.pluck(propValue, 'value');
+      return (values.length === 1) ? values[0] : values;
+    });
+    return obj;
+  };
+
   var _groovyScriptEngineName: string = 'Groovy';
   var _javaScriptEngineName: string = 'JavaScript';
 }

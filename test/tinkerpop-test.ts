@@ -273,6 +273,32 @@ describe('Gremlin', (): void => {
         }
       ];
       expect(json).to.deep.equal(expected);
+
+      var simplifed = TP.simplifyVertexProperties(json);
+      var simplifedExpected = [
+        {
+          id: 3,
+          label: 'vertex',
+          type: 'vertex',
+          properties:
+          {
+            name: 'lop',
+            lang: 'java'
+          }
+        },
+        {
+          id: 5,
+          label: 'vertex',
+          type: 'vertex',
+          properties:
+          {
+            name: 'ripple',
+            lang: 'java'
+          }
+        }
+      ];
+      expect(simplifed).to.deep.equal(simplifedExpected);
+
       return BluePromise.resolve();
     });
 
@@ -304,6 +330,8 @@ describe('Gremlin', (): void => {
       expect(json).to.deep.equal(expected);
       return BluePromise.resolve();
     });
+
+
 
   });
 

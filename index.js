@@ -215,6 +215,20 @@ var Tinkerpop;
     }
     Tinkerpop.asJSONSync = asJSONSync;
     ;
+    function simplifyVertexProperties(obj) {
+        // Given *obj* which is a javascript object created by asJSONSync(),
+        // return a simpler representation of the object that is more convenient for unit tests.
+        if (_.isArray(obj)) {
+            return _.map(obj, simplifyVertexProperties);
+        }
+        obj.properties = _.mapValues(obj.properties, function (propValue) {
+            var values = _.pluck(propValue, 'value');
+            return (values.length === 1) ? values[0] : values;
+        });
+        return obj;
+    }
+    Tinkerpop.simplifyVertexProperties = simplifyVertexProperties;
+    ;
     var _groovyScriptEngineName = 'Groovy';
     var _javaScriptEngineName = 'JavaScript';
 })(Tinkerpop || (Tinkerpop = {}));
