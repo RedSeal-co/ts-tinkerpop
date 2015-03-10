@@ -189,6 +189,60 @@ describe('Gremlin', function () {
                 return BluePromise.resolve();
             });
         });
+        it('TP.asJSONSync(vertices)', function () {
+            var traversal = graph.VSync(TP.noargs).hasSync('lang', TP.Compare.eq, 'java');
+            var json = TP.asJSONSync(traversal);
+            var expected = [
+                {
+                    id: 3,
+                    label: 'vertex',
+                    type: 'vertex',
+                    properties: {
+                        name: [{ id: 4, value: 'lop', properties: {} }],
+                        lang: [{ id: 5, value: 'java', properties: {} }]
+                    }
+                },
+                {
+                    id: 5,
+                    label: 'vertex',
+                    type: 'vertex',
+                    properties: {
+                        name: [{ id: 8, value: 'ripple', properties: {} }],
+                        lang: [{ id: 9, value: 'java', properties: {} }]
+                    }
+                }
+            ];
+            expect(json).to.deep.equal(expected);
+            return BluePromise.resolve();
+        });
+        it('TP.asJSONSync(edges)', function () {
+            var traversal = graph.ESync(TP.noargs).hasSync('weight', TP.Compare.eq, java.newFloat(1.0));
+            var json = TP.asJSONSync(traversal);
+            var expected = [
+                {
+                    inV: 4,
+                    inVLabel: 'vertex',
+                    outVLabel: 'vertex',
+                    id: 8,
+                    label: 'knows',
+                    type: 'edge',
+                    outV: 1,
+                    properties: { weight: 1 }
+                },
+                {
+                    inV: 5,
+                    inVLabel: 'vertex',
+                    outVLabel: 'vertex',
+                    id: 10,
+                    label: 'created',
+                    type: 'edge',
+                    outV: 4,
+                    properties: { weight: 1 }
+                }
+            ];
+            expect(json).to.deep.equal(expected);
+            return BluePromise.resolve();
+        });
     });
 });
 //# sourceMappingURL=tinkerpop-test.js.map

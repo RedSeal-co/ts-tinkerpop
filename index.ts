@@ -18,6 +18,7 @@ module Tinkerpop {
 
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
   export var ByteArrayOutputStream: Java.java.io.ByteArrayOutputStream.Static;
+  export var Compare: Java.com.tinkerpop.gremlin.structure.Compare.Static;
   export var GraphSONWriter: Java.com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter.Static;
   export var GremlinGroovyScriptEngine: Java.com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine.Static;
   export var GroovyLambda: Java.co.redseal.gremlinnode.function_.GroovyLambda.Static;
@@ -40,6 +41,7 @@ module Tinkerpop {
   export function initialize() {
     __ = java.import('com.tinkerpop.gremlin.process.graph.traversal.__');
     ByteArrayOutputStream = java.import('java.io.ByteArrayOutputStream');
+    Compare = java.import('com.tinkerpop.gremlin.structure.Compare');
     GraphSONWriter = java.import('com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter');
     GremlinGroovyScriptEngine = java.import('com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine');
     GroovyLambda = java.import('co.redseal.gremlinnode.function.GroovyLambda');
@@ -115,6 +117,18 @@ module Tinkerpop {
     return JSON.parse(edgeStringify(edge));
   };
 
+  export function isJavaObject(e: any): boolean {
+    return java.instanceOf(e, 'java.lang.Object');
+  }
+
+  export function asJavaObject(obj: Java.object_t): Java.Object {
+    if (isJavaObject(obj)) {
+      return <Java.Object> obj;
+    } else {
+      throw new Error('asJavaObject given an object that is not a Java.Object');
+    }
+  }
+
   export function isVertex(v: any): boolean {
     return java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex');
   }
@@ -162,7 +176,44 @@ module Tinkerpop {
         });
     }
     return _eachIterator(javaIterator, consumer);
-};
+  }
+
+  function _asJSON(elem: any): any {
+    if (!_.isObject(elem)) {
+      // Scalars should stay that way.
+      return elem;
+
+    } else if (_.isArray(elem)) {
+      // Arrays must be recursively converted.
+      return elem.map((e: any) => _asJSON(e));
+
+    } else if (isVertex(elem)) {
+      // Handle Vertex
+      return vertexToJson(asVertex(elem));
+
+    } else if (isEdge(elem)) {
+      // Handle Vertex
+      return edgeToJson(asEdge(elem));
+
+    } else if (isJavaObject(elem)) {
+      // If we still have an unrecognized Java object, convert it to a string.
+      var javaObj: Java.Object = <Java.Object> elem;
+      return {'javaClass': javaObj.getClassSync().getNameSync(), 'toString': javaObj.toStringSync()};
+
+    } else if ('toJSON' in elem) {
+      // If we have a 'toJSON' method, use it.
+      return elem;
+
+    } else {
+      // Recursively convert any other kind of object.
+      return _.mapValues(elem, (value: any) => _asJSON(value));
+    }
+  }
+
+  export function asJSONSync(traversal: Java.Traversal): any {
+    var array: any[] = traversal.toListSync().toArraySync().map((elem: any) => _asJSON(elem));
+    return JSON.parse(JSON.stringify(array));
+  };
 
   var _groovyScriptEngineName: string = 'Groovy';
   var _javaScriptEngineName: string = 'JavaScript';
