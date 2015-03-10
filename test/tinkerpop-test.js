@@ -213,8 +213,11 @@ describe('Gremlin', function () {
                 }
             ];
             expect(json).to.deep.equal(expected);
-            var simplifed = TP.simplifyVertexProperties(json);
-            var simplifedExpected = [
+        });
+        it('TP.asJSONSync(vertices) with simplifyVertex', function () {
+            var traversal = graph.VSync(TP.noargs).hasSync('lang', TP.Compare.eq, 'java');
+            var json = TP.simplifyVertexProperties(TP.asJSONSync(traversal));
+            var expected = [
                 {
                     id: 3,
                     label: 'vertex',
@@ -234,8 +237,7 @@ describe('Gremlin', function () {
                     }
                 }
             ];
-            expect(simplifed).to.deep.equal(simplifedExpected);
-            return BluePromise.resolve();
+            expect(json).to.deep.equal(expected);
         });
         it('TP.asJSONSync(edges)', function () {
             var traversal = graph.ESync(TP.noargs).hasSync('weight', TP.Compare.eq, java.newFloat(1.0));
@@ -263,7 +265,6 @@ describe('Gremlin', function () {
                 }
             ];
             expect(json).to.deep.equal(expected);
-            return BluePromise.resolve();
         });
     });
 });

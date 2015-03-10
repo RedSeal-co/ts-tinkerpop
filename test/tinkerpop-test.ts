@@ -247,7 +247,7 @@ describe('Gremlin', (): void => {
       });
     });
 
-    it('TP.asJSONSync(vertices)', (): BluePromise<void> => {
+    it('TP.asJSONSync(vertices)', (): void => {
       var traversal = graph.VSync(TP.noargs).hasSync('lang', TP.Compare.eq, 'java');
       var json: any = TP.asJSONSync(traversal);
       var expected = [
@@ -273,9 +273,12 @@ describe('Gremlin', (): void => {
         }
       ];
       expect(json).to.deep.equal(expected);
+    });
 
-      var simplifed = TP.simplifyVertexProperties(json);
-      var simplifedExpected = [
+    it('TP.asJSONSync(vertices) with simplifyVertex', (): void => {
+      var traversal = graph.VSync(TP.noargs).hasSync('lang', TP.Compare.eq, 'java');
+      var json: any = TP.simplifyVertexProperties(TP.asJSONSync(traversal));
+      var expected = [
         {
           id: 3,
           label: 'vertex',
@@ -297,12 +300,10 @@ describe('Gremlin', (): void => {
           }
         }
       ];
-      expect(simplifed).to.deep.equal(simplifedExpected);
-
-      return BluePromise.resolve();
+      expect(json).to.deep.equal(expected);
     });
 
-    it('TP.asJSONSync(edges)', (): BluePromise<void> => {
+    it('TP.asJSONSync(edges)', (): void => {
       var traversal = graph.ESync(TP.noargs).hasSync('weight', TP.Compare.eq, java.newFloat(1.0));
       var json: any = TP.asJSONSync(traversal);
       var expected = [
@@ -328,7 +329,6 @@ describe('Gremlin', (): void => {
         }
       ];
       expect(json).to.deep.equal(expected);
-      return BluePromise.resolve();
     });
 
 
