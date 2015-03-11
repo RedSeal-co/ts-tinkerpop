@@ -1,10 +1,10 @@
 # ts-gremlin-test/Makefile
 
-default: test
+default: test o/documentation.lastran
 
 install: o/all-installed.lastran
 
-o/all-installed.lastran: o/maven-installed.lastran o/npm-installed.lastran o/tsd-installed.lastran o/documentation.lastran
+o/all-installed.lastran: o/maven-installed.lastran o/npm-installed.lastran o/tsd-installed.lastran
 	touch $@
 
 clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java clean-doc
