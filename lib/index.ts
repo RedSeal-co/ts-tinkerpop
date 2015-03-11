@@ -16,6 +16,8 @@ module Tinkerpop {
 
   var dlog = debug('ts-tinkerpop:index');
 
+  // ### Exported variables
+
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
   export var ByteArrayOutputStream: Java.java.io.ByteArrayOutputStream.Static;
   export var Compare: Java.com.tinkerpop.gremlin.structure.Compare.Static;
@@ -29,8 +31,6 @@ module Tinkerpop {
   export var TinkerFactory: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory.Static;
   export var TinkerGraph: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.Static;
   export var UTF8: string;
-
-  var _groovyScriptEngine: Java.com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
 
   // ### *initialize()* should be called once just after java has been configured.
   // Java configuration includes classpath, options, and asyncOptions.
@@ -59,6 +59,8 @@ module Tinkerpop {
     dlog('Tinkerpop helper initialized.');
   }
 
+  // ### Exported Functions
+
   export function id(n: number): Java.Object {
     return java.newLong(n);
   }
@@ -80,11 +82,6 @@ module Tinkerpop {
     // It is a code fragment with implicit parameters a,b,c, e.g.: 'println(a)'
     assert.ok(!_isClosure(groovyFragment));
     return new ScriptEngineLambda(_groovyScriptEngineName, groovyFragment);
-  };
-
-  function _isClosure(val: string): boolean {
-    var closureRegex = /^\{.*\}$/;
-    return _.isString(val) && val.search(closureRegex) > -1;
   };
 
   export function newGroovyClosure(groovyClosureString: string): Java.GroovyLambda {
@@ -178,6 +175,33 @@ module Tinkerpop {
     return _eachIterator(javaIterator, consumer);
   }
 
+  export function asJSONSync(traversal: Java.Traversal): any {
+    var array: any[] = traversal.toListSync().toArraySync().map((elem: any) => _asJSON(elem));
+    return JSON.parse(JSON.stringify(array));
+  };
+
+  export function simplifyVertexProperties(obj: any): any {
+    // Given *obj* which is a javascript object created by asJSONSync(),
+    // return a simpler representation of the object that is more convenient for unit tests.
+
+    if (_.isArray(obj)) {
+      return _.map(obj, simplifyVertexProperties);
+    }
+
+    obj.properties = _.mapValues(obj.properties, (propValue: any) => {
+      var values = _.pluck(propValue, 'value');
+      return (values.length === 1) ? values[0] : values;
+    });
+    return obj;
+  };
+
+  // ### Non-exported Functions
+
+  function _isClosure(val: string): boolean {
+    var closureRegex = /^\{.*\}$/;
+    return _.isString(val) && val.search(closureRegex) > -1;
+  };
+
   function _asJSON(elem: any): any {
     if (!_.isObject(elem)) {
       // Scalars should stay that way.
@@ -210,28 +234,11 @@ module Tinkerpop {
     }
   }
 
-  export function asJSONSync(traversal: Java.Traversal): any {
-    var array: any[] = traversal.toListSync().toArraySync().map((elem: any) => _asJSON(elem));
-    return JSON.parse(JSON.stringify(array));
-  };
-
-  export function simplifyVertexProperties(obj: any): any {
-    // Given *obj* which is a javascript object created by asJSONSync(),
-    // return a simpler representation of the object that is more convenient for unit tests.
-
-    if (_.isArray(obj)) {
-      return _.map(obj, simplifyVertexProperties);
-    }
-
-    obj.properties = _.mapValues(obj.properties, (propValue: any) => {
-      var values = _.pluck(propValue, 'value');
-      return (values.length === 1) ? values[0] : values;
-    });
-    return obj;
-  };
-
+  // ### Non-exported variables
   var _groovyScriptEngineName: string = 'Groovy';
   var _javaScriptEngineName: string = 'JavaScript';
+  var _groovyScriptEngine: Java.com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
+
 }
 
 export = Tinkerpop;
