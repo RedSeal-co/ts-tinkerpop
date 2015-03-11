@@ -284,7 +284,7 @@ module Tinkerpop {
       return vertexToJson(asVertex(elem));
 
     } else if (isEdge(elem)) {
-      // Handle Vertex
+      // Handle Edge
       return edgeToJson(asEdge(elem));
 
     } else if (isJavaObject(elem)) {
