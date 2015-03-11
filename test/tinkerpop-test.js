@@ -13,7 +13,7 @@ var chai = require('chai');
 var debug = require('debug');
 var glob = require('glob');
 var java = require('java');
-var TP = require('../index');
+var TP = require('../lib/index');
 var dlog = debug('ts-tinkerpop:test');
 before(function (done) {
     java.asyncOptions = {
@@ -188,6 +188,83 @@ describe('Gremlin', function () {
                 expect(json.type).to.equal('edge');
                 return BluePromise.resolve();
             });
+        });
+        it('TP.asJSONSync(vertices)', function () {
+            var traversal = graph.VSync(TP.noargs).hasSync('lang', TP.Compare.eq, 'java');
+            var json = TP.asJSONSync(traversal);
+            var expected = [
+                {
+                    id: 3,
+                    label: 'vertex',
+                    type: 'vertex',
+                    properties: {
+                        name: [{ id: 4, value: 'lop', properties: {} }],
+                        lang: [{ id: 5, value: 'java', properties: {} }]
+                    }
+                },
+                {
+                    id: 5,
+                    label: 'vertex',
+                    type: 'vertex',
+                    properties: {
+                        name: [{ id: 8, value: 'ripple', properties: {} }],
+                        lang: [{ id: 9, value: 'java', properties: {} }]
+                    }
+                }
+            ];
+            expect(json).to.deep.equal(expected);
+        });
+        it('TP.asJSONSync(vertices) with simplifyVertex', function () {
+            var traversal = graph.VSync(TP.noargs).hasSync('lang', TP.Compare.eq, 'java');
+            var json = TP.simplifyVertexProperties(TP.asJSONSync(traversal));
+            var expected = [
+                {
+                    id: 3,
+                    label: 'vertex',
+                    type: 'vertex',
+                    properties: {
+                        name: 'lop',
+                        lang: 'java'
+                    }
+                },
+                {
+                    id: 5,
+                    label: 'vertex',
+                    type: 'vertex',
+                    properties: {
+                        name: 'ripple',
+                        lang: 'java'
+                    }
+                }
+            ];
+            expect(json).to.deep.equal(expected);
+        });
+        it('TP.asJSONSync(edges)', function () {
+            var traversal = graph.ESync(TP.noargs).hasSync('weight', TP.Compare.eq, java.newFloat(1.0));
+            var json = TP.asJSONSync(traversal);
+            var expected = [
+                {
+                    inV: 4,
+                    inVLabel: 'vertex',
+                    outVLabel: 'vertex',
+                    id: 8,
+                    label: 'knows',
+                    type: 'edge',
+                    outV: 1,
+                    properties: { weight: 1 }
+                },
+                {
+                    inV: 5,
+                    inVLabel: 'vertex',
+                    outVLabel: 'vertex',
+                    id: 10,
+                    label: 'created',
+                    type: 'edge',
+                    outV: 4,
+                    properties: { weight: 1 }
+                }
+            ];
+            expect(json).to.deep.equal(expected);
         });
     });
 });

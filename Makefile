@@ -1,13 +1,14 @@
 # ts-gremlin-test/Makefile
 
-default: test
+default: test o/documentation.lastran
 
 install: o/all-installed.lastran
 
 o/all-installed.lastran: o/maven-installed.lastran o/npm-installed.lastran o/tsd-installed.lastran
-	mkdir -p $(dir $@) && touch $@
+	touch $@
 
-clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java
+clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java clean-doc
+	rm -rf o
 
 .PHONY: default install clean test
 
@@ -19,9 +20,9 @@ JAVA_SRC=$(shell find src -name '*.java')
 
 install-maven: o/maven-installed.lastran
 
-o/maven-installed.lastran: pom.xml $(JAVA_SRC)
+o/maven-installed.lastran: pom.xml $(JAVA_SRC) | o
 	mvn clean package
-	mkdir -p $(dir $@) && touch $@
+	touch $@
 
 clean-maven:
 	rm -rf target o/maven-installed.lastran
@@ -35,12 +36,12 @@ UNIT_TEST_OBJS=$(patsubst %.ts,%.js,$(UNIT_TESTS))
 UNIT_TEST_RAN=$(patsubst %.ts,o/%.lastran,$(UNIT_TESTS))
 
 $(UNIT_TEST_RAN): o/%.lastran: %.js o/all-installed.lastran
-	node_modules/.bin/mocha --timeout 5s --reporter=spec --ui tdd $<
-	mkdir -p $(dir $@) && touch  $@
+	node_modules/.bin/mocha --timeout 10s --reporter=spec --ui tdd $<
+	mkdir -p $(dir $@) && touch $@
 
 test: $(UNIT_TEST_RAN)
 
-test/tinkerpop-test.js : index.js $(JAVA_D_TS)
+test/tinkerpop-test.js : lib/index.js $(JAVA_D_TS)
 
 clean-test:
 	rm -f test/*.js test/*.js.map
@@ -51,9 +52,9 @@ clean-test:
 
 install-npm: o/npm-installed.lastran
 
-o/npm-installed.lastran:
+o/npm-installed.lastran: | o
 	npm install
-	mkdir -p $(dir $@) && touch $@
+	touch $@
 
 clean-npm:
 	rm -rf node_modules o/npm-installed.lastran
@@ -68,7 +69,7 @@ install-tsd: o/tsd-installed.lastran
 
 o/tsd-installed.lastran: o/npm-installed.lastran
 	$(TSD) reinstall
-	mkdir -p $(dir $@) && touch $@
+	touch $@
 
 update-tsd:
 	$(TSD) update -o -s
@@ -83,17 +84,18 @@ clean-tsd:
 TSC=./node_modules/.bin/tsc
 TSC_OPTS=--module commonjs --target ES5 --sourceMap --noEmitOnError --noImplicitAny
 
-%.js: %.ts o/all-installed.lastran
-	$(TSC) $(TSC_OPTS) $< || (rm -f $@ && false)
-	stat $@ > /dev/null
-	node_modules/tslint/bin/tslint --config tslint.json --file $<
+LINT=./node_modules/.bin/tslint
+LINT_OPTS=--config tslint.json --file
+
+%.js %.js.map: %.ts o/all-installed.lastran
+	($(TSC) $(TSC_OPTS) $< && $(LINT) $(LINT_OPTS) $<) || (rm -f $*.js* && false)
 
 clean-typescript:
 	rm -f *.js *.js.map
 
 .PHONY: clean-typescript
 
-index.js: $(JAVA_D_TS)
+lib/index.js: $(JAVA_D_TS)
 
 ### ts-java
 
@@ -107,4 +109,20 @@ clean-ts-java:
 
 .PHONY: ts-java java.d.ts
 
+### Documentation
 
+documentation : o/documentation.lastran
+
+o/documentation.lastran : o/npm-installed.lastran README.md lib/index.ts $(UNIT_TESTS) | o
+	node_modules/.bin/groc --except "node_modules/**" --except "o/**" --except "**/*.d.ts" lib/index.ts $(UNIT_TESTS) README.md
+	touch $@
+
+clean-doc:
+	rm -rf doc o/documentation.lastran
+
+.PHONY: documentation clean-doc
+
+### o (output) directory
+
+o :
+	mkdir -p o
