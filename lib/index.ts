@@ -50,7 +50,8 @@ module Tinkerpop {
 
   // ### Exported Functions
 
-  // ### *initialize()* should be called once just after java has been configured.
+  // #### `initialize()`
+  // This function should be called once just after java has been configured.
   // Java configuration includes classpath, options, and asyncOptions.
   // If this method is called before configuration, the java.import calls will likely
   // fail due to the classes not being on the classpath.
@@ -71,43 +72,59 @@ module Tinkerpop {
     TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
     UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.nameSync();
 
-    // TODO: provide a separate factory class for script engine instances.
+    /// TODO: provide a separate factory class for script engine instances.
     _groovyScriptEngine = new GremlinGroovyScriptEngine();
 
     dlog('Tinkerpop helper initialized.');
   }
 
-  // ### Exported Functions
-
+  // #### `id(n: number)`
+  // Tinkerpop IDs typically are long (64-bit) integers. Javascript does not support 64-bit integers.
+  // There are use cases where leaving the type of an ID unspecified can result in ambiguities between
+  // the Java types Integer and Long. To disambigute, use this function.
   export function id(n: number): Java.Object {
     return java.newLong(n);
   }
 
+  // #### `ids(a: number[])`
+  // As above, but for creating an array of IDs.
   export function ids(a: number[]) : Java.array_t<Java.Object> {
     return java.newArray('java.lang.Object', _.map(a, (n: number) => id(n)));
   }
 
+  // #### `S(strs: string[])`
+  // Converts a javascript array of strings to a Java array of Strings
   export function S(strs: string[]) : Java.array_t<Java.String> {
     return java.newArray<Java.String>('java.lang.String', strs);
   }
 
+  // #### `newJavaScriptLambda(javascript: string)`
+  // Creates a lambda function from a javascript string.
   export function newJavaScriptLambda(javascript: string): Java.ScriptEngineLambda {
     return new ScriptEngineLambda(_javaScriptEngineName, javascript);
   };
 
+  // #### `newGroovyLambda(groovyFragment: string)`
+  // Creates a lambda function from a groovy code fragment (*not*) a closure string).
+  // Lambdas of this form have more overhead than lambdas created with `newGroovyClosure()`.
   export function newGroovyLambda(groovyFragment: string): Java.ScriptEngineLambda {
-    // The groovy string here is *not* a closure
-    // It is a code fragment with implicit parameters a,b,c, e.g.: 'println(a)'
+    // The groovy string here is *not* a closure.
+    // It is a code fragment with implicit parameters a,b,c, e.g.: 'println(a)'.
     assert.ok(!_isClosure(groovyFragment));
     return new ScriptEngineLambda(_groovyScriptEngineName, groovyFragment);
   };
 
+  // #### `newGroovyClosure(groovyClosureString: string)`
+  // Creates a lambda function from a groovy closure string.
   export function newGroovyClosure(groovyClosureString: string): Java.GroovyLambda {
     // The groovy string must be a closure expression, e.g. '{ x -> println(x) }'.
     assert.ok(_isClosure(groovyClosureString));
     return new GroovyLambda(groovyClosureString, _groovyScriptEngine);
   };
 
+  // #### `vertexStringify(vertex: Java.Vertex)`
+  // Converts a Tinkerpop Vertex to a string representation.
+  // See also `vertexToJson` below.
   export function vertexStringify(vertex: Java.Vertex): string {
     var stream: Java.ByteArrayOutputStream = new ByteArrayOutputStream();
     var builder: Java.GraphSONWriter$Builder = GraphSONWriter.buildSync();
@@ -116,10 +133,15 @@ module Tinkerpop {
     return stream.toStringSync(UTF8);
   }
 
+  // #### `vertexToJson(vertex: Java.Vertex)`
+  // Converts a Tinkerpop Vertex to a javascript (json) object.
   export function vertexToJson(vertex: Java.Vertex): any {
     return JSON.parse(vertexStringify(vertex));
   }
 
+  // #### `function edgeStringify(edge: Java.Edge)`
+  // Converts a Tinkerpop Edge to a string representation.
+  // See also `edgeToJson` below.
   export function edgeStringify(edge: Java.Edge): string {
     var stream: Java.ByteArrayOutputStream = new ByteArrayOutputStream();
     var builder: Java.GraphSONWriter$Builder = GraphSONWriter.buildSync();
@@ -128,14 +150,22 @@ module Tinkerpop {
     return stream.toStringSync(UTF8);
   };
 
+  // #### `function edgeToJson(edge: Java.Edge)`
+  // Converts a Tinkerpop Edge to a javascript (json) object.
   export function edgeToJson(edge: Java.Edge): any {
     return JSON.parse(edgeStringify(edge));
   };
 
+  // #### `function isJavaObject(e: any)`
+  // Returns true if the obj is a Java object.
+  // Useful for determining the runtime type of object_t returned by many java methods.
   export function isJavaObject(e: any): boolean {
     return java.instanceOf(e, 'java.lang.Object');
   }
 
+  // #### `function asJavaObject(obj: Java.object_t)`
+  // Useful for when in a given context an application expects that an object_t really is a Java.Object,
+  // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
   export function asJavaObject(obj: Java.object_t): Java.Object {
     if (isJavaObject(obj)) {
       return <Java.Object> obj;
@@ -144,10 +174,15 @@ module Tinkerpop {
     }
   }
 
+  // #### `function isVertex(v: any)`
+  // Returns true if v is a Tinkerpop Vertex.
   export function isVertex(v: any): boolean {
     return java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex');
   }
 
+  // #### `function asVertex(v: Java.object_t)`
+  // Useful for when in a given context an application expects that an object_t really is a Java.Vertex,
+  // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
   export function asVertex(v: Java.object_t): Java.Vertex {
     if (isVertex(v)) {
       return <Java.Vertex> v;
@@ -156,10 +191,15 @@ module Tinkerpop {
     }
   }
 
+  // #### `function isEdge(e: any)`
+  // Returns true if e is a Tinkerpop Edge.
   export function isEdge(e: any): boolean {
     return java.instanceOf(e, 'com.tinkerpop.gremlin.structure.Edge');
   }
 
+  // #### `function asEdge(e: Java.object_t)`
+  // Useful for when in a given context an application expects that an object_t really is a Java.Edge,
+  // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
   export function asEdge(e: Java.object_t): Java.Edge {
     if (isEdge(e)) {
       return <Java.Edge> e;
@@ -168,10 +208,14 @@ module Tinkerpop {
     }
   }
 
-  interface ConsumeObject {
+  // #### `interface ConsumeObject`
+  // A function interface for Java Object consumer.
+  // See `forEach` below.
+  export interface ConsumeObject {
     (item: Java.Object): BluePromise<void>;
   }
 
+  // #### `forEach(javaIterator: Java.Iterator, consumer: ConsumeObject)`
   // Applies *consumer* to each Java.Object returned by the *javaIterator*.
   // *javaIterator* may be any type that implements java.util.Iterator, including a tinkerpop Traversal.
   // *consumer* is function that will do some work on a Java.Object asychronously, returning a Promise for its completion.
@@ -193,15 +237,17 @@ module Tinkerpop {
     return _eachIterator(javaIterator, consumer);
   }
 
+  // #### `function asJSONSync(traversal: Java.Traversal)`
+  // Executes a traversal (synchronously!), returning a json object for all of the returned objects.
   export function asJSONSync(traversal: Java.Traversal): any {
     var array: any[] = traversal.toListSync().toArraySync().map((elem: any) => _asJSON(elem));
     return JSON.parse(JSON.stringify(array));
   };
 
+  // #### `function simplifyVertexProperties(obj: any)`
+  // Given *obj* which is a javascript object created by asJSONSync(),
+  // return a simpler representation of the object that is more convenient for unit tests.
   export function simplifyVertexProperties(obj: any): any {
-    // Given *obj* which is a javascript object created by asJSONSync(),
-    // return a simpler representation of the object that is more convenient for unit tests.
-
     if (_.isArray(obj)) {
       return _.map(obj, simplifyVertexProperties);
     }
@@ -215,11 +261,15 @@ module Tinkerpop {
 
   // ### Non-exported Functions
 
+  // #### `function _isClosure(val: string)`
+  // Returns true if the string *smells* like a groovy closure.
   function _isClosure(val: string): boolean {
     var closureRegex = /^\{.*\}$/;
     return _.isString(val) && val.search(closureRegex) > -1;
   };
 
+  // #### `function _asJSON(elem: any)`
+  // A utility function used by `asJSONSync`.
   function _asJSON(elem: any): any {
     if (!_.isObject(elem)) {
       // Scalars should stay that way.
