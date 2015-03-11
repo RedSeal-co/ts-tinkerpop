@@ -10,6 +10,11 @@ import BluePromise = require('bluebird');
 import debug = require('debug');
 import java = require('java');
 
+// # ts-tinkerpop
+// Helper functions for Typescript applications using [TinkerPop 3]() via [node-java](https://github.com/joeferner/node-java).
+//
+// See the README.md for usage notes.
+
 module Tinkerpop {
 
   'use strict';
@@ -18,19 +23,32 @@ module Tinkerpop {
 
   // ### Exported variables
 
+  // #### TinkerPop Classes
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
-  export var ByteArrayOutputStream: Java.java.io.ByteArrayOutputStream.Static;
   export var Compare: Java.com.tinkerpop.gremlin.structure.Compare.Static;
   export var GraphSONWriter: Java.com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter.Static;
   export var GremlinGroovyScriptEngine: Java.com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine.Static;
-  export var GroovyLambda: Java.co.redseal.gremlinnode.function_.GroovyLambda.Static;
-  export var noargs: Java.array_t<Java.String>;
-  export var NULL: Java.org.codehaus.groovy.runtime.NullObject;
   export var ScriptEngineLambda: Java.com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda.Static;
   export var T: Java.com.tinkerpop.gremlin.process.T.Static;
   export var TinkerFactory: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory.Static;
   export var TinkerGraph: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.Static;
+
+  // #### Other Java classes
+  export var ByteArrayOutputStream: Java.java.io.ByteArrayOutputStream.Static;
+  export var GroovyLambda: Java.co.redseal.gremlinnode.function_.GroovyLambda.Static;
+
+  // #### Useful singleton variables
+
+  // An empty array that may be used where a method expects an array of Java String (or Object).
+  export var noargs: Java.array_t<Java.String>;
+
+  // The groovy runtime NULL object.
+  export var NULL: Java.org.codehaus.groovy.runtime.NullObject;
+
+  // The UTF8 Charset specifier
   export var UTF8: string;
+
+  // ### Exported Functions
 
   // ### *initialize()* should be called once just after java has been configured.
   // Java configuration includes classpath, options, and asyncOptions.
