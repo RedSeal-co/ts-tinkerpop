@@ -145,7 +145,7 @@
       "co.redseal."
     ],
     "asyncOptions": {
-      "syncSuffix": "Sync",
+      "syncSuffix": "",
       "promiseSuffix": "P"
     }
   },

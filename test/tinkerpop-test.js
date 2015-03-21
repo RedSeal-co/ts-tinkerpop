@@ -17,7 +17,7 @@ var TP = require('../lib/index');
 var dlog = debug('ts-tinkerpop:test');
 before(function (done) {
     java.asyncOptions = {
-        syncSuffix: 'Sync',
+        syncSuffix: '',
         promiseSuffix: 'P',
         promisify: require('bluebird').promisify
     };
@@ -40,7 +40,7 @@ describe('Gremlin', function () {
     // Tests using an empty in-memory TinkerGraph database instance.
     describe('TinkerGraph empty', function () {
         before(function () {
-            graph = TP.TinkerGraph.openSync();
+            graph = TP.TinkerGraph.open();
             expect(graph).to.be.ok;
         });
         after(function (done) {
@@ -60,14 +60,14 @@ describe('Gremlin', function () {
         // Check that the Gremlin statements `graph.V.count()` and `graph.E.count()` return `0`.
         it('should be empty', function (done) {
             // Count vertices.
-            var allVerticesTraversal = graph.VSync();
+            var allVerticesTraversal = graph.V();
             // The "count" method applies to a Traversal, destructively measuring the number of
             // elements in it.
-            allVerticesTraversal.countSync().nextP().then(function (count) {
+            allVerticesTraversal.count().nextP().then(function (count) {
                 expect(count.valueOf()).to.equal(0);
                 // Count edges.
-                var allEdgesTraversal = graph.ESync();
-                allEdgesTraversal.countSync().nextP().then(function (count) {
+                var allEdgesTraversal = graph.E();
+                allEdgesTraversal.count().nextP().then(function (count) {
                     expect(count.valueOf()).to.equal(0);
                     done();
                 });
@@ -81,7 +81,7 @@ describe('Gremlin', function () {
         var graph;
         before(function () {
             expect(TP.TinkerFactory).to.be.ok;
-            graph = TP.TinkerFactory.createClassicSync();
+            graph = TP.TinkerFactory.createClassic();
             expect(graph).to.be.ok;
         });
         after(function (done) {
@@ -102,7 +102,7 @@ describe('Gremlin', function () {
         // Gremlin would be `graph.V.value('name').dedup`.  However, it can also be written with
         // the shortcut syntax for property access: `graph.V.name.dedup`.
         it('has certain names', function () {
-            var distinctNamesTraversal = graph.VSync().valuesSync('name').dedupSync();
+            var distinctNamesTraversal = graph.V().values('name').dedup();
             expect(distinctNamesTraversal).to.be.ok;
             return distinctNamesTraversal.toListP().then(function (list) { return list.toArrayP(); }).then(function (data) {
                 var expected = ['lop', 'vadas', 'marko', 'peter', 'ripple', 'josh'];
@@ -113,14 +113,14 @@ describe('Gremlin', function () {
             });
         });
         it('g.V().has("name", "marko") -> v.value("name")', function () {
-            return graph.VSync().hasSync('name', 'marko').nextP().then(function (v) {
+            return graph.V().has('name', 'marko').nextP().then(function (v) {
                 expect(v).to.be.ok;
-                var name = v.valueSync('name');
+                var name = v.value('name');
                 expect(name).to.be.equal('marko');
             });
         });
-        it('g.V().valueSync("name")', function () {
-            return graph.VSync().valuesSync('name').toListP().then(function (list) { return list.toArrayP(); }).then(function (data) {
+        it('g.V().value("name")', function () {
+            return graph.V().values('name').toListP().then(function (list) { return list.toArrayP(); }).then(function (data) {
                 expect(data).to.be.ok;
                 var expected = ['marko', 'vadas', 'lop', 'josh', 'ripple', 'peter'];
                 expect(data).to.deep.equal(expected);
@@ -129,7 +129,7 @@ describe('Gremlin', function () {
         it('filter() with JavaScript lambda', function () {
             var js = 'a.get().value("name") == "lop"';
             var lambda = TP.newJavaScriptLambda(js);
-            return graph.VSync().filterSync(lambda).toListP().then(function (list) { return list.toArrayP(); }).then(function (recs) {
+            return graph.V().filter(lambda).toListP().then(function (list) { return list.toArrayP(); }).then(function (recs) {
                 expect(recs).to.be.ok;
                 expect(recs.length).to.equal(1);
                 var v = TP.asVertex(recs[0]);
@@ -151,7 +151,7 @@ describe('Gremlin', function () {
             // Use the result of the function as a key to the map of traversal choices.
             var groovy = 'a.value("name").length()';
             var lambda = TP.newGroovyLambda(groovy);
-            var chosen = graph.VSync().hasSync('age').chooseSync(lambda).optionSync(5, __.inSync()).optionSync(4, __.outSync()).optionSync(3, __.bothSync()).valuesSync('name');
+            var chosen = graph.V().has('age').choose(lambda).option(5, __.in()).option(4, __.out()).option(3, __.both()).values('name');
             return chosen.toListP().then(function (list) { return list.toArrayP(); }).then(function (actual) {
                 var expected = ['marko', 'ripple', 'lop'];
                 expect(actual.sort()).to.deep.equal(expected.sort());
@@ -162,14 +162,14 @@ describe('Gremlin', function () {
             // Use the result of the function as a key to the map of traversal choices.
             var groovy = '{ vertex -> vertex.value("name").length() }';
             var lambda = TP.newGroovyClosure(groovy);
-            var chosen = graph.VSync().hasSync('age').chooseSync(lambda).optionSync(5, __.inSync()).optionSync(4, __.outSync()).optionSync(3, __.bothSync()).valuesSync('name');
+            var chosen = graph.V().has('age').choose(lambda).option(5, __.in()).option(4, __.out()).option(3, __.both()).values('name');
             return chosen.toListP().then(function (list) { return list.toArrayP(); }).then(function (actual) {
                 var expected = ['marko', 'ripple', 'lop'];
                 expect(actual.sort()).to.deep.equal(expected.sort());
             });
         });
         it('TP.forEach(g.V())', function () {
-            var traversal = graph.VSync();
+            var traversal = graph.V();
             return TP.forEach(traversal, function (obj) {
                 var v = TP.asVertex(obj);
                 var json = TP.vertexToJson(v);
@@ -179,7 +179,7 @@ describe('Gremlin', function () {
             });
         });
         it('TP.forEach(g.E())', function () {
-            var traversal = graph.ESync();
+            var traversal = graph.E();
             return TP.forEach(traversal, function (obj) {
                 var e = TP.asEdge(obj);
                 var json = TP.edgeToJson(e);
@@ -188,9 +188,9 @@ describe('Gremlin', function () {
                 return BluePromise.resolve();
             });
         });
-        it('TP.asJSONSync(vertices)', function () {
-            var traversal = graph.VSync().hasSync('lang', TP.Compare.eq, 'java');
-            var json = TP.asJSONSync(traversal);
+        it('TP.asJSON(vertices)', function () {
+            var traversal = graph.V().has('lang', TP.Compare.eq, 'java');
+            var json = TP.asJSON(traversal);
             var expected = [
                 {
                     id: 3,
@@ -213,9 +213,9 @@ describe('Gremlin', function () {
             ];
             expect(json).to.deep.equal(expected);
         });
-        it('TP.asJSONSync(vertices) with simplifyVertex', function () {
-            var traversal = graph.VSync().hasSync('lang', TP.Compare.eq, 'java');
-            var json = TP.simplifyVertexProperties(TP.asJSONSync(traversal));
+        it('TP.asJSON(vertices) with simplifyVertex', function () {
+            var traversal = graph.V().has('lang', TP.Compare.eq, 'java');
+            var json = TP.simplifyVertexProperties(TP.asJSON(traversal));
             var expected = [
                 {
                     id: 3,
@@ -238,9 +238,9 @@ describe('Gremlin', function () {
             ];
             expect(json).to.deep.equal(expected);
         });
-        it('TP.asJSONSync(edges)', function () {
-            var traversal = graph.ESync().hasSync('weight', TP.Compare.eq, java.newFloat(1.0));
-            var json = TP.asJSONSync(traversal);
+        it('TP.asJSON(edges)', function () {
+            var traversal = graph.E().has('weight', TP.Compare.eq, java.newFloat(1.0));
+            var json = TP.asJSON(traversal);
             var expected = [
                 {
                     inV: 4,

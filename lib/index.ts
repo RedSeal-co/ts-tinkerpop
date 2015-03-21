@@ -66,7 +66,7 @@ module Tinkerpop {
     T = java.import('com.tinkerpop.gremlin.process.T');
     TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
     TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
-    UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.nameSync();
+    UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.name();
 
     /// TODO: provide a separate factory class for script engine instances.
     _groovyScriptEngine = new GremlinGroovyScriptEngine();
@@ -117,10 +117,10 @@ module Tinkerpop {
   // See also `vertexToJson` below.
   export function vertexStringify(vertex: Java.Vertex): string {
     var stream: Java.ByteArrayOutputStream = new ByteArrayOutputStream();
-    var builder: Java.GraphSONWriter$Builder = GraphSONWriter.buildSync();
-    var writer: Java.GraphSONWriter = builder.createSync();
-    writer.writeVertexSync(stream, vertex);
-    return stream.toStringSync(UTF8);
+    var builder: Java.GraphSONWriter$Builder = GraphSONWriter.build();
+    var writer: Java.GraphSONWriter = builder.create();
+    writer.writeVertex(stream, vertex);
+    return stream.toString(UTF8);
   }
 
   // #### `vertexToJson(vertex: Java.Vertex)`
@@ -134,10 +134,10 @@ module Tinkerpop {
   // See also `edgeToJson` below.
   export function edgeStringify(edge: Java.Edge): string {
     var stream: Java.ByteArrayOutputStream = new ByteArrayOutputStream();
-    var builder: Java.GraphSONWriter$Builder = GraphSONWriter.buildSync();
-    var writer: Java.GraphSONWriter = builder.createSync();
-    writer.writeEdgeSync(stream, edge);
-    return stream.toStringSync(UTF8);
+    var builder: Java.GraphSONWriter$Builder = GraphSONWriter.build();
+    var writer: Java.GraphSONWriter = builder.create();
+    writer.writeEdge(stream, edge);
+    return stream.toString(UTF8);
   };
 
   // #### `function edgeToJson(edge: Java.Edge)`
@@ -227,15 +227,15 @@ module Tinkerpop {
     return _eachIterator(javaIterator, consumer);
   }
 
-  // #### `function asJSONSync(traversal: Java.Traversal)`
+  // #### `function asJSON(traversal: Java.Traversal)`
   // Executes a traversal (synchronously!), returning a json object for all of the returned objects.
-  export function asJSONSync(traversal: Java.Traversal): any {
-    var array: any[] = traversal.toListSync().toArraySync().map((elem: any) => _asJSON(elem));
+  export function asJSON(traversal: Java.Traversal): any {
+    var array: any[] = traversal.toList().toArray().map((elem: any) => _asJSON(elem));
     return JSON.parse(JSON.stringify(array));
   };
 
   // #### `function simplifyVertexProperties(obj: any)`
-  // Given *obj* which is a javascript object created by asJSONSync(),
+  // Given *obj* which is a javascript object created by asJSON(),
   // return a simpler representation of the object that is more convenient for unit tests.
   export function simplifyVertexProperties(obj: any): any {
     if (_.isArray(obj)) {
@@ -280,7 +280,7 @@ module Tinkerpop {
     } else if (isJavaObject(elem)) {
       // If we still have an unrecognized Java object, convert it to a string.
       var javaObj: Java.Object = <Java.Object> elem;
-      return {'javaClass': javaObj.getClassSync().getNameSync(), 'toString': javaObj.toStringSync()};
+      return {'javaClass': javaObj.getClass().getName(), 'toString': javaObj.toString()};
 
     } else if ('toJSON' in elem) {
       // If we have a 'toJSON' method, use it.
