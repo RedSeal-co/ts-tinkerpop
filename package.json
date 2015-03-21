@@ -146,8 +146,7 @@
     ],
     "asyncOptions": {
       "syncSuffix": "Sync",
-      "asyncSuffix": "",
-      "promiseSuffix": "Promise"
+      "promiseSuffix": "P"
     }
   },
   "directories": {

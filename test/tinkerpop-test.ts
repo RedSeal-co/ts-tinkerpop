@@ -24,9 +24,8 @@ var dlog = debug('ts-tinkerpop:test');
 
 before((done: MochaDone): void => {
   java.asyncOptions = {
-    asyncSuffix: '',
     syncSuffix: 'Sync',
-    promiseSuffix: 'Promise',
+    promiseSuffix: 'P',
     promisify: require('bluebird').promisify
   };
 
@@ -59,7 +58,7 @@ describe('Gremlin', (): void => {
 
     after((done: MochaDone): void => {
       if (graph) {
-        graph.close((): void => {
+        graph.closeP().then((): void => {
           graph = null;
           done();
         });
@@ -79,15 +78,13 @@ describe('Gremlin', (): void => {
 
       // The "count" method applies to a Traversal, destructively measuring the number of
       // elements in it.
-      allVerticesTraversal.countSync().next((err: Error, count: Java.Object): void => {
-        expect(err).to.not.exist;
+      allVerticesTraversal.countSync().nextP().then((count: Java.Object): void => {
         expect(count.valueOf()).to.equal(0);
 
         // Count edges.
         var allEdgesTraversal = graph.ESync();
 
-        allEdgesTraversal.countSync().next((err: Error, count: Java.Object): void => {
-          expect(err).to.not.exist;
+        allEdgesTraversal.countSync().nextP().then((count: Java.Object): void => {
           expect(count.valueOf()).to.equal(0);
           done();
         });
@@ -111,7 +108,7 @@ describe('Gremlin', (): void => {
 
     after((done: MochaDone): void => {
       if (graph) {
-        graph.close((): void => {
+        graph.closeP().then((): void => {
           graph = null;
           done();
         });
@@ -131,8 +128,8 @@ describe('Gremlin', (): void => {
       var distinctNamesTraversal: Java.GraphTraversal = graph.VSync().valuesSync('name').dedupSync();
       expect(distinctNamesTraversal).to.be.ok;
       return distinctNamesTraversal
-        .toListPromise()
-        .then((list: Java.List) => list.toArrayPromise())
+        .toListP()
+        .then((list: Java.List) => list.toArrayP())
         .then((data: Java.object_t[] ) => {
           var expected = ['lop', 'vadas', 'marko', 'peter', 'ripple', 'josh'];
           // Sort data to ignore sequence differences.
@@ -144,7 +141,7 @@ describe('Gremlin', (): void => {
 
     it('g.V().has("name", "marko") -> v.value("name")', (): BluePromise<void> => {
       return graph.VSync().hasSync('name', 'marko')
-        .nextPromise()
+        .nextP()
         .then((v: Java.Vertex) => {
           expect(v).to.be.ok;
           var name: Java.object_t = v.valueSync('name');
@@ -153,8 +150,8 @@ describe('Gremlin', (): void => {
     });
 
     it('g.V().valueSync("name")', (): BluePromise<void> => {
-      return graph.VSync().valuesSync('name').toListPromise()
-        .then((list: Java.List) => list.toArrayPromise())
+      return graph.VSync().valuesSync('name').toListP()
+        .then((list: Java.List) => list.toArrayP())
         .then((data: Java.object_t[] ) => {
           expect(data).to.be.ok;
           var expected = [ 'marko', 'vadas', 'lop', 'josh', 'ripple', 'peter' ];
@@ -165,8 +162,8 @@ describe('Gremlin', (): void => {
     it('filter() with JavaScript lambda', (): BluePromise<void> => {
       var js = 'a.get().value("name") == "lop"';
       var lambda = TP.newJavaScriptLambda(js);
-      return graph.VSync().filterSync(lambda).toListPromise()
-        .then((list: Java.List) => list.toArrayPromise())
+      return graph.VSync().filterSync(lambda).toListP()
+        .then((list: Java.List) => list.toArrayP())
         .then((recs: Java.object_t[] ) => {
           expect(recs).to.be.ok;
           expect(recs.length).to.equal(1);
@@ -198,8 +195,8 @@ describe('Gremlin', (): void => {
           .optionSync(3, __.bothSync())
           .valuesSync('name');
 
-      return chosen.toListPromise()
-        .then((list: Java.List) => list.toArrayPromise())
+      return chosen.toListP()
+        .then((list: Java.List) => list.toArrayP())
         .then((actual: Java.object_t[] ) => {
           var expected = ['marko', 'ripple', 'lop'];
           expect(actual.sort()).to.deep.equal(expected.sort());
@@ -219,8 +216,8 @@ describe('Gremlin', (): void => {
           .optionSync(3, __.bothSync())
           .valuesSync('name');
 
-      return chosen.toListPromise()
-        .then((list: Java.List) => list.toArrayPromise())
+      return chosen.toListP()
+        .then((list: Java.List) => list.toArrayP())
         .then((actual: Java.object_t[] ) => {
           var expected = ['marko', 'ripple', 'lop'];
           expect(actual.sort()).to.deep.equal(expected.sort());

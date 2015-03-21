@@ -17,9 +17,8 @@ var TP = require('../lib/index');
 var dlog = debug('ts-tinkerpop:test');
 before(function (done) {
     java.asyncOptions = {
-        asyncSuffix: '',
         syncSuffix: 'Sync',
-        promiseSuffix: 'Promise',
+        promiseSuffix: 'P',
         promisify: require('bluebird').promisify
     };
     var filenames = glob.sync('target/**/*.jar');
@@ -46,7 +45,7 @@ describe('Gremlin', function () {
         });
         after(function (done) {
             if (graph) {
-                graph.close(function () {
+                graph.closeP().then(function () {
                     graph = null;
                     done();
                 });
@@ -64,13 +63,11 @@ describe('Gremlin', function () {
             var allVerticesTraversal = graph.VSync();
             // The "count" method applies to a Traversal, destructively measuring the number of
             // elements in it.
-            allVerticesTraversal.countSync().next(function (err, count) {
-                expect(err).to.not.exist;
+            allVerticesTraversal.countSync().nextP().then(function (count) {
                 expect(count.valueOf()).to.equal(0);
                 // Count edges.
                 var allEdgesTraversal = graph.ESync();
-                allEdgesTraversal.countSync().next(function (err, count) {
-                    expect(err).to.not.exist;
+                allEdgesTraversal.countSync().nextP().then(function (count) {
                     expect(count.valueOf()).to.equal(0);
                     done();
                 });
@@ -89,7 +86,7 @@ describe('Gremlin', function () {
         });
         after(function (done) {
             if (graph) {
-                graph.close(function () {
+                graph.closeP().then(function () {
                     graph = null;
                     done();
                 });
@@ -107,7 +104,7 @@ describe('Gremlin', function () {
         it('has certain names', function () {
             var distinctNamesTraversal = graph.VSync().valuesSync('name').dedupSync();
             expect(distinctNamesTraversal).to.be.ok;
-            return distinctNamesTraversal.toListPromise().then(function (list) { return list.toArrayPromise(); }).then(function (data) {
+            return distinctNamesTraversal.toListP().then(function (list) { return list.toArrayP(); }).then(function (data) {
                 var expected = ['lop', 'vadas', 'marko', 'peter', 'ripple', 'josh'];
                 // Sort data to ignore sequence differences.
                 expected.sort();
@@ -116,14 +113,14 @@ describe('Gremlin', function () {
             });
         });
         it('g.V().has("name", "marko") -> v.value("name")', function () {
-            return graph.VSync().hasSync('name', 'marko').nextPromise().then(function (v) {
+            return graph.VSync().hasSync('name', 'marko').nextP().then(function (v) {
                 expect(v).to.be.ok;
                 var name = v.valueSync('name');
                 expect(name).to.be.equal('marko');
             });
         });
         it('g.V().valueSync("name")', function () {
-            return graph.VSync().valuesSync('name').toListPromise().then(function (list) { return list.toArrayPromise(); }).then(function (data) {
+            return graph.VSync().valuesSync('name').toListP().then(function (list) { return list.toArrayP(); }).then(function (data) {
                 expect(data).to.be.ok;
                 var expected = ['marko', 'vadas', 'lop', 'josh', 'ripple', 'peter'];
                 expect(data).to.deep.equal(expected);
@@ -132,7 +129,7 @@ describe('Gremlin', function () {
         it('filter() with JavaScript lambda', function () {
             var js = 'a.get().value("name") == "lop"';
             var lambda = TP.newJavaScriptLambda(js);
-            return graph.VSync().filterSync(lambda).toListPromise().then(function (list) { return list.toArrayPromise(); }).then(function (recs) {
+            return graph.VSync().filterSync(lambda).toListP().then(function (list) { return list.toArrayP(); }).then(function (recs) {
                 expect(recs).to.be.ok;
                 expect(recs.length).to.equal(1);
                 var v = TP.asVertex(recs[0]);
@@ -155,7 +152,7 @@ describe('Gremlin', function () {
             var groovy = 'a.value("name").length()';
             var lambda = TP.newGroovyLambda(groovy);
             var chosen = graph.VSync().hasSync('age').chooseSync(lambda).optionSync(5, __.inSync()).optionSync(4, __.outSync()).optionSync(3, __.bothSync()).valuesSync('name');
-            return chosen.toListPromise().then(function (list) { return list.toArrayPromise(); }).then(function (actual) {
+            return chosen.toListP().then(function (list) { return list.toArrayP(); }).then(function (actual) {
                 var expected = ['marko', 'ripple', 'lop'];
                 expect(actual.sort()).to.deep.equal(expected.sort());
             });
@@ -166,7 +163,7 @@ describe('Gremlin', function () {
             var groovy = '{ vertex -> vertex.value("name").length() }';
             var lambda = TP.newGroovyClosure(groovy);
             var chosen = graph.VSync().hasSync('age').chooseSync(lambda).optionSync(5, __.inSync()).optionSync(4, __.outSync()).optionSync(3, __.bothSync()).valuesSync('name');
-            return chosen.toListPromise().then(function (list) { return list.toArrayPromise(); }).then(function (actual) {
+            return chosen.toListP().then(function (list) { return list.toArrayP(); }).then(function (actual) {
                 var expected = ['marko', 'ripple', 'lop'];
                 expect(actual.sort()).to.deep.equal(expected.sort());
             });

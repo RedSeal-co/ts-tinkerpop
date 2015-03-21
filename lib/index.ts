@@ -212,13 +212,13 @@ module Tinkerpop {
   // Returns a promise that is resolved when all objects have been consumed.
   export function forEach(javaIterator: Java.Iterator, consumer: ConsumeObject): BluePromise<void> {
     function _eachIterator(javaIterator: Java.Iterator, consumer: ConsumeObject): BluePromise<void> {
-      return javaIterator.hasNextPromise()
+      return javaIterator.hasNextP()
         .then((hasNext: boolean): BluePromise<void> => {
           if (!hasNext) {
             dlog('forEach: done');
             return BluePromise.resolve();
           } else {
-            return javaIterator.nextPromise()
+            return javaIterator.nextP()
               .then((obj: Java.Object) => { dlog('forEach: consuming'); return consumer(obj); })
               .then(() => { dlog('forEach: recursing'); return _eachIterator(javaIterator, consumer); });
           }
