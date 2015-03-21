@@ -39,9 +39,6 @@ module Tinkerpop {
 
   // #### Useful singleton variables
 
-  // An empty array that may be used where a method expects an array of Java String (or Object).
-  export var noargs: Java.array_t<Java.String>;
-
   // The groovy runtime NULL object.
   export var NULL: Java.org.codehaus.groovy.runtime.NullObject;
 
@@ -64,7 +61,6 @@ module Tinkerpop {
     GraphSONWriter = java.import('com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter');
     GremlinGroovyScriptEngine = java.import('com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine');
     GroovyLambda = java.import('co.redseal.gremlinnode.function.GroovyLambda');
-    noargs = java.newArray<Java.String>('java.lang.String', []);
     NULL = java.callStaticMethodSync('org.codehaus.groovy.runtime.NullObject', 'getNullObject');
     ScriptEngineLambda = java.import('com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda');
     T = java.import('com.tinkerpop.gremlin.process.T');
@@ -90,12 +86,6 @@ module Tinkerpop {
   // As above, but for creating an array of IDs.
   export function ids(a: number[]) : Java.array_t<Java.Object> {
     return java.newArray('java.lang.Object', _.map(a, (n: number) => id(n)));
-  }
-
-  // #### `S(strs: string[])`
-  // Converts a javascript array of strings to a Java array of Strings
-  export function S(strs: string[]) : Java.array_t<Java.String> {
-    return java.newArray<Java.String>('java.lang.String', strs);
   }
 
   // #### `newJavaScriptLambda(javascript: string)`
