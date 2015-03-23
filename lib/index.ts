@@ -39,9 +39,6 @@ module Tinkerpop {
 
   // #### Useful singleton variables
 
-  // An empty array that may be used where a method expects an array of Java String (or Object).
-  export var noargs: Java.array_t<Java.String>;
-
   // The groovy runtime NULL object.
   export var NULL: Java.org.codehaus.groovy.runtime.NullObject;
 
@@ -64,13 +61,12 @@ module Tinkerpop {
     GraphSONWriter = java.import('com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter');
     GremlinGroovyScriptEngine = java.import('com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine');
     GroovyLambda = java.import('co.redseal.gremlinnode.function.GroovyLambda');
-    noargs = java.newArray<Java.String>('java.lang.String', []);
     NULL = java.callStaticMethodSync('org.codehaus.groovy.runtime.NullObject', 'getNullObject');
     ScriptEngineLambda = java.import('com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda');
     T = java.import('com.tinkerpop.gremlin.process.T');
     TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
     TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
-    UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.nameSync();
+    UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.name();
 
     /// TODO: provide a separate factory class for script engine instances.
     _groovyScriptEngine = new GremlinGroovyScriptEngine();
@@ -90,12 +86,6 @@ module Tinkerpop {
   // As above, but for creating an array of IDs.
   export function ids(a: number[]) : Java.array_t<Java.Object> {
     return java.newArray('java.lang.Object', _.map(a, (n: number) => id(n)));
-  }
-
-  // #### `S(strs: string[])`
-  // Converts a javascript array of strings to a Java array of Strings
-  export function S(strs: string[]) : Java.array_t<Java.String> {
-    return java.newArray<Java.String>('java.lang.String', strs);
   }
 
   // #### `newJavaScriptLambda(javascript: string)`
@@ -127,10 +117,10 @@ module Tinkerpop {
   // See also `vertexToJson` below.
   export function vertexStringify(vertex: Java.Vertex): string {
     var stream: Java.ByteArrayOutputStream = new ByteArrayOutputStream();
-    var builder: Java.GraphSONWriter$Builder = GraphSONWriter.buildSync();
-    var writer: Java.GraphSONWriter = builder.createSync();
-    writer.writeVertexSync(stream, vertex);
-    return stream.toStringSync(UTF8);
+    var builder: Java.GraphSONWriter$Builder = GraphSONWriter.build();
+    var writer: Java.GraphSONWriter = builder.create();
+    writer.writeVertex(stream, vertex);
+    return stream.toString(UTF8);
   }
 
   // #### `vertexToJson(vertex: Java.Vertex)`
@@ -144,10 +134,10 @@ module Tinkerpop {
   // See also `edgeToJson` below.
   export function edgeStringify(edge: Java.Edge): string {
     var stream: Java.ByteArrayOutputStream = new ByteArrayOutputStream();
-    var builder: Java.GraphSONWriter$Builder = GraphSONWriter.buildSync();
-    var writer: Java.GraphSONWriter = builder.createSync();
-    writer.writeEdgeSync(stream, edge);
-    return stream.toStringSync(UTF8);
+    var builder: Java.GraphSONWriter$Builder = GraphSONWriter.build();
+    var writer: Java.GraphSONWriter = builder.create();
+    writer.writeEdge(stream, edge);
+    return stream.toString(UTF8);
   };
 
   // #### `function edgeToJson(edge: Java.Edge)`
@@ -222,13 +212,13 @@ module Tinkerpop {
   // Returns a promise that is resolved when all objects have been consumed.
   export function forEach(javaIterator: Java.Iterator, consumer: ConsumeObject): BluePromise<void> {
     function _eachIterator(javaIterator: Java.Iterator, consumer: ConsumeObject): BluePromise<void> {
-      return javaIterator.hasNextPromise()
+      return javaIterator.hasNextP()
         .then((hasNext: boolean): BluePromise<void> => {
           if (!hasNext) {
             dlog('forEach: done');
             return BluePromise.resolve();
           } else {
-            return javaIterator.nextPromise()
+            return javaIterator.nextP()
               .then((obj: Java.Object) => { dlog('forEach: consuming'); return consumer(obj); })
               .then(() => { dlog('forEach: recursing'); return _eachIterator(javaIterator, consumer); });
           }
@@ -237,15 +227,15 @@ module Tinkerpop {
     return _eachIterator(javaIterator, consumer);
   }
 
-  // #### `function asJSONSync(traversal: Java.Traversal)`
+  // #### `function asJSON(traversal: Java.Traversal)`
   // Executes a traversal (synchronously!), returning a json object for all of the returned objects.
-  export function asJSONSync(traversal: Java.Traversal): any {
-    var array: any[] = traversal.toListSync().toArraySync().map((elem: any) => _asJSON(elem));
+  export function asJSON(traversal: Java.Traversal): any {
+    var array: any[] = traversal.toList().toArray().map((elem: any) => _asJSON(elem));
     return JSON.parse(JSON.stringify(array));
   };
 
   // #### `function simplifyVertexProperties(obj: any)`
-  // Given *obj* which is a javascript object created by asJSONSync(),
+  // Given *obj* which is a javascript object created by asJSON(),
   // return a simpler representation of the object that is more convenient for unit tests.
   export function simplifyVertexProperties(obj: any): any {
     if (_.isArray(obj)) {
@@ -290,7 +280,7 @@ module Tinkerpop {
     } else if (isJavaObject(elem)) {
       // If we still have an unrecognized Java object, convert it to a string.
       var javaObj: Java.Object = <Java.Object> elem;
-      return {'javaClass': javaObj.getClassSync().getNameSync(), 'toString': javaObj.toStringSync()};
+      return {'javaClass': javaObj.getClass().getName(), 'toString': javaObj.toString()};
 
     } else if ('toJSON' in elem) {
       // If we have a 'toJSON' method, use it.

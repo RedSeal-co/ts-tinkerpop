@@ -28,7 +28,7 @@
   "dependencies": {
     "bluebird": "^2.9.13",
     "debug": "^2.1.2",
-    "java": "^0.4.6",
+    "java": "git://github.com/RedSeal-co/node-java.git#varargs.r3",
     "lodash": "^3.3.1",
     "power-assert": "^0.10.2",
     "source-map-support": "^0.2.9"
@@ -143,7 +143,11 @@
     ],
     "whiteList": [
       "co.redseal."
-    ]
+    ],
+    "asyncOptions": {
+      "syncSuffix": "",
+      "promiseSuffix": "P"
+    }
   },
   "directories": {
     "doc": "doc",
