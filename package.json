@@ -6,7 +6,7 @@
   "scripts": {
     "test": "make test",
     "install": "make install-maven",
-    "postinstall": "ts-java"
+    "postinstall": "ts-java && ts-pkg-installer"
   },
   "keywords": [
     "typescript",
