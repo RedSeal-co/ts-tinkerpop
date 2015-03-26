@@ -16,7 +16,7 @@ import BluePromise = require('bluebird');
 import chai = require('chai');
 import debug = require('debug');
 import glob = require('glob');
-import java = require('java');
+import java = require('redseal-java');
 import TP = require('../lib/index');
 import util = require('util');
 
