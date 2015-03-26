@@ -135,7 +135,6 @@
       "org.codehaus.groovy.ast.ClassNode",
       "org.codehaus.groovy.control.CompilerConfiguration",
       "org.codehaus.groovy.control.customizers.CompilationCustomizer",
-      "org.codehaus.groovy.jsr223.GroovyScriptEngineImpl",
       "org.codehaus.groovy.runtime.NullObject",
       "org.codehaus.groovy.tools.shell.Groovysh",
       "org.codehaus.groovy.util.ManagedReference",
