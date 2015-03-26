@@ -28,7 +28,7 @@
   "dependencies": {
     "bluebird": "^2.9.13",
     "debug": "^2.1.2",
-    "java": "git://github.com/RedSeal-co/node-java.git#varargs.r3",
+    "redseal-java": "^0.5.0",
     "lodash": "^3.3.1",
     "power-assert": "^0.10.2",
     "source-map-support": "^0.2.9"
