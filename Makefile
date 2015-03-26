@@ -82,7 +82,7 @@ clean-tsd:
 ### Typescript & Lint
 
 TSC=./node_modules/.bin/tsc
-TSC_OPTS=--module commonjs --target ES5 --sourceMap --noEmitOnError --noImplicitAny
+TSC_OPTS=--module commonjs --target ES5 --sourceMap --declaration --noEmitOnError --noImplicitAny
 
 LINT=./node_modules/.bin/tslint
 LINT_OPTS=--config tslint.json --file
