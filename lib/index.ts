@@ -23,6 +23,8 @@ module Tinkerpop {
 
   // ### Exported variables
 
+  export var Java: Java.NodeAPI = java;
+
   // #### TinkerPop Classes
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
   export var Compare: Java.com.tinkerpop.gremlin.structure.Compare.Static;
