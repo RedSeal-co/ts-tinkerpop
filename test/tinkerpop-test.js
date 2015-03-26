@@ -12,7 +12,7 @@ var BluePromise = require('bluebird');
 var chai = require('chai');
 var debug = require('debug');
 var glob = require('glob');
-var java = require('java');
+var java = require('redseal-java');
 var TP = require('../lib/index');
 var dlog = debug('ts-tinkerpop:test');
 before(function (done) {
