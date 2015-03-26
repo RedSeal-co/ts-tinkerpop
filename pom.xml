@@ -6,7 +6,7 @@
   <groupId>com.redseal</groupId>
   <artifactId>tinkerpop</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.0.SNAPSHOT</version>
+  <version>0.0.0-SNAPSHOT</version>
   <name>tinkerpop</name>
 
   <properties>

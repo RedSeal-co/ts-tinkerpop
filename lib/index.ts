@@ -8,7 +8,7 @@ import _ = require('lodash');
 import assert = require('power-assert');
 import BluePromise = require('bluebird');
 import debug = require('debug');
-import java = require('java');
+import java = require('redseal-java');
 
 // # ts-tinkerpop
 // Helper functions for Typescript applications using [TinkerPop 3]() via [node-java](https://github.com/joeferner/node-java).
