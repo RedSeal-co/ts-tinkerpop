@@ -21,7 +21,7 @@ JAVA_SRC=$(shell find src -name '*.java')
 install-maven: o/maven-installed.lastran
 
 o/maven-installed.lastran: pom.xml $(JAVA_SRC) | o
-	mvn clean package
+	mvn -DskipTests=true clean package
 	touch $@
 
 clean-maven:
