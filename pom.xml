@@ -15,13 +15,13 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <!-- Point to the SonaType snapshot repo, so that we don't depend on Maven environment -->
+  <!-- Point to the RedSeal Artifactory snapshot repo, so that we don't depend on Apache snapshots -->
   <repositories>
     <repository>
       <snapshots />
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>redseal-artifactory-snapshots</id>
+      <name>RedSeal Artifactory Snapshots</name>
+      <url>http://artifactory.lab.redseal.net:8081/artifactory/libs-snapshot</url>
     </repository>
   </repositories>
 
