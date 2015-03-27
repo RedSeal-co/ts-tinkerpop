@@ -12,7 +12,7 @@ clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java
 
 .PHONY: default install clean test
 
-JAVA_D_TS=typings/java/java.d.ts
+JAVA_D_TS=lib/java.d.ts
 
 ### Maven
 
@@ -107,7 +107,7 @@ $(JAVA_D_TS) : o/all-installed.lastran package.json
 clean-ts-java:
 	rm -f $(JAVA_D_TS)
 
-.PHONY: ts-java java.d.ts
+.PHONY: ts-java
 
 ### Documentation
 

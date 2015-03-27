@@ -5,3 +5,4 @@ target/
 doc/
 *.d.ts
 !lib/index.d.ts
+!lib/java.d.ts

@@ -1,6 +1,6 @@
+/// <reference path="java.d.ts" />
 /// <reference path="../typings/bluebird/bluebird.d.ts" />
 /// <reference path="../typings/debug/debug.d.ts" />
-/// <reference path="../typings/java/java.d.ts" />
 /// <reference path="../typings/lodash/lodash.d.ts" />
 /// <reference path="../typings/power-assert/power-assert.d.ts" />
 import BluePromise = require('bluebird');

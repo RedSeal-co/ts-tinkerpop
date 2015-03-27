@@ -6,7 +6,7 @@
   "scripts": {
     "test": "make test",
     "install": "make install-maven",
-    "postinstall": "ts-java && ts-pkg-installer"
+    "postinstall": "ts-pkg-installer"
   },
   "keywords": [
     "typescript",
@@ -22,6 +22,7 @@
     "glob": "^4.4.0",
     "groc": "^0.8.0",
     "mocha": "^2.1.0",
+    "ts-java": "git://github.lab.redseal.net/redseal/ts-java.git#master",
     "tsd": ">=0.6.0-beta.5",
     "tslint": "^2.1.1",
     "typescript": "^1.4.1"
@@ -32,10 +33,11 @@
     "redseal-java": "^0.5.0",
     "lodash": "^3.3.1",
     "power-assert": "^0.10.2",
-    "source-map-support": "^0.2.9",
-    "ts-java": "git://github.lab.redseal.net/redseal/ts-java.git#master"
+    "source-map-support": "^0.2.9"
   },
   "tsjava": {
+    "outputPath": "lib/java.d.ts",
+    "promisesPath": "../typings/bluebird/bluebird.d.ts",
     "classpath": [
       "target/*.jar",
       "target/**/*.jar"
