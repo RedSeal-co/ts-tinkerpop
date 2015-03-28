@@ -1,0 +1,3 @@
+{
+  "secondaryDeclarations": ["lib/java.d.ts", "lib/autoImport.d.ts"]
+}
