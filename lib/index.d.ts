@@ -3,8 +3,10 @@
 /// <reference path="../typings/debug/debug.d.ts" />
 /// <reference path="../typings/lodash/lodash.d.ts" />
 /// <reference path="../typings/power-assert/power-assert.d.ts" />
+import _autoImport = require('./autoImport');
 import BluePromise = require('bluebird');
 declare module Tinkerpop {
+    var autoImport: typeof _autoImport;
     var Java: Java.NodeAPI;
     var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
     var Compare: Java.com.tinkerpop.gremlin.structure.Compare.Static;

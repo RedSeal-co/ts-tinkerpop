@@ -38,6 +38,7 @@
   "tsjava": {
     "outputPath": "lib/java.d.ts",
     "promisesPath": "../typings/bluebird/bluebird.d.ts",
+    "autoImportPath": "lib/autoImport.ts",
     "classpath": [
       "target/*.jar",
       "target/**/*.jar"

@@ -14,6 +14,7 @@ var debug = require('debug');
 var glob = require('glob');
 var java = require('redseal-java');
 var TP = require('../lib/index');
+var expect = chai.expect;
 var dlog = debug('ts-tinkerpop:test');
 before(function (done) {
     java.asyncOptions = {
@@ -29,8 +30,17 @@ before(function (done) {
     TP.initialize();
     done();
 });
+describe('autoImport', function () {
+    it('works for ArrayList', function () {
+        var ArrayList = TP.autoImport('ArrayList');
+        expect(ArrayList).to.exist;
+    });
+    it('works for Traversal', function () {
+        var Traversal = TP.autoImport('Traversal');
+        expect(Traversal).to.exist;
+    });
+});
 describe('Gremlin', function () {
-    var expect = chai.expect;
     var graph;
     before(function (done) {
         expect(TP.TinkerGraph).to.be.ok;

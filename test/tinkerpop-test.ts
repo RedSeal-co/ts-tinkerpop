@@ -20,6 +20,8 @@ import java = require('redseal-java');
 import TP = require('../lib/index');
 import util = require('util');
 
+import expect = chai.expect;
+
 var dlog = debug('ts-tinkerpop:test');
 
 before((done: MochaDone): void => {
@@ -36,9 +38,21 @@ before((done: MochaDone): void => {
   done();
 });
 
-describe('Gremlin', (): void => {
+describe('autoImport', (): void => {
 
-  var expect = chai.expect;
+  it('works for ArrayList', () => {
+    var ArrayList: Java.ArrayList.Static = TP.autoImport('ArrayList');
+    expect(ArrayList).to.exist;
+  });
+
+  it('works for Traversal', () => {
+    var Traversal: Java.Traversal.Static = TP.autoImport('Traversal');
+    expect(Traversal).to.exist;
+  });
+
+});
+
+describe('Gremlin', (): void => {
 
   var graph: Java.TinkerGraph;
 

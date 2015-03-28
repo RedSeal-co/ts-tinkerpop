@@ -95,7 +95,7 @@ clean-typescript:
 
 .PHONY: clean-typescript
 
-lib/index.js: $(JAVA_D_TS)
+lib/index.js: $(JAVA_D_TS) lib/autoImport.js
 
 ### ts-java
 

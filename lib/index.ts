@@ -5,6 +5,7 @@
 /// <reference path='../typings/power-assert/power-assert.d.ts' />
 
 import _ = require('lodash');
+import _autoImport = require('./autoImport');
 import assert = require('power-assert');
 import BluePromise = require('bluebird');
 import debug = require('debug');
@@ -20,6 +21,9 @@ module Tinkerpop {
   'use strict';
 
   var dlog = debug('ts-tinkerpop:index');
+
+  // ### autoImport
+  export var autoImport = _autoImport;
 
   // ### Exported variables
 
