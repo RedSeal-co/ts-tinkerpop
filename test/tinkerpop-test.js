@@ -1,5 +1,4 @@
 // # tinkerpop-test.ts
-/// <reference path='../lib/java.d.ts' />
 /// <reference path='../typings/bluebird/bluebird.d.ts' />
 /// <reference path='../typings/chai/chai.d.ts'/>
 /// <reference path='../typings/debug/debug.d.ts' />
@@ -12,9 +11,9 @@ var BluePromise = require('bluebird');
 var chai = require('chai');
 var debug = require('debug');
 var glob = require('glob');
-var java = require('redseal-java');
 var TP = require('../lib/index');
 var expect = chai.expect;
+var java = TP.java;
 var dlog = debug('ts-tinkerpop:test');
 before(function (done) {
     java.asyncOptions = {

@@ -7,7 +7,7 @@ import _autoImport = require('./autoImport');
 import BluePromise = require('bluebird');
 declare module Tinkerpop {
     var autoImport: typeof _autoImport;
-    var Java: Java.NodeAPI;
+    var java: Java.NodeAPI;
     var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
     var Compare: Java.com.tinkerpop.gremlin.structure.Compare.Static;
     var GraphSONWriter: Java.com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter.Static;

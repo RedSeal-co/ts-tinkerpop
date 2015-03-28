@@ -6,10 +6,10 @@
 
 import _ = require('lodash');
 import _autoImport = require('./autoImport');
+import _java = require('redseal-java');
 import assert = require('power-assert');
 import BluePromise = require('bluebird');
 import debug = require('debug');
-import java = require('redseal-java');
 
 // # ts-tinkerpop
 // Helper functions for Typescript applications using [TinkerPop 3]() via [node-java](https://github.com/joeferner/node-java).
@@ -27,7 +27,7 @@ module Tinkerpop {
 
   // ### Exported variables
 
-  export var Java: Java.NodeAPI = java;
+  export var java: Java.NodeAPI = _java;
 
   // #### TinkerPop Classes
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;

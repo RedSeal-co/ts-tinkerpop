@@ -1,5 +1,4 @@
 // # tinkerpop-test.ts
-/// <reference path='../lib/java.d.ts' />
 /// <reference path='../typings/bluebird/bluebird.d.ts' />
 /// <reference path='../typings/chai/chai.d.ts'/>
 /// <reference path='../typings/debug/debug.d.ts' />
@@ -16,11 +15,11 @@ import BluePromise = require('bluebird');
 import chai = require('chai');
 import debug = require('debug');
 import glob = require('glob');
-import java = require('redseal-java');
 import TP = require('../lib/index');
 import util = require('util');
 
 import expect = chai.expect;
+import java = TP.java;
 
 var dlog = debug('ts-tinkerpop:test');
 
