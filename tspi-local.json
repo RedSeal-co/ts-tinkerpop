@@ -1,0 +1,8 @@
+{
+  "_comment": "This file generates a wrapped ts-tinkerpop module declaration file for use within this package",
+  "force": true,
+  "moduleName": "ts-tinkerpop",
+  "exportedTypingsDir": "typings",
+  "exportedTsdConfig": "tsd.json",
+  "secondaryDeclarations": ["lib/java.d.ts", "lib/autoImport.d.ts"]
+}
