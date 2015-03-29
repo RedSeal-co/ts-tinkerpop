@@ -7,4 +7,5 @@ doc/
 !lib/autoImport.d.ts
 !lib/index.d.ts
 !lib/java.d.ts
+!lib/bundle.d.ts
 *~
