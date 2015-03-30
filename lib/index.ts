@@ -27,7 +27,7 @@ module Tinkerpop {
 
   // ### Exported variables
 
-  export var java: typeof _java = _java;
+  export var java: Java.NodeAPI = _java;
 
   // #### TinkerPop Classes
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;

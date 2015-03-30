@@ -6,5 +6,5 @@ dts.bundle({
   name: 'ts-tinkerpop',
   main: 'lib/index.d.ts',
   out: 'bundle.d.ts',
-  externals: true
+  externals: false
 });
