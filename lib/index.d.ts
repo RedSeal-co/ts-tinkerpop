@@ -4,10 +4,11 @@
 /// <reference path="../typings/lodash/lodash.d.ts" />
 /// <reference path="../typings/power-assert/power-assert.d.ts" />
 import _autoImport = require('./autoImport');
+import _java = require('redseal-java');
 import BluePromise = require('bluebird');
 declare module Tinkerpop {
     var autoImport: typeof _autoImport;
-    var java: Java.NodeAPI;
+    var java: typeof _java;
     var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
     var Compare: Java.com.tinkerpop.gremlin.structure.Compare.Static;
     var GraphSONWriter: Java.com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter.Static;
