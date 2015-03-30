@@ -126,8 +126,10 @@ LOCAL_DTS=typings/ts-tinkerpop/index.d.ts
 
 TSPI=ts-pkg-installer
 
-$(LOCAL_DTS): lib/index.d.ts lib/autoImport.d.ts lib/java.d.ts
+$(LOCAL_DTS): lib/index.d.ts lib/autoImport.d.ts lib/java.d.ts tspi-local.json
 	$(TSPI) --config-file tspi-local.json
+
+test/header-test.js: $(LOCAL_DTS)
 
 ### Documentation
 
