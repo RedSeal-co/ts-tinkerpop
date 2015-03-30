@@ -1,4 +1,5 @@
 {
   "mainDeclaration": "lib/bundle.d.ts",
-  "secondaryDeclarations": ["lib/java.d.ts"]
+  "secondaryDeclarations": ["lib/java.d.ts"],
+  "noWrap": true
 }
