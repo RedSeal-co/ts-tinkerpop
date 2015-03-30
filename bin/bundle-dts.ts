@@ -4,7 +4,7 @@ import dts = require('dts-bundle');
 
 dts.bundle({
   name: 'ts-tinkerpop',
-  main: 'lib/index.d.ts',
+  main: 'lib/ts-tinkerpop.d.ts',
   out: '../o/bundle.d.ts',
   externals: false
 });

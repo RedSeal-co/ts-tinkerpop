@@ -20,7 +20,7 @@ module Tinkerpop {
 
   'use strict';
 
-  var dlog = debug('ts-tinkerpop:index');
+  var dlog = debug('ts-tinkerpop');
 
   // ### autoImport
   export var autoImport = _autoImport;

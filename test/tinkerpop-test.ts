@@ -15,7 +15,7 @@ import BluePromise = require('bluebird');
 import chai = require('chai');
 import debug = require('debug');
 import glob = require('glob');
-import TP = require('../lib/index');
+import TP = require('../lib/ts-tinkerpop');
 import util = require('util');
 
 import expect = chai.expect;

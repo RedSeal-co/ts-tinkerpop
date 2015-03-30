@@ -41,7 +41,7 @@ $(UNIT_TEST_RAN): o/%.lastran: %.js o/all-installed.lastran
 
 test: $(UNIT_TEST_RAN)
 
-test/tinkerpop-test.js : lib/index.js $(JAVA_D_TS)
+test/tinkerpop-test.js : lib/ts-tinkerpop.js $(JAVA_D_TS)
 
 clean-test:
 	rm -f test/*.js test/*.js.map
@@ -95,7 +95,7 @@ clean-typescript:
 
 .PHONY: clean-typescript
 
-lib/index.js: $(JAVA_D_TS) lib/autoImport.js
+lib/ts-tinkerpop.js: $(JAVA_D_TS) lib/autoImport.js
 
 ### ts-java
 
@@ -115,7 +115,7 @@ BUNDLE_DTS=lib/bundle.d.ts
 
 O_BUNDLE_DTS=o/bundle.d.ts
 
-$(O_BUNDLE_DTS): lib/index.d.ts lib/autoImport.d.ts lib/java.d.ts bin/bundle-dts.js
+$(O_BUNDLE_DTS): lib/ts-tinkerpop.d.ts lib/autoImport.d.ts lib/java.d.ts bin/bundle-dts.js
 	bin/bundle-dts.sh
 
 $(BUNDLE_DTS): $(O_BUNDLE_DTS)
@@ -142,8 +142,8 @@ test/header-test.js: $(LOCAL_DTS)
 
 documentation : o/documentation.lastran
 
-o/documentation.lastran : o/npm-installed.lastran README.md lib/index.ts $(UNIT_TESTS) | o
-	node_modules/.bin/groc --except "node_modules/**" --except "o/**" --except "**/*.d.ts" lib/index.ts $(UNIT_TESTS) README.md
+o/documentation.lastran : o/npm-installed.lastran README.md lib/ts-tinkerpop.ts $(UNIT_TESTS) | o
+	node_modules/.bin/groc --except "node_modules/**" --except "o/**" --except "**/*.d.ts" lib/ts-tinkerpop.ts $(UNIT_TESTS) README.md
 	touch $@
 
 clean-doc:
