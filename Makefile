@@ -87,7 +87,7 @@ TSC_OPTS=--module commonjs --target ES5 --sourceMap --declaration --noEmitOnErro
 LINT=./node_modules/.bin/tslint
 LINT_OPTS=--config tslint.json --file
 
-%.js %.js.map: %.ts o/all-installed.lastran
+%.js %.js.map %.d.ts: %.ts o/all-installed.lastran
 	($(TSC) $(TSC_OPTS) $<) || (rm -f $*.js* && false)
 
 clean-typescript:
@@ -115,6 +115,8 @@ BUNDLE_DTS=lib/bundle.d.ts
 
 $(BUNDLE_DTS): lib/index.d.ts lib/autoImport.d.ts lib/java.d.ts bin/bundle-dts.js
 	bin/bundle-dts.sh
+
+test/bundle-test.js: $(BUNDLE_DTS)
 
 ### Local d.ts file
 
