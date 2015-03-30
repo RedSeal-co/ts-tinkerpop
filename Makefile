@@ -113,8 +113,15 @@ clean-ts-java:
 
 BUNDLE_DTS=lib/bundle.d.ts
 
-$(BUNDLE_DTS): lib/index.d.ts lib/autoImport.d.ts lib/java.d.ts bin/bundle-dts.js
+O_BUNDLE_DTS=o/bundle.d.ts
+
+$(O_BUNDLE_DTS): lib/index.d.ts lib/autoImport.d.ts lib/java.d.ts bin/bundle-dts.js
 	bin/bundle-dts.sh
+
+$(BUNDLE_DTS): $(O_BUNDLE_DTS)
+	echo '/// <reference path="java.d.ts"/>' > $@
+	echo '/// <reference path="../typings/bluebird/bluebird.d.ts"/>' >> $@
+	cat $(O_BUNDLE_DTS) >> $@
 
 test/bundle-test.js: $(BUNDLE_DTS)
 
