@@ -7,5 +7,5 @@ doc/
 !lib/autoImport.d.ts
 !lib/ts-tinkerpop.d.ts
 !lib/java.d.ts
-!lib/bundle.d.ts
+!lib/index.d.ts
 *~

@@ -1,4 +1,4 @@
-/// <reference path="../lib/bundle.d.ts"/>
+/// <reference path="../lib/index.d.ts"/>
 /// <reference path="../typings/mocha/mocha.d.ts"/>
 describe('bundle-test', function () {
     it('compiles', function () {

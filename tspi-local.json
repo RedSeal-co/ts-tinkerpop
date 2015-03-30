@@ -4,7 +4,7 @@
   "moduleName": "ts-tinkerpop",
   "exportedTypingsDir": "typings",
   "exportedTsdConfig": "tsd.json",
-  "mainDeclaration": "lib/bundle.d.ts",
+  "mainDeclaration": "lib/index.d.ts",
   "secondaryDeclarations": ["lib/java.d.ts"],
   "noWrap": true
 }
