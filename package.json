@@ -5,8 +5,7 @@
   "main": "lib/ts-tinkerpop.js",
   "scripts": {
     "test": "make test",
-    "install": "make install-maven",
-    "postinstall": "ts-pkg-installer"
+    "install": "make install-maven"
   },
   "keywords": [
     "typescript",
