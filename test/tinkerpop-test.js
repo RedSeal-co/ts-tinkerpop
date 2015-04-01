@@ -23,7 +23,7 @@ before(function (done) {
     };
     var filenames = glob.sync('target/**/*.jar');
     filenames.forEach(function (name) {
-        dlog(name);
+        dlog('classpath:', name);
         java.classpath.push(name);
     });
     TP.initialize();
@@ -274,6 +274,52 @@ describe('Gremlin', function () {
             ];
             expect(json).to.deep.equal(expected);
         });
+    });
+});
+describe('Groovy support', function () {
+    var engine;
+    before(function () {
+        engine = TP.getGroovyEngine();
+    });
+    it('initializes', function () {
+        expect(engine).to.exist;
+    });
+    it('does NOT come with test classes already imported', function () {
+        var imports = engine.imports();
+        expect(imports.toString()).to.not.contain('co.redseal.gremlinnode.testing');
+    });
+    it('accepts valid Groovy', function () {
+        var groovy = engine.eval('{ it -> it.toString() }');
+        expect(groovy).to.exist;
+        expect(groovy.call(123)).to.deep.equal('123');
+    });
+    it('rejects invalid Groovy', function () {
+        expect(function () {
+            engine.eval('this is not valid Groovy');
+            return;
+        }).to.throw(Error);
+    });
+    it('importGroovy introduces types for newGroovyClosure but not newGroovyLambda', function () {
+        // We're going to try to define a lambda that references an application-specific datatype.
+        var groovy = '{ -> new TestClass() }';
+        // Check that the TestClass is NOT in the Groovy imports already.
+        var testClassName = 'co.redseal.gremlinnode.testing.TestClass';
+        expect(engine.imports().toString()).to.not.contain(testClassName);
+        // Make sure it IS in the classpath.
+        var TestClass = TP.java.import(testClassName);
+        expect(TestClass).to.exist;
+        // First check that TestClass is not defined.
+        expect(function () { return TP.newGroovyClosure(groovy); }).to.throw(/unable to resolve class TestClass/);
+        expect(function () { return TP.newGroovyLambda('new TestClass()').get(); }).to.throw(/unable to resolve class TestClass/);
+        // Now import it, and check that it shows up in the imports.
+        TP.importGroovy(testClassName);
+        dlog('engine.imports()', engine.imports().toString());
+        expect(engine.imports().toString()).to.contain(testClassName);
+        // Retry the lambda.
+        var lambda = TP.newGroovyClosure(groovy);
+        expect(lambda.get().toString()).to.deep.equal('TestClass');
+        // Show that it does NOT affect newGroovyLambda.
+        expect(function () { return TP.newGroovyLambda('new TestClass()').get(); }).to.throw(/unable to resolve class TestClass/);
     });
 });
 //# sourceMappingURL=tinkerpop-test.js.map

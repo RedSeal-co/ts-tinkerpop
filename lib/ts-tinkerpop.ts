@@ -118,6 +118,23 @@ module Tinkerpop {
     return new GroovyLambda(groovyClosureString, _groovyScriptEngine);
   };
 
+  // ### `getGroovyEngine()`
+  // Returns the Groovy engine used by `newGroovyLambda` and `newGroovyClosure`.
+  export function getGroovyEngine(): Java.GremlinGroovyScriptEngine {
+    return _groovyScriptEngine;
+  }
+
+  // ### `importGroovy(pkgOrClass: string)`
+  // Imports a Java package or class, based on fully-qualified wildcard or class name.  This affects the operation of
+  // `newGroovyClosure` but does NOT affect `newGroovyLambda`.
+  export function importGroovy(javaClassOrPkg: string): void {
+    var engine = getGroovyEngine();
+    var HashSet: Java.HashSet.Static = autoImport('HashSet');
+    var imports: Java.HashSet = new HashSet();
+    imports.add('import ' + javaClassOrPkg);
+    engine.addImports(imports);
+  }
+
   // #### `vertexStringify(vertex: Java.Vertex)`
   // Converts a Tinkerpop Vertex to a string representation.
   // See also `vertexToJson` below.
