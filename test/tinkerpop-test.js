@@ -3,7 +3,6 @@
 /// <reference path='../typings/chai/chai.d.ts'/>
 /// <reference path='../typings/debug/debug.d.ts' />
 /// <reference path='../typings/glob/glob.d.ts' />
-/// <reference path='../typings/java/java.d.ts' />
 /// <reference path='../typings/mocha/mocha.d.ts'/>
 /// <reference path='../typings/node/node.d.ts'/>
 'use strict';
@@ -12,8 +11,9 @@ var BluePromise = require('bluebird');
 var chai = require('chai');
 var debug = require('debug');
 var glob = require('glob');
-var java = require('redseal-java');
-var TP = require('../lib/index');
+var TP = require('../lib/ts-tinkerpop');
+var expect = chai.expect;
+var java = TP.java;
 var dlog = debug('ts-tinkerpop:test');
 before(function (done) {
     java.asyncOptions = {
@@ -29,8 +29,17 @@ before(function (done) {
     TP.initialize();
     done();
 });
+describe('autoImport', function () {
+    it('works for ArrayList', function () {
+        var ArrayList = TP.autoImport('ArrayList');
+        expect(ArrayList).to.exist;
+    });
+    it('works for Traversal', function () {
+        var Traversal = TP.autoImport('Traversal');
+        expect(Traversal).to.exist;
+    });
+});
 describe('Gremlin', function () {
-    var expect = chai.expect;
     var graph;
     before(function (done) {
         expect(TP.TinkerGraph).to.be.ok;

@@ -3,4 +3,6 @@ o/
 typings/
 target/
 doc/
-
+*.d.ts
+!lib/java.d.ts
+*~

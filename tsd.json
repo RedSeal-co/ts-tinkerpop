@@ -46,6 +46,9 @@
     },
     "power-assert-formatter/power-assert-formatter.d.ts": {
       "commit": "e20d7e796da57baa25a6372edfec154fe47e218f"
+    },
+    "dts-bundle/dts-bundle.d.ts": {
+      "commit": "e20d7e796da57baa25a6372edfec154fe47e218f"
     }
   }
 }

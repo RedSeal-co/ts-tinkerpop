@@ -2,7 +2,7 @@
   "name": "ts-tinkerpop",
   "version": "1.0.0",
   "description": "Unit tests for gremlin (TinkerPop3) written directly to the node-java API in Typescript",
-  "main": "lib/index.js",
+  "main": "lib/ts-tinkerpop.js",
   "scripts": {
     "test": "make test",
     "install": "make install-maven"
@@ -18,6 +18,7 @@
   "license": "ISC",
   "devDependencies": {
     "chai": "^2.0.0",
+    "dts-bundle": "^0.2.0",
     "glob": "^4.4.0",
     "groc": "^0.8.0",
     "mocha": "^2.1.0",
@@ -35,6 +36,9 @@
     "source-map-support": "^0.2.9"
   },
   "tsjava": {
+    "outputPath": "lib/java.d.ts",
+    "promisesPath": "../typings/bluebird/bluebird.d.ts",
+    "autoImportPath": "lib/autoImport.ts",
     "classpath": [
       "target/*.jar",
       "target/**/*.jar"

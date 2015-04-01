@@ -3,7 +3,6 @@
 /// <reference path='../typings/chai/chai.d.ts'/>
 /// <reference path='../typings/debug/debug.d.ts' />
 /// <reference path='../typings/glob/glob.d.ts' />
-/// <reference path='../typings/java/java.d.ts' />
 /// <reference path='../typings/mocha/mocha.d.ts'/>
 /// <reference path='../typings/node/node.d.ts'/>
 
@@ -16,9 +15,11 @@ import BluePromise = require('bluebird');
 import chai = require('chai');
 import debug = require('debug');
 import glob = require('glob');
-import java = require('redseal-java');
-import TP = require('../lib/index');
+import TP = require('../lib/ts-tinkerpop');
 import util = require('util');
+
+import expect = chai.expect;
+import java = TP.java;
 
 var dlog = debug('ts-tinkerpop:test');
 
@@ -36,9 +37,21 @@ before((done: MochaDone): void => {
   done();
 });
 
-describe('Gremlin', (): void => {
+describe('autoImport', (): void => {
 
-  var expect = chai.expect;
+  it('works for ArrayList', () => {
+    var ArrayList: Java.ArrayList.Static = TP.autoImport('ArrayList');
+    expect(ArrayList).to.exist;
+  });
+
+  it('works for Traversal', () => {
+    var Traversal: Java.Traversal.Static = TP.autoImport('Traversal');
+    expect(Traversal).to.exist;
+  });
+
+});
+
+describe('Gremlin', (): void => {
 
   var graph: Java.TinkerGraph;
 

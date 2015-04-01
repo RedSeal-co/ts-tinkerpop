@@ -1,14 +1,15 @@
+/// <reference path='./java.d.ts' />
 /// <reference path='../typings/bluebird/bluebird.d.ts' />
 /// <reference path='../typings/debug/debug.d.ts' />
-/// <reference path='../typings/java/java.d.ts' />
 /// <reference path='../typings/lodash/lodash.d.ts' />
 /// <reference path='../typings/power-assert/power-assert.d.ts' />
 
 import _ = require('lodash');
+import _autoImport = require('./autoImport');
+import _java = require('redseal-java');
 import assert = require('power-assert');
 import BluePromise = require('bluebird');
 import debug = require('debug');
-import java = require('redseal-java');
 
 // # ts-tinkerpop
 // Helper functions for Typescript applications using [TinkerPop 3]() via [node-java](https://github.com/joeferner/node-java).
@@ -19,9 +20,14 @@ module Tinkerpop {
 
   'use strict';
 
-  var dlog = debug('ts-tinkerpop:index');
+  var dlog = debug('ts-tinkerpop');
+
+  // ### autoImport
+  export var autoImport = _autoImport;
 
   // ### Exported variables
+
+  export var java: Java.NodeAPI = _java;
 
   // #### TinkerPop Classes
   export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
