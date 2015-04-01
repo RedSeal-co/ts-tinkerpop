@@ -30,23 +30,23 @@ module Tinkerpop {
   export var java: Java.NodeAPI = _java;
 
   // #### TinkerPop Classes
-  export var __: Java.com.tinkerpop.gremlin.process.graph.traversal.__.Static;
-  export var Compare: Java.com.tinkerpop.gremlin.structure.Compare.Static;
-  export var GraphSONWriter: Java.com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter.Static;
-  export var GremlinGroovyScriptEngine: Java.com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine.Static;
-  export var ScriptEngineLambda: Java.com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda.Static;
-  export var T: Java.com.tinkerpop.gremlin.process.T.Static;
-  export var TinkerFactory: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory.Static;
-  export var TinkerGraph: Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.Static;
+  export var __: Java.__.Static;
+  export var Compare: Java.Compare.Static;
+  export var GraphSONWriter: Java.GraphSONWriter.Static;
+  export var GremlinGroovyScriptEngine: Java.GremlinGroovyScriptEngine.Static;
+  export var ScriptEngineLambda: Java.ScriptEngineLambda.Static;
+  export var T: Java.T.Static;
+  export var TinkerFactory: Java.TinkerFactory.Static;
+  export var TinkerGraph: Java.TinkerGraph.Static;
 
   // #### Other Java classes
-  export var ByteArrayOutputStream: Java.java.io.ByteArrayOutputStream.Static;
-  export var GroovyLambda: Java.co.redseal.gremlinnode.function_.GroovyLambda.Static;
+  export var ByteArrayOutputStream: Java.ByteArrayOutputStream.Static;
+  export var GroovyLambda: Java.GroovyLambda.Static;
 
   // #### Useful singleton variables
 
   // The groovy runtime NULL object.
-  export var NULL: Java.org.codehaus.groovy.runtime.NullObject;
+  export var NULL: Java.NullObject;
 
   // The UTF8 Charset specifier
   export var UTF8: string;
@@ -61,18 +61,19 @@ module Tinkerpop {
   // This method must be called before any of the exported vars above are accessed.
   // It is wasteful, but not an error, to call this method more than once.
   export function initialize() {
-    __ = java.import('com.tinkerpop.gremlin.process.graph.traversal.__');
-    ByteArrayOutputStream = java.import('java.io.ByteArrayOutputStream');
-    Compare = java.import('com.tinkerpop.gremlin.structure.Compare');
-    GraphSONWriter = java.import('com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter');
-    GremlinGroovyScriptEngine = java.import('com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine');
-    GroovyLambda = java.import('co.redseal.gremlinnode.function.GroovyLambda');
-    NULL = java.callStaticMethodSync('org.codehaus.groovy.runtime.NullObject', 'getNullObject');
-    ScriptEngineLambda = java.import('com.tinkerpop.gremlin.process.computer.util.ScriptEngineLambda');
-    T = java.import('com.tinkerpop.gremlin.process.T');
-    TinkerFactory = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory');
-    TinkerGraph = java.import('com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph');
-    UTF8 = java.import('java.nio.charset.StandardCharsets').UTF_8.name();
+    __ = autoImport('__');
+    ByteArrayOutputStream = autoImport('ByteArrayOutputStream');
+    Compare = autoImport('Compare');
+    GraphSONWriter = autoImport('GraphSONWriter');
+    GremlinGroovyScriptEngine = autoImport('GremlinGroovyScriptEngine');
+    GroovyLambda =
+      java.import('co.redseal.gremlinnode.function.GroovyLambda');  // TODO: Use autoImport when #91309036 fixed
+    NULL = autoImport('NullObject').getNullObject();
+    ScriptEngineLambda = autoImport('ScriptEngineLambda');
+    T = autoImport('T');
+    TinkerFactory = autoImport('TinkerFactory');
+    TinkerGraph = autoImport('TinkerGraph');
+    UTF8 = autoImport('StandardCharsets').UTF_8.name();
 
     /// TODO: provide a separate factory class for script engine instances.
     _groovyScriptEngine = new GremlinGroovyScriptEngine();
@@ -117,6 +118,23 @@ module Tinkerpop {
     assert.ok(_isClosure(groovyClosureString));
     return new GroovyLambda(groovyClosureString, _groovyScriptEngine);
   };
+
+  // ### `getGroovyEngine()`
+  // Returns the Groovy engine used by `newGroovyLambda` and `newGroovyClosure`.
+  export function getGroovyEngine(): Java.GremlinGroovyScriptEngine {
+    return _groovyScriptEngine;
+  }
+
+  // ### `importGroovy(pkgOrClass: string)`
+  // Imports a Java package or class, based on fully-qualified wildcard or class name.  This affects the operation of
+  // `newGroovyClosure` but does NOT affect `newGroovyLambda`.
+  export function importGroovy(javaClassOrPkg: string): void {
+    var engine = getGroovyEngine();
+    var HashSet: Java.HashSet.Static = autoImport('HashSet');
+    var imports: Java.HashSet = new HashSet();
+    imports.add('import ' + javaClassOrPkg);
+    engine.addImports(imports);
+  }
 
   // #### `vertexStringify(vertex: Java.Vertex)`
   // Converts a Tinkerpop Vertex to a string representation.

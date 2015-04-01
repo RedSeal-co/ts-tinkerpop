@@ -31,7 +31,10 @@ before((done: MochaDone): void => {
   };
 
   var filenames = glob.sync('target/**/*.jar');
-  filenames.forEach((name: string): void => { dlog(name); java.classpath.push(name); });
+  filenames.forEach((name: string): void => {
+    dlog('classpath:', name);
+    java.classpath.push(name);
+  });
 
   TP.initialize();
   done();
@@ -345,6 +348,67 @@ describe('Gremlin', (): void => {
 
 
 
+  });
+
+});
+
+describe('Groovy support', (): void => {
+
+  var engine: Java.GremlinGroovyScriptEngine;
+
+  before((): void => {
+    engine = TP.getGroovyEngine();
+  });
+
+  it('initializes', (): void => {
+    expect(engine).to.exist;
+  });
+
+  it('does NOT come with test classes already imported', (): void => {
+    var imports: Java.Map = engine.imports();
+    expect(imports.toString()).to.not.contain('co.redseal.gremlinnode.testing');
+  });
+
+  it('accepts valid Groovy', (): void => {
+    var groovy: Java.Closure = <Java.Closure> engine.eval('{ it -> it.toString() }');
+    expect(groovy).to.exist;
+    expect(groovy.call(123)).to.deep.equal('123');
+  });
+
+  it('rejects invalid Groovy', (): void => {
+    expect((): void => {
+      engine.eval('this is not valid Groovy');
+      return;
+    }).to.throw(Error);
+  });
+
+  it('importGroovy introduces types for newGroovyClosure but not newGroovyLambda', function () {
+    // We're going to try to define a lambda that references an application-specific datatype.
+    var groovy: string = '{ -> new TestClass() }';
+
+    // Check that the TestClass is NOT in the Groovy imports already.
+    var testClassName: string = 'co.redseal.gremlinnode.testing.TestClass'
+    expect(engine.imports().toString()).to.not.contain(testClassName);
+
+    // Make sure it IS in the classpath.
+    var TestClass: Java.TestClass.Static = TP.java.import(testClassName);
+    expect(TestClass).to.exist;
+
+    // First check that TestClass is not defined.
+    expect(() => TP.newGroovyClosure(groovy)).to.throw(/unable to resolve class TestClass/);
+    expect(() => TP.newGroovyLambda('new TestClass()').get()).to.throw(/unable to resolve class TestClass/);
+
+    // Now import it, and check that it shows up in the imports.
+    TP.importGroovy(testClassName);
+    dlog('engine.imports()', engine.imports().toString());
+    expect(engine.imports().toString()).to.contain(testClassName);
+
+    // Retry the lambda.
+    var lambda: Java.GroovyLambda = TP.newGroovyClosure(groovy);
+    expect(lambda.get().toString()).to.deep.equal('TestClass');
+
+    // Show that it does NOT affect newGroovyLambda.
+    expect(() => TP.newGroovyLambda('new TestClass()').get()).to.throw(/unable to resolve class TestClass/);
   });
 
 });
