@@ -1,6 +1,6 @@
 {
   "version": "v4",
-  "repo": "mhfrantz/DefinitelyTyped",
+  "repo": "RedSeal-co/DefinitelyTyped",
   "ref": "prod",
   "path": "typings",
   "bundle": "typings/tsd.d.ts",
