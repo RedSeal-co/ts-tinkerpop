@@ -50,8 +50,8 @@ declare module Java {
 
   export type object_array_t = array_t<java.lang.Object> | object_t[];
 
-  interface Callback<T> {
-    (err: Error, result: T): void;
+  export interface Callback<T> {
+    (err?: Error, result?: T): void;
   }
 
   interface AsyncOptions {
@@ -69,6 +69,10 @@ declare module Java {
     callMethodSync(instance: any, className: string, methodName: string, ...args: any[]): any;
     callStaticMethodSync(className: string, methodName: string, ...args: any[]): any;
     instanceOf(javaObject: any, className: string): boolean;
+    registerClient(before: (cb: Callback<void>) => void, after?: (cb: Callback<void>) => void): void;
+    registerClientP(beforeP: () => Promise<void>, afterP?: () => Promise<void>): void;
+    ensureJvm(done: Callback<void>): void;
+    ensureJvm(): Promise<void>;
 
     newShort(val: number): java.lang.Short;
     newLong(val: number): java.lang.Long;
@@ -80,9 +84,9 @@ declare module Java {
     newArray(className: 'java.util.AbstractList', arg: AbstractList[]): array_t<java.util.AbstractList>;
     newArray(className: 'java.util.AbstractCollection', arg: AbstractCollection[]): array_t<java.util.AbstractCollection>;
     newArray(className: 'java.util.AbstractSet', arg: AbstractSet[]): array_t<java.util.AbstractSet>;
-    newArray(className: 'java.util.function_.Predicate', arg: Predicate[]): array_t<java.util.function_.Predicate>;
+    newArray(className: 'java.util.function.Predicate', arg: Predicate[]): array_t<java.util.function_.Predicate>;
     newArray(className: 'org.codehaus.groovy.util.ReferenceBundle', arg: ReferenceBundle[]): array_t<org.codehaus.groovy.util.ReferenceBundle>;
-    newArray(className: 'java.util.function_.Supplier', arg: Supplier[]): array_t<java.util.function_.Supplier>;
+    newArray(className: 'java.util.function.Supplier', arg: Supplier[]): array_t<java.util.function_.Supplier>;
     newArray(className: 'java.util.Set', arg: Set[]): array_t<java.util.Set>;
     newArray(className: 'groovy.lang.GroovyObjectSupport', arg: GroovyObjectSupport[]): array_t<groovy.lang.GroovyObjectSupport>;
     newArray(className: 'java.lang.Class', arg: Class[]): array_t<java.lang.Class>;
@@ -112,13 +116,13 @@ declare module Java {
     newArray(className: 'com.tinkerpop.gremlin.structure.Direction', arg: Direction[]): array_t<com.tinkerpop.gremlin.structure.Direction>;
     newArray(className: 'java.util.ListIterator', arg: ListIterator[]): array_t<java.util.ListIterator>;
     newArray(className: 'java.nio.charset.StandardCharsets', arg: StandardCharsets[]): array_t<java.nio.charset.StandardCharsets>;
-    newArray(className: 'java.util.function_.Consumer', arg: Consumer[]): array_t<java.util.function_.Consumer>;
+    newArray(className: 'java.util.function.Consumer', arg: Consumer[]): array_t<java.util.function_.Consumer>;
     newArray(className: 'com.tinkerpop.gremlin.structure.VertexProperty', arg: VertexProperty[]): array_t<com.tinkerpop.gremlin.structure.VertexProperty>;
     newArray(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter', arg: GraphSONWriter[]): array_t<com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter>;
     newArray(className: 'groovy.lang.IntRange', arg: IntRange[]): array_t<groovy.lang.IntRange>;
     newArray(className: 'java.util.Iterator', arg: Iterator[]): array_t<java.util.Iterator>;
     newArray(className: 'org.codehaus.groovy.ast.ClassNode', arg: ClassNode[]): array_t<org.codehaus.groovy.ast.ClassNode>;
-    newArray(className: 'java.util.function_.Function', arg: Function[]): array_t<java.util.function_.Function>;
+    newArray(className: 'java.util.function.Function', arg: Function[]): array_t<java.util.function_.Function>;
     newArray(className: 'com.tinkerpop.gremlin.process.computer.GraphComputer', arg: GraphComputer[]): array_t<com.tinkerpop.gremlin.process.computer.GraphComputer>;
     newArray(className: 'java.util.HashMap', arg: HashMap[]): array_t<java.util.HashMap>;
     newArray(className: 'groovy.lang.GroovyResourceLoader', arg: GroovyResourceLoader[]): array_t<groovy.lang.GroovyResourceLoader>;
@@ -131,30 +135,30 @@ declare module Java {
     newArray(className: 'java.io.FileInputStream', arg: FileInputStream[]): array_t<java.io.FileInputStream>;
     newArray(className: 'groovy.lang.MetaClass', arg: MetaClass[]): array_t<groovy.lang.MetaClass>;
     newArray(className: 'java.lang.Object', arg: object_t[]): array_t<java.lang.Object>;
-    newArray(className: 'java.util.function_.BiConsumer', arg: BiConsumer[]): array_t<java.util.function_.BiConsumer>;
+    newArray(className: 'java.util.function.BiConsumer', arg: BiConsumer[]): array_t<java.util.function_.BiConsumer>;
     newArray(className: 'java.lang.Boolean', arg: boolean_t[]): array_t<java.lang.Boolean>;
     newArray(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder', arg: GraphSONReader$Builder[]): array_t<com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder>;
-    newArray(className: 'co.redseal.gremlinnode.function_.IdentityGlobFunction', arg: IdentityGlobFunction[]): array_t<co.redseal.gremlinnode.function_.IdentityGlobFunction>;
+    newArray(className: 'co.redseal.gremlinnode.function.IdentityGlobFunction', arg: IdentityGlobFunction[]): array_t<co.redseal.gremlinnode.function_.IdentityGlobFunction>;
     newArray(className: 'org.codehaus.groovy.tools.shell.Groovysh', arg: Groovysh[]): array_t<org.codehaus.groovy.tools.shell.Groovysh>;
     newArray(className: 'java.util.HashSet', arg: HashSet[]): array_t<java.util.HashSet>;
     newArray(className: 'java.lang.reflect.Array', arg: Array[]): array_t<java.lang.reflect.Array>;
     newArray(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyGraph', arg: StrategyGraph[]): array_t<com.tinkerpop.gremlin.structure.strategy.StrategyGraph>;
     newArray(className: 'java.lang.Enum', arg: Enum[]): array_t<java.lang.Enum>;
     newArray(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyContext', arg: StrategyContext[]): array_t<com.tinkerpop.gremlin.structure.strategy.StrategyContext>;
-    newArray(className: 'java.util.function_.BiFunction', arg: BiFunction[]): array_t<java.util.function_.BiFunction>;
+    newArray(className: 'java.util.function.BiFunction', arg: BiFunction[]): array_t<java.util.function_.BiFunction>;
     newArray(className: 'java.io.ByteArrayOutputStream', arg: ByteArrayOutputStream[]): array_t<java.io.ByteArrayOutputStream>;
     newArray(className: 'groovy.lang.GroovyCodeSource', arg: GroovyCodeSource[]): array_t<groovy.lang.GroovyCodeSource>;
     newArray(className: 'java.util.Comparator', arg: Comparator[]): array_t<java.util.Comparator>;
-    newArray(className: 'co.redseal.gremlinnode.function_.GlobFunction', arg: GlobFunction[]): array_t<co.redseal.gremlinnode.function_.GlobFunction>;
+    newArray(className: 'co.redseal.gremlinnode.function.GlobFunction', arg: GlobFunction[]): array_t<co.redseal.gremlinnode.function_.GlobFunction>;
     newArray(className: 'java.util.ArrayList', arg: ArrayList[]): array_t<java.util.ArrayList>;
     newArray(className: 'org.codehaus.groovy.control.customizers.CompilationCustomizer', arg: CompilationCustomizer[]): array_t<org.codehaus.groovy.control.customizers.CompilationCustomizer>;
     newArray(className: 'java.lang.ClassLoader', arg: ClassLoader[]): array_t<java.lang.ClassLoader>;
     newArray(className: 'co.redseal.gremlinnode.testing.TestClass', arg: TestClass[]): array_t<co.redseal.gremlinnode.testing.TestClass>;
     newArray(className: 'com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal', arg: GraphTraversal[]): array_t<com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal>;
     newArray(className: 'org.codehaus.groovy.util.ManagedReference', arg: ManagedReference[]): array_t<org.codehaus.groovy.util.ManagedReference>;
-    newArray(className: 'co.redseal.gremlinnode.function_.AbstractGlobFunction', arg: AbstractGlobFunction[]): array_t<co.redseal.gremlinnode.function_.AbstractGlobFunction>;
+    newArray(className: 'co.redseal.gremlinnode.function.AbstractGlobFunction', arg: AbstractGlobFunction[]): array_t<co.redseal.gremlinnode.function_.AbstractGlobFunction>;
     newArray(className: 'com.tinkerpop.gremlin.structure.Vertex', arg: Vertex[]): array_t<com.tinkerpop.gremlin.structure.Vertex>;
-    newArray(className: 'co.redseal.gremlinnode.function_.NegateGlobFunction', arg: NegateGlobFunction[]): array_t<co.redseal.gremlinnode.function_.NegateGlobFunction>;
+    newArray(className: 'co.redseal.gremlinnode.function.NegateGlobFunction', arg: NegateGlobFunction[]): array_t<co.redseal.gremlinnode.function_.NegateGlobFunction>;
     newArray(className: 'com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory', arg: TinkerFactory[]): array_t<com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory>;
     newArray(className: 'javax.script.ScriptEngine', arg: ScriptEngine[]): array_t<javax.script.ScriptEngine>;
     newArray(className: 'javax.script.Bindings', arg: Bindings[]): array_t<javax.script.Bindings>;
@@ -164,13 +168,13 @@ declare module Java {
     newArray(className: 'com.tinkerpop.gremlin.structure.strategy.GraphStrategy', arg: GraphStrategy[]): array_t<com.tinkerpop.gremlin.structure.strategy.GraphStrategy>;
     newArray(className: 'groovy.lang.MetaProperty', arg: MetaProperty[]): array_t<groovy.lang.MetaProperty>;
     newArray(className: 'com.tinkerpop.gremlin.structure.Graph', arg: Graph[]): array_t<com.tinkerpop.gremlin.structure.Graph>;
-    newArray(className: 'java.util.function_.BiPredicate', arg: BiPredicate[]): array_t<java.util.function_.BiPredicate>;
+    newArray(className: 'java.util.function.BiPredicate', arg: BiPredicate[]): array_t<java.util.function_.BiPredicate>;
     newArray(className: 'javax.script.AbstractScriptEngine', arg: AbstractScriptEngine[]): array_t<javax.script.AbstractScriptEngine>;
     newArray(className: 'com.tinkerpop.gremlin.structure.Order', arg: Order[]): array_t<com.tinkerpop.gremlin.structure.Order>;
     newArray(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper', arg: GraphSONMapper[]): array_t<com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper>;
     newArray(className: 'java.util.NoSuchElementException', arg: NoSuchElementException[]): array_t<java.util.NoSuchElementException>;
-    newArray(className: 'java.util.function_.BinaryOperator', arg: BinaryOperator[]): array_t<java.util.function_.BinaryOperator>;
-    newArray(className: 'co.redseal.gremlinnode.function_.GroovyLambda', arg: GroovyLambda[]): array_t<co.redseal.gremlinnode.function_.GroovyLambda>;
+    newArray(className: 'java.util.function.BinaryOperator', arg: BinaryOperator[]): array_t<java.util.function_.BinaryOperator>;
+    newArray(className: 'co.redseal.gremlinnode.function.GroovyLambda', arg: GroovyLambda[]): array_t<co.redseal.gremlinnode.function_.GroovyLambda>;
     newArray(className: 'groovy.lang.Closure', arg: Closure[]): array_t<groovy.lang.Closure>;
     newArray(className: 'org.codehaus.groovy.runtime.NullObject', arg: NullObject[]): array_t<org.codehaus.groovy.runtime.NullObject>;
     newArray(className: 'com.tinkerpop.gremlin.process.Scope', arg: Scope[]): array_t<com.tinkerpop.gremlin.process.Scope>;
@@ -180,22 +184,22 @@ declare module Java {
     newArray(className: 'com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph', arg: TinkerGraph[]): array_t<com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph>;
     newArray(className: 'java.util.Map', arg: Map[]): array_t<java.util.Map>;
     newArray(className: 'groovy.lang.GroovyClassLoader', arg: GroovyClassLoader[]): array_t<groovy.lang.GroovyClassLoader>;
-    newArray(className: 'java.util.function_.UnaryOperator', arg: UnaryOperator[]): array_t<java.util.function_.UnaryOperator>;
+    newArray(className: 'java.util.function.UnaryOperator', arg: UnaryOperator[]): array_t<java.util.function_.UnaryOperator>;
     newArray(className: 'java.lang.Number', arg: number_t[]): array_t<java.lang.Number>;
     newArray(className: 'groovy.lang.Range', arg: Range[]): array_t<groovy.lang.Range>;
     newArray(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader', arg: GraphSONReader[]): array_t<com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader>;
     newArray(className: 'java.util.Collection', arg: Collection[]): array_t<java.util.Collection>;
     newArray(className: 'java.util.List', arg: List[]): array_t<java.util.List>;
-    newArray(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg: AndThenGlobFunction[]): array_t<co.redseal.gremlinnode.function_.AndThenGlobFunction>;
-    newArray(className: 'com.tinkerpop.gremlin.util.function_.TriConsumer', arg: TriConsumer[]): array_t<com.tinkerpop.gremlin.util.function_.TriConsumer>;
+    newArray(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg: AndThenGlobFunction[]): array_t<co.redseal.gremlinnode.function_.AndThenGlobFunction>;
+    newArray(className: 'com.tinkerpop.gremlin.util.function.TriConsumer', arg: TriConsumer[]): array_t<com.tinkerpop.gremlin.util.function_.TriConsumer>;
     newArray<T>(className: string, arg: any[]): array_t<T>;
 
     import(className: 'java.util.AbstractList'): java.util.AbstractList.Static;
     import(className: 'java.util.AbstractCollection'): java.util.AbstractCollection.Static;
     import(className: 'java.util.AbstractSet'): java.util.AbstractSet.Static;
-    import(className: 'java.util.function_.Predicate'): java.util.function_.Predicate.Static;
+    import(className: 'java.util.function.Predicate'): java.util.function_.Predicate.Static;
     import(className: 'org.codehaus.groovy.util.ReferenceBundle'): org.codehaus.groovy.util.ReferenceBundle.Static;
-    import(className: 'java.util.function_.Supplier'): java.util.function_.Supplier.Static;
+    import(className: 'java.util.function.Supplier'): java.util.function_.Supplier.Static;
     import(className: 'java.util.Set'): java.util.Set.Static;
     import(className: 'groovy.lang.GroovyObjectSupport'): groovy.lang.GroovyObjectSupport.Static;
     import(className: 'java.lang.Class'): java.lang.Class.Static;
@@ -225,13 +229,13 @@ declare module Java {
     import(className: 'com.tinkerpop.gremlin.structure.Direction'): com.tinkerpop.gremlin.structure.Direction.Static;
     import(className: 'java.util.ListIterator'): java.util.ListIterator.Static;
     import(className: 'java.nio.charset.StandardCharsets'): java.nio.charset.StandardCharsets.Static;
-    import(className: 'java.util.function_.Consumer'): java.util.function_.Consumer.Static;
+    import(className: 'java.util.function.Consumer'): java.util.function_.Consumer.Static;
     import(className: 'com.tinkerpop.gremlin.structure.VertexProperty'): com.tinkerpop.gremlin.structure.VertexProperty.Static;
     import(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter'): com.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter.Static;
     import(className: 'groovy.lang.IntRange'): groovy.lang.IntRange.Static;
     import(className: 'java.util.Iterator'): java.util.Iterator.Static;
     import(className: 'org.codehaus.groovy.ast.ClassNode'): org.codehaus.groovy.ast.ClassNode.Static;
-    import(className: 'java.util.function_.Function'): java.util.function_.Function.Static;
+    import(className: 'java.util.function.Function'): java.util.function_.Function.Static;
     import(className: 'com.tinkerpop.gremlin.process.computer.GraphComputer'): com.tinkerpop.gremlin.process.computer.GraphComputer.Static;
     import(className: 'java.util.HashMap'): java.util.HashMap.Static;
     import(className: 'groovy.lang.GroovyResourceLoader'): groovy.lang.GroovyResourceLoader.Static;
@@ -244,30 +248,30 @@ declare module Java {
     import(className: 'java.io.FileInputStream'): java.io.FileInputStream.Static;
     import(className: 'groovy.lang.MetaClass'): groovy.lang.MetaClass.Static;
     import(className: 'java.lang.Object'): java.lang.Object.Static;
-    import(className: 'java.util.function_.BiConsumer'): java.util.function_.BiConsumer.Static;
+    import(className: 'java.util.function.BiConsumer'): java.util.function_.BiConsumer.Static;
     import(className: 'java.lang.Boolean'): java.lang.Boolean.Static;
     import(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder'): com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder.Static;
-    import(className: 'co.redseal.gremlinnode.function_.IdentityGlobFunction'): co.redseal.gremlinnode.function_.IdentityGlobFunction.Static;
+    import(className: 'co.redseal.gremlinnode.function.IdentityGlobFunction'): co.redseal.gremlinnode.function_.IdentityGlobFunction.Static;
     import(className: 'org.codehaus.groovy.tools.shell.Groovysh'): org.codehaus.groovy.tools.shell.Groovysh.Static;
     import(className: 'java.util.HashSet'): java.util.HashSet.Static;
     import(className: 'java.lang.reflect.Array'): java.lang.reflect.Array.Static;
     import(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyGraph'): com.tinkerpop.gremlin.structure.strategy.StrategyGraph.Static;
     import(className: 'java.lang.Enum'): java.lang.Enum.Static;
     import(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyContext'): com.tinkerpop.gremlin.structure.strategy.StrategyContext.Static;
-    import(className: 'java.util.function_.BiFunction'): java.util.function_.BiFunction.Static;
+    import(className: 'java.util.function.BiFunction'): java.util.function_.BiFunction.Static;
     import(className: 'java.io.ByteArrayOutputStream'): java.io.ByteArrayOutputStream.Static;
     import(className: 'groovy.lang.GroovyCodeSource'): groovy.lang.GroovyCodeSource.Static;
     import(className: 'java.util.Comparator'): java.util.Comparator.Static;
-    import(className: 'co.redseal.gremlinnode.function_.GlobFunction'): co.redseal.gremlinnode.function_.GlobFunction.Static;
+    import(className: 'co.redseal.gremlinnode.function.GlobFunction'): co.redseal.gremlinnode.function_.GlobFunction.Static;
     import(className: 'java.util.ArrayList'): java.util.ArrayList.Static;
     import(className: 'org.codehaus.groovy.control.customizers.CompilationCustomizer'): org.codehaus.groovy.control.customizers.CompilationCustomizer.Static;
     import(className: 'java.lang.ClassLoader'): java.lang.ClassLoader.Static;
     import(className: 'co.redseal.gremlinnode.testing.TestClass'): co.redseal.gremlinnode.testing.TestClass.Static;
     import(className: 'com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal'): com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.Static;
     import(className: 'org.codehaus.groovy.util.ManagedReference'): org.codehaus.groovy.util.ManagedReference.Static;
-    import(className: 'co.redseal.gremlinnode.function_.AbstractGlobFunction'): co.redseal.gremlinnode.function_.AbstractGlobFunction.Static;
+    import(className: 'co.redseal.gremlinnode.function.AbstractGlobFunction'): co.redseal.gremlinnode.function_.AbstractGlobFunction.Static;
     import(className: 'com.tinkerpop.gremlin.structure.Vertex'): com.tinkerpop.gremlin.structure.Vertex.Static;
-    import(className: 'co.redseal.gremlinnode.function_.NegateGlobFunction'): co.redseal.gremlinnode.function_.NegateGlobFunction.Static;
+    import(className: 'co.redseal.gremlinnode.function.NegateGlobFunction'): co.redseal.gremlinnode.function_.NegateGlobFunction.Static;
     import(className: 'com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory'): com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory.Static;
     import(className: 'javax.script.ScriptEngine'): javax.script.ScriptEngine.Static;
     import(className: 'javax.script.Bindings'): javax.script.Bindings.Static;
@@ -277,13 +281,13 @@ declare module Java {
     import(className: 'com.tinkerpop.gremlin.structure.strategy.GraphStrategy'): com.tinkerpop.gremlin.structure.strategy.GraphStrategy.Static;
     import(className: 'groovy.lang.MetaProperty'): groovy.lang.MetaProperty.Static;
     import(className: 'com.tinkerpop.gremlin.structure.Graph'): com.tinkerpop.gremlin.structure.Graph.Static;
-    import(className: 'java.util.function_.BiPredicate'): java.util.function_.BiPredicate.Static;
+    import(className: 'java.util.function.BiPredicate'): java.util.function_.BiPredicate.Static;
     import(className: 'javax.script.AbstractScriptEngine'): javax.script.AbstractScriptEngine.Static;
     import(className: 'com.tinkerpop.gremlin.structure.Order'): com.tinkerpop.gremlin.structure.Order.Static;
     import(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper'): com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper.Static;
     import(className: 'java.util.NoSuchElementException'): java.util.NoSuchElementException.Static;
-    import(className: 'java.util.function_.BinaryOperator'): java.util.function_.BinaryOperator.Static;
-    import(className: 'co.redseal.gremlinnode.function_.GroovyLambda'): co.redseal.gremlinnode.function_.GroovyLambda.Static;
+    import(className: 'java.util.function.BinaryOperator'): java.util.function_.BinaryOperator.Static;
+    import(className: 'co.redseal.gremlinnode.function.GroovyLambda'): co.redseal.gremlinnode.function_.GroovyLambda.Static;
     import(className: 'groovy.lang.Closure'): groovy.lang.Closure.Static;
     import(className: 'org.codehaus.groovy.runtime.NullObject'): org.codehaus.groovy.runtime.NullObject.Static;
     import(className: 'com.tinkerpop.gremlin.process.Scope'): com.tinkerpop.gremlin.process.Scope.Static;
@@ -293,14 +297,14 @@ declare module Java {
     import(className: 'com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph'): com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.Static;
     import(className: 'java.util.Map'): java.util.Map.Static;
     import(className: 'groovy.lang.GroovyClassLoader'): groovy.lang.GroovyClassLoader.Static;
-    import(className: 'java.util.function_.UnaryOperator'): java.util.function_.UnaryOperator.Static;
+    import(className: 'java.util.function.UnaryOperator'): java.util.function_.UnaryOperator.Static;
     import(className: 'java.lang.Number'): java.lang.Number.Static;
     import(className: 'groovy.lang.Range'): groovy.lang.Range.Static;
     import(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader'): com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader.Static;
     import(className: 'java.util.Collection'): java.util.Collection.Static;
     import(className: 'java.util.List'): java.util.List.Static;
-    import(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction'): co.redseal.gremlinnode.function_.AndThenGlobFunction.Static;
-    import(className: 'com.tinkerpop.gremlin.util.function_.TriConsumer'): com.tinkerpop.gremlin.util.function_.TriConsumer.Static;
+    import(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction'): co.redseal.gremlinnode.function_.AndThenGlobFunction.Static;
+    import(className: 'com.tinkerpop.gremlin.util.function.TriConsumer'): com.tinkerpop.gremlin.util.function_.TriConsumer.Static;
     import(className: string): any;
 
     newInstance(className: 'org.codehaus.groovy.util.ReferenceBundle', arg0: object_t, arg1: object_t, cb: Callback<ReferenceBundle>): void;
@@ -361,7 +365,7 @@ declare module Java {
     newInstance(className: 'java.lang.Object', cb: Callback<object_t>): void;
     newInstance(className: 'java.lang.Boolean', arg0: string_t, cb: Callback<boolean>): void;
     newInstance(className: 'java.lang.Boolean', arg0: boolean_t, cb: Callback<boolean>): void;
-    newInstance(className: 'co.redseal.gremlinnode.function_.IdentityGlobFunction', arg0: GlobFunction, cb: Callback<IdentityGlobFunction>): void;
+    newInstance(className: 'co.redseal.gremlinnode.function.IdentityGlobFunction', arg0: GlobFunction, cb: Callback<IdentityGlobFunction>): void;
     newInstance(className: 'org.codehaus.groovy.tools.shell.Groovysh', arg0: ClassLoader, arg1: Binding, arg2: object_t, arg3: Closure, cb: Callback<Groovysh>): void;
     newInstance(className: 'org.codehaus.groovy.tools.shell.Groovysh', arg0: ClassLoader, arg1: Binding, arg2: object_t, cb: Callback<Groovysh>): void;
     newInstance(className: 'org.codehaus.groovy.tools.shell.Groovysh', arg0: Binding, arg1: object_t, cb: Callback<Groovysh>): void;
@@ -389,7 +393,7 @@ declare module Java {
     newInstance(className: 'co.redseal.gremlinnode.testing.TestClass', cb: Callback<TestClass>): void;
     newInstance(className: 'org.codehaus.groovy.util.ManagedReference', arg0: object_t, arg1: object_t, arg2: object_t, cb: Callback<ManagedReference>): void;
     newInstance(className: 'org.codehaus.groovy.util.ManagedReference', arg0: ReferenceBundle, arg1: object_t, cb: Callback<ManagedReference>): void;
-    newInstance(className: 'co.redseal.gremlinnode.function_.NegateGlobFunction', arg0: GlobFunction, cb: Callback<NegateGlobFunction>): void;
+    newInstance(className: 'co.redseal.gremlinnode.function.NegateGlobFunction', arg0: GlobFunction, cb: Callback<NegateGlobFunction>): void;
     newInstance(className: 'com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory', cb: Callback<TinkerFactory>): void;
     newInstance(className: 'java.io.FileOutputStream', arg0: string_t, arg1: boolean_t, cb: Callback<FileOutputStream>): void;
     newInstance(className: 'java.io.FileOutputStream', arg0: object_t, arg1: boolean_t, cb: Callback<FileOutputStream>): void;
@@ -401,8 +405,8 @@ declare module Java {
     newInstance(className: 'javax.script.AbstractScriptEngine', cb: Callback<AbstractScriptEngine>): void;
     newInstance(className: 'java.util.NoSuchElementException', arg0: string_t, cb: Callback<NoSuchElementException>): void;
     newInstance(className: 'java.util.NoSuchElementException', cb: Callback<NoSuchElementException>): void;
-    newInstance(className: 'co.redseal.gremlinnode.function_.GroovyLambda', arg0: string_t, arg1: ScriptEngine, cb: Callback<GroovyLambda>): void;
-    newInstance(className: 'co.redseal.gremlinnode.function_.GroovyLambda', arg0: string_t, cb: Callback<GroovyLambda>): void;
+    newInstance(className: 'co.redseal.gremlinnode.function.GroovyLambda', arg0: string_t, arg1: ScriptEngine, cb: Callback<GroovyLambda>): void;
+    newInstance(className: 'co.redseal.gremlinnode.function.GroovyLambda', arg0: string_t, cb: Callback<GroovyLambda>): void;
     newInstance(className: 'groovy.lang.Closure', arg0: object_t, arg1: object_t, cb: Callback<Closure>): void;
     newInstance(className: 'groovy.lang.Closure', arg0: object_t, cb: Callback<Closure>): void;
     newInstance(className: 'com.tinkerpop.gremlin.process.util.BulkSet', cb: Callback<BulkSet>): void;
@@ -416,10 +420,10 @@ declare module Java {
     newInstance(className: 'groovy.lang.GroovyClassLoader', cb: Callback<GroovyClassLoader>): void;
     newInstance(className: 'java.lang.Number', cb: Callback<number>): void;
     newInstance(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader', arg0: GraphSONMapper, arg1: long_t, arg2: string_t, arg3: string_t, cb: Callback<GraphSONReader>): void;
-    newInstance(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg0: GlobFunction, arg1: GlobFunction, cb: Callback<AndThenGlobFunction>): void;
-    newInstance(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg0: GlobFunction, arg1: BiConsumer, cb: Callback<AndThenGlobFunction>): void;
-    newInstance(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg0: GlobFunction, arg1: Function, cb: Callback<AndThenGlobFunction>): void;
-    newInstance(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg0: GlobFunction, arg1: Consumer, cb: Callback<AndThenGlobFunction>): void;
+    newInstance(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg0: GlobFunction, arg1: GlobFunction, cb: Callback<AndThenGlobFunction>): void;
+    newInstance(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg0: GlobFunction, arg1: BiConsumer, cb: Callback<AndThenGlobFunction>): void;
+    newInstance(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg0: GlobFunction, arg1: Function, cb: Callback<AndThenGlobFunction>): void;
+    newInstance(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg0: GlobFunction, arg1: Consumer, cb: Callback<AndThenGlobFunction>): void;
     newInstance(className: string, ...args: any[]): void;
 
     newInstanceSync(className: 'org.codehaus.groovy.util.ReferenceBundle', arg0: object_t, arg1: object_t): ReferenceBundle;
@@ -480,7 +484,7 @@ declare module Java {
     newInstanceSync(className: 'java.lang.Object'): object_t;
     newInstanceSync(className: 'java.lang.Boolean', arg0: string_t): boolean;
     newInstanceSync(className: 'java.lang.Boolean', arg0: boolean_t): boolean;
-    newInstanceSync(className: 'co.redseal.gremlinnode.function_.IdentityGlobFunction', arg0: GlobFunction): IdentityGlobFunction;
+    newInstanceSync(className: 'co.redseal.gremlinnode.function.IdentityGlobFunction', arg0: GlobFunction): IdentityGlobFunction;
     newInstanceSync(className: 'org.codehaus.groovy.tools.shell.Groovysh', arg0: ClassLoader, arg1: Binding, arg2: object_t, arg3: Closure): Groovysh;
     newInstanceSync(className: 'org.codehaus.groovy.tools.shell.Groovysh', arg0: ClassLoader, arg1: Binding, arg2: object_t): Groovysh;
     newInstanceSync(className: 'org.codehaus.groovy.tools.shell.Groovysh', arg0: Binding, arg1: object_t): Groovysh;
@@ -508,7 +512,7 @@ declare module Java {
     newInstanceSync(className: 'co.redseal.gremlinnode.testing.TestClass'): TestClass;
     newInstanceSync(className: 'org.codehaus.groovy.util.ManagedReference', arg0: object_t, arg1: object_t, arg2: object_t): ManagedReference;
     newInstanceSync(className: 'org.codehaus.groovy.util.ManagedReference', arg0: ReferenceBundle, arg1: object_t): ManagedReference;
-    newInstanceSync(className: 'co.redseal.gremlinnode.function_.NegateGlobFunction', arg0: GlobFunction): NegateGlobFunction;
+    newInstanceSync(className: 'co.redseal.gremlinnode.function.NegateGlobFunction', arg0: GlobFunction): NegateGlobFunction;
     newInstanceSync(className: 'com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory'): TinkerFactory;
     newInstanceSync(className: 'java.io.FileOutputStream', arg0: string_t, arg1: boolean_t): FileOutputStream;
     newInstanceSync(className: 'java.io.FileOutputStream', arg0: object_t, arg1: boolean_t): FileOutputStream;
@@ -520,8 +524,8 @@ declare module Java {
     newInstanceSync(className: 'javax.script.AbstractScriptEngine'): AbstractScriptEngine;
     newInstanceSync(className: 'java.util.NoSuchElementException', arg0: string_t): NoSuchElementException;
     newInstanceSync(className: 'java.util.NoSuchElementException'): NoSuchElementException;
-    newInstanceSync(className: 'co.redseal.gremlinnode.function_.GroovyLambda', arg0: string_t, arg1: ScriptEngine): GroovyLambda;
-    newInstanceSync(className: 'co.redseal.gremlinnode.function_.GroovyLambda', arg0: string_t): GroovyLambda;
+    newInstanceSync(className: 'co.redseal.gremlinnode.function.GroovyLambda', arg0: string_t, arg1: ScriptEngine): GroovyLambda;
+    newInstanceSync(className: 'co.redseal.gremlinnode.function.GroovyLambda', arg0: string_t): GroovyLambda;
     newInstanceSync(className: 'groovy.lang.Closure', arg0: object_t, arg1: object_t): Closure;
     newInstanceSync(className: 'groovy.lang.Closure', arg0: object_t): Closure;
     newInstanceSync(className: 'com.tinkerpop.gremlin.process.util.BulkSet'): BulkSet;
@@ -535,10 +539,10 @@ declare module Java {
     newInstanceSync(className: 'groovy.lang.GroovyClassLoader'): GroovyClassLoader;
     newInstanceSync(className: 'java.lang.Number'): number;
     newInstanceSync(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader', arg0: GraphSONMapper, arg1: long_t, arg2: string_t, arg3: string_t): GraphSONReader;
-    newInstanceSync(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg0: GlobFunction, arg1: GlobFunction): AndThenGlobFunction;
-    newInstanceSync(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg0: GlobFunction, arg1: BiConsumer): AndThenGlobFunction;
-    newInstanceSync(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg0: GlobFunction, arg1: Function): AndThenGlobFunction;
-    newInstanceSync(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg0: GlobFunction, arg1: Consumer): AndThenGlobFunction;
+    newInstanceSync(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg0: GlobFunction, arg1: GlobFunction): AndThenGlobFunction;
+    newInstanceSync(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg0: GlobFunction, arg1: BiConsumer): AndThenGlobFunction;
+    newInstanceSync(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg0: GlobFunction, arg1: Function): AndThenGlobFunction;
+    newInstanceSync(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg0: GlobFunction, arg1: Consumer): AndThenGlobFunction;
     newInstanceSync(className: string, ...args: any[]): any;
 
     newInstancePromise(className: 'org.codehaus.groovy.util.ReferenceBundle', arg0: object_t, arg1: object_t): Promise<ReferenceBundle>;
@@ -599,7 +603,7 @@ declare module Java {
     newInstancePromise(className: 'java.lang.Object'): Promise<object_t>;
     newInstancePromise(className: 'java.lang.Boolean', arg0: string_t): Promise<boolean>;
     newInstancePromise(className: 'java.lang.Boolean', arg0: boolean_t): Promise<boolean>;
-    newInstancePromise(className: 'co.redseal.gremlinnode.function_.IdentityGlobFunction', arg0: GlobFunction): Promise<IdentityGlobFunction>;
+    newInstancePromise(className: 'co.redseal.gremlinnode.function.IdentityGlobFunction', arg0: GlobFunction): Promise<IdentityGlobFunction>;
     newInstancePromise(className: 'org.codehaus.groovy.tools.shell.Groovysh', arg0: ClassLoader, arg1: Binding, arg2: object_t, arg3: Closure): Promise<Groovysh>;
     newInstancePromise(className: 'org.codehaus.groovy.tools.shell.Groovysh', arg0: ClassLoader, arg1: Binding, arg2: object_t): Promise<Groovysh>;
     newInstancePromise(className: 'org.codehaus.groovy.tools.shell.Groovysh', arg0: Binding, arg1: object_t): Promise<Groovysh>;
@@ -627,7 +631,7 @@ declare module Java {
     newInstancePromise(className: 'co.redseal.gremlinnode.testing.TestClass'): Promise<TestClass>;
     newInstancePromise(className: 'org.codehaus.groovy.util.ManagedReference', arg0: object_t, arg1: object_t, arg2: object_t): Promise<ManagedReference>;
     newInstancePromise(className: 'org.codehaus.groovy.util.ManagedReference', arg0: ReferenceBundle, arg1: object_t): Promise<ManagedReference>;
-    newInstancePromise(className: 'co.redseal.gremlinnode.function_.NegateGlobFunction', arg0: GlobFunction): Promise<NegateGlobFunction>;
+    newInstancePromise(className: 'co.redseal.gremlinnode.function.NegateGlobFunction', arg0: GlobFunction): Promise<NegateGlobFunction>;
     newInstancePromise(className: 'com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory'): Promise<TinkerFactory>;
     newInstancePromise(className: 'java.io.FileOutputStream', arg0: string_t, arg1: boolean_t): Promise<FileOutputStream>;
     newInstancePromise(className: 'java.io.FileOutputStream', arg0: object_t, arg1: boolean_t): Promise<FileOutputStream>;
@@ -639,8 +643,8 @@ declare module Java {
     newInstancePromise(className: 'javax.script.AbstractScriptEngine'): Promise<AbstractScriptEngine>;
     newInstancePromise(className: 'java.util.NoSuchElementException', arg0: string_t): Promise<NoSuchElementException>;
     newInstancePromise(className: 'java.util.NoSuchElementException'): Promise<NoSuchElementException>;
-    newInstancePromise(className: 'co.redseal.gremlinnode.function_.GroovyLambda', arg0: string_t, arg1: ScriptEngine): Promise<GroovyLambda>;
-    newInstancePromise(className: 'co.redseal.gremlinnode.function_.GroovyLambda', arg0: string_t): Promise<GroovyLambda>;
+    newInstancePromise(className: 'co.redseal.gremlinnode.function.GroovyLambda', arg0: string_t, arg1: ScriptEngine): Promise<GroovyLambda>;
+    newInstancePromise(className: 'co.redseal.gremlinnode.function.GroovyLambda', arg0: string_t): Promise<GroovyLambda>;
     newInstancePromise(className: 'groovy.lang.Closure', arg0: object_t, arg1: object_t): Promise<Closure>;
     newInstancePromise(className: 'groovy.lang.Closure', arg0: object_t): Promise<Closure>;
     newInstancePromise(className: 'com.tinkerpop.gremlin.process.util.BulkSet'): Promise<BulkSet>;
@@ -654,10 +658,10 @@ declare module Java {
     newInstancePromise(className: 'groovy.lang.GroovyClassLoader'): Promise<GroovyClassLoader>;
     newInstancePromise(className: 'java.lang.Number'): Promise<number>;
     newInstancePromise(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader', arg0: GraphSONMapper, arg1: long_t, arg2: string_t, arg3: string_t): Promise<GraphSONReader>;
-    newInstancePromise(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg0: GlobFunction, arg1: GlobFunction): Promise<AndThenGlobFunction>;
-    newInstancePromise(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg0: GlobFunction, arg1: BiConsumer): Promise<AndThenGlobFunction>;
-    newInstancePromise(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg0: GlobFunction, arg1: Function): Promise<AndThenGlobFunction>;
-    newInstancePromise(className: 'co.redseal.gremlinnode.function_.AndThenGlobFunction', arg0: GlobFunction, arg1: Consumer): Promise<AndThenGlobFunction>;
+    newInstancePromise(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg0: GlobFunction, arg1: GlobFunction): Promise<AndThenGlobFunction>;
+    newInstancePromise(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg0: GlobFunction, arg1: BiConsumer): Promise<AndThenGlobFunction>;
+    newInstancePromise(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg0: GlobFunction, arg1: Function): Promise<AndThenGlobFunction>;
+    newInstancePromise(className: 'co.redseal.gremlinnode.function.AndThenGlobFunction', arg0: GlobFunction, arg1: Consumer): Promise<AndThenGlobFunction>;
     newInstancePromise(className: string, ...args: any[]): Promise<any>;
   }
 
@@ -4377,10 +4381,10 @@ declare module Java {
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.range(long,long)
       range(arg0: long_t, arg1: long_t): GraphTraversal;
       rangeP(arg0: long_t, arg1: long_t): Promise<GraphTraversal>;
-      // public abstract void com.tinkerpop.gremlin.structure.Property.remove()
+      // public abstract void com.tinkerpop.gremlin.structure.Element.remove()
       remove(): void;
       removeP(): Promise<void>;
-      // public abstract void com.tinkerpop.gremlin.structure.Element.remove()
+      // public abstract void com.tinkerpop.gremlin.structure.Property.remove()
       remove(): void;
       removeP(): Promise<void>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.repeat(com.tinkerpop.gremlin.process.Traversal<?, A>)
