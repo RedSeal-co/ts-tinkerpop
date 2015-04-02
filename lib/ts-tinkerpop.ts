@@ -1,6 +1,7 @@
 /// <reference path='./java.d.ts' />
 /// <reference path='../typings/bluebird/bluebird.d.ts' />
 /// <reference path='../typings/debug/debug.d.ts' />
+/// <reference path='../typings/glob/glob.d.ts' />
 /// <reference path='../typings/json-stable-stringify/json-stable-stringify.d.ts' />
 /// <reference path='../typings/lodash/lodash.d.ts' />
 /// <reference path='../typings/node/node.d.ts' />
@@ -13,7 +14,10 @@ import assert = require('power-assert');
 import BluePromise = require('bluebird');
 import debug = require('debug');
 import fs = require('fs');
+import glob = require('glob');
 import jsonStableStringify = require('json-stable-stringify');
+
+var dlog = debug('ts-tinkerpop');
 
 // # ts-tinkerpop
 // Helper functions for Typescript applications using [TinkerPop 3]() via [node-java](https://github.com/joeferner/node-java).
@@ -24,7 +28,7 @@ module Tinkerpop {
 
   'use strict';
 
-  var dlog = debug('ts-tinkerpop');
+  export type Static = typeof Tinkerpop;
 
   // ### autoImport
   export var autoImport = _autoImport;
@@ -87,6 +91,10 @@ module Tinkerpop {
     _groovyScriptEngine = new GremlinGroovyScriptEngine();
 
     dlog('Tinkerpop helper initialized.');
+  }
+
+  export function getTinkerpop(): BluePromise<Static> {
+    return _java.ensureJvm().then(() => Tinkerpop);
   }
 
   // #### `id(n: number)`
@@ -478,5 +486,31 @@ module Tinkerpop {
   var _groovyScriptEngine: Java.com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
 
 }
+
+function beforeJvm(): BluePromise<void> {
+  var globP = BluePromise.promisify(glob);
+  return globP('target/**/*.jar').then((filenames: string[]) => {
+    filenames.forEach((name: string): void => {
+      dlog('classpath:', name);
+      _java.classpath.push(name);
+    });
+  });
+}
+
+function afterJvm(): BluePromise<void> {
+  Tinkerpop.initialize();
+  return BluePromise.resolve();
+}
+
+// This code is executed just once at module import time
+_java.asyncOptions = {
+  syncSuffix: '',
+  promiseSuffix: 'P',
+  // Should be able to use BluePromise.promisify here, but TSC gives a type error.
+  // TODO: Fix this after changing ts-java's declaration of the promisify type.
+  promisify: require('bluebird').promisify
+};
+_java.registerClientP(beforeJvm, afterJvm);
+
 
 export = Tinkerpop;

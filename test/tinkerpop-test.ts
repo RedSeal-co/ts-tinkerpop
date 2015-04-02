@@ -2,7 +2,6 @@
 /// <reference path='../typings/bluebird/bluebird.d.ts' />
 /// <reference path='../typings/chai/chai.d.ts'/>
 /// <reference path='../typings/debug/debug.d.ts' />
-/// <reference path='../typings/glob/glob.d.ts' />
 /// <reference path='../typings/mocha/mocha.d.ts'/>
 /// <reference path='../typings/node/node.d.ts'/>
 /// <reference path='../typings/tmp/tmp.d.ts'/>
@@ -16,31 +15,23 @@ import BluePromise = require('bluebird');
 import chai = require('chai');
 import debug = require('debug');
 import fs = require('fs');
-import glob = require('glob');
 import tmp = require('tmp');
 import TP = require('../lib/ts-tinkerpop');
 import util = require('util');
 
 import expect = chai.expect;
-import java = TP.java;
 
 var dlog = debug('ts-tinkerpop:test');
 
 before((done: MochaDone): void => {
-  java.asyncOptions = {
-    syncSuffix: '',
-    promiseSuffix: 'P',
-    promisify: require('bluebird').promisify
-  };
 
-  var filenames = glob.sync('target/**/*.jar');
-  filenames.forEach((name: string): void => {
-    dlog('classpath:', name);
-    java.classpath.push(name);
+  TP.getTinkerpop().then((t: TP.Static) => {
+    if (TP !== t) {
+      throw new Error('Tinkerpop is not a singleton.');
+    };
+    done();
   });
 
-  TP.initialize();
-  done();
 });
 
 describe('autoImport', (): void => {
@@ -322,7 +313,7 @@ describe('Gremlin', (): void => {
     });
 
     it('TP.asJSON(edges)', (): void => {
-      var traversal = graph.E().has('weight', TP.Compare.eq, java.newFloat(1.0));
+      var traversal = graph.E().has('weight', TP.Compare.eq, TP.java.newFloat(1.0));
       var json: any = TP.asJSON(traversal);
       var expected = [
         {
