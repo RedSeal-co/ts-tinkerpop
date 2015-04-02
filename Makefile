@@ -87,7 +87,7 @@ TSC_OPTS=--module commonjs --target ES5 --sourceMap --declaration --noEmitOnErro
 LINT=./node_modules/.bin/tslint
 LINT_OPTS=--config tslint.json --file
 
-%.js %.js.map %.d.ts: %.ts o/all-installed.lastran
+%.js %.js.map %.d.ts: %.ts o/all-installed.lastran $(JAVA_D_TS)
 	($(TSC) $(TSC_OPTS) $<) || (rm -f $*.js* && false)
 
 clean-typescript:
