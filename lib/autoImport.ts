@@ -59,12 +59,14 @@ function autoImport(shortName: "Long"): Java.java.lang.Long.Static;
 function autoImport(shortName: "DelegatingMetaClass"): Java.groovy.lang.DelegatingMetaClass.Static;
 function autoImport(shortName: "Compare"): Java.com.tinkerpop.gremlin.structure.Compare.Static;
 function autoImport(shortName: "Edge"): Java.com.tinkerpop.gremlin.structure.Edge.Static;
+function autoImport(shortName: "GraphSONMapper$Builder"): Java.com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder.Static;
 function autoImport(shortName: "ScriptEngineFactory"): Java.javax.script.ScriptEngineFactory.Static;
 function autoImport(shortName: "FileInputStream"): Java.java.io.FileInputStream.Static;
 function autoImport(shortName: "MetaClass"): Java.groovy.lang.MetaClass.Static;
 function autoImport(shortName: "Object"): Java.java.lang.Object.Static;
 function autoImport(shortName: "BiConsumer"): Java.java.util.function_.BiConsumer.Static;
 function autoImport(shortName: "Boolean"): Java.java.lang.Boolean.Static;
+function autoImport(shortName: "GraphSONReader$Builder"): Java.com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder.Static;
 function autoImport(shortName: "IdentityGlobFunction"): Java.co.redseal.gremlinnode.function_.IdentityGlobFunction.Static;
 function autoImport(shortName: "Groovysh"): Java.org.codehaus.groovy.tools.shell.Groovysh.Static;
 function autoImport(shortName: "HashSet"): Java.java.util.HashSet.Static;
@@ -89,6 +91,7 @@ function autoImport(shortName: "NegateGlobFunction"): Java.co.redseal.gremlinnod
 function autoImport(shortName: "TinkerFactory"): Java.com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory.Static;
 function autoImport(shortName: "ScriptEngine"): Java.javax.script.ScriptEngine.Static;
 function autoImport(shortName: "Bindings"): Java.javax.script.Bindings.Static;
+function autoImport(shortName: "FileOutputStream"): Java.java.io.FileOutputStream.Static;
 function autoImport(shortName: "ScriptContext"): Java.javax.script.ScriptContext.Static;
 function autoImport(shortName: "AbstractMap"): Java.java.util.AbstractMap.Static;
 function autoImport(shortName: "GraphStrategy"): Java.com.tinkerpop.gremlin.structure.strategy.GraphStrategy.Static;
@@ -171,12 +174,14 @@ function autoImport(shortName: string): any {
     "DelegatingMetaClass": "groovy.lang.DelegatingMetaClass",
     "Compare": "com.tinkerpop.gremlin.structure.Compare",
     "Edge": "com.tinkerpop.gremlin.structure.Edge",
+    "GraphSONMapper$Builder": "com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder",
     "ScriptEngineFactory": "javax.script.ScriptEngineFactory",
     "FileInputStream": "java.io.FileInputStream",
     "MetaClass": "groovy.lang.MetaClass",
     "Object": "java.lang.Object",
     "BiConsumer": "java.util.function_.BiConsumer",
     "Boolean": "java.lang.Boolean",
+    "GraphSONReader$Builder": "com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder",
     "IdentityGlobFunction": "co.redseal.gremlinnode.function_.IdentityGlobFunction",
     "Groovysh": "org.codehaus.groovy.tools.shell.Groovysh",
     "HashSet": "java.util.HashSet",
@@ -201,6 +206,7 @@ function autoImport(shortName: string): any {
     "TinkerFactory": "com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory",
     "ScriptEngine": "javax.script.ScriptEngine",
     "Bindings": "javax.script.Bindings",
+    "FileOutputStream": "java.io.FileOutputStream",
     "ScriptContext": "javax.script.ScriptContext",
     "AbstractMap": "java.util.AbstractMap",
     "GraphStrategy": "com.tinkerpop.gremlin.structure.strategy.GraphStrategy",

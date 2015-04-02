@@ -49,6 +49,12 @@
     },
     "dts-bundle/dts-bundle.d.ts": {
       "commit": "e20d7e796da57baa25a6372edfec154fe47e218f"
+    },
+    "tmp/tmp.d.ts": {
+      "commit": "e20d7e796da57baa25a6372edfec154fe47e218f"
+    },
+    "json-stable-stringify/json-stable-stringify.d.ts": {
+      "commit": "541ec0641136f59fbba8c164386acbc685d4972e"
     }
   }
 }

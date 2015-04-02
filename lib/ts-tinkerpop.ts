@@ -1,7 +1,9 @@
 /// <reference path='./java.d.ts' />
 /// <reference path='../typings/bluebird/bluebird.d.ts' />
 /// <reference path='../typings/debug/debug.d.ts' />
+/// <reference path='../typings/json-stable-stringify/json-stable-stringify.d.ts' />
 /// <reference path='../typings/lodash/lodash.d.ts' />
+/// <reference path='../typings/node/node.d.ts' />
 /// <reference path='../typings/power-assert/power-assert.d.ts' />
 
 import _ = require('lodash');
@@ -10,6 +12,8 @@ import _java = require('redseal-java');
 import assert = require('power-assert');
 import BluePromise = require('bluebird');
 import debug = require('debug');
+import fs = require('fs');
+import jsonStableStringify = require('json-stable-stringify');
 
 // # ts-tinkerpop
 // Helper functions for Typescript applications using [TinkerPop 3]() via [node-java](https://github.com/joeferner/node-java).
@@ -32,7 +36,9 @@ module Tinkerpop {
   // #### TinkerPop Classes
   export var __: Java.__.Static;
   export var Compare: Java.Compare.Static;
+  export var GraphSONReader: Java.GraphSONReader.Static;
   export var GraphSONWriter: Java.GraphSONWriter.Static;
+  export var GraphSONMapper: Java.GraphSONMapper.Static;
   export var GremlinGroovyScriptEngine: Java.GremlinGroovyScriptEngine.Static;
   export var ScriptEngineLambda: Java.ScriptEngineLambda.Static;
   export var T: Java.T.Static;
@@ -64,7 +70,9 @@ module Tinkerpop {
     __ = autoImport('__');
     ByteArrayOutputStream = autoImport('ByteArrayOutputStream');
     Compare = autoImport('Compare');
+    GraphSONReader = autoImport('GraphSONReader');
     GraphSONWriter = autoImport('GraphSONWriter');
+    GraphSONMapper = autoImport('GraphSONMapper');
     GremlinGroovyScriptEngine = autoImport('GremlinGroovyScriptEngine');
     GroovyLambda =
       java.import('co.redseal.gremlinnode.function.GroovyLambda');  // TODO: Use autoImport when #91309036 fixed
@@ -273,6 +281,114 @@ module Tinkerpop {
     return obj;
   };
 
+  // ## GraphSON API
+
+  export interface GraphCallback {
+    (err: Error, graph: Java.Graph): any;
+  }
+
+  // ### `loadGraphSON(graph: Java.Graph, filename: string)`
+  // Loads the graph as GraphSON, and returns promise to the graph (for fluent API).
+  export function loadGraphSON(graph: Java.Graph, filename: string, callback?: GraphCallback): BluePromise<Java.Graph> {
+    var FileInputStream: Java.FileInputStream.Static = autoImport('FileInputStream');
+    var stream: Java.FileInputStream = new FileInputStream(filename);
+    return GraphSONReader.buildP()
+      .then((builder: Java.GraphSONReader$Builder): BluePromise<Java.GraphSONReader$Builder> => {
+        return _newGraphSONMapper()
+          .then((mapper: Java.GraphSONMapper): BluePromise<Java.GraphSONReader$Builder> => builder.mapperP(mapper));
+      })
+      .then((builder: Java.GraphSONReader$Builder): BluePromise<Java.GraphSONReader> => builder.createP())
+      .then((reader: Java.GraphSONReader): BluePromise<void> => reader.readGraphP(stream, graph))
+      .then((): Java.Graph => graph)
+      .nodeify(callback);
+  }
+
+  // ### `loadGraphSONSync(graph: Java.Graph, filename: string)`
+  // Loads the graph as GraphSON, and returns the graph (for fluent API).
+  export function loadGraphSONSync(graph: Java.Graph, filename: string): Java.Graph {
+    var FileInputStream: Java.FileInputStream.Static = autoImport('FileInputStream');
+    var stream: Java.FileInputStream = new FileInputStream(filename);
+    var builder: Java.GraphSONReader$Builder = GraphSONReader.build();
+    var mapper: Java.GraphSONMapper = _newGraphSONMapperSync();
+    builder.mapper(mapper);
+    var reader: Java.GraphSONReader = builder.create();
+    reader.readGraph(stream, graph);
+    return graph;
+  }
+
+  // ### `saveGraphSON(graph: Java.Graph, filename: string)`
+  // Saves the graph as GraphSON, and returns promise to the graph.
+  export function saveGraphSON(graph: Java.Graph, filename: string, callback?: GraphCallback): BluePromise<Java.Graph> {
+    var FileOutputStream: Java.FileOutputStream.Static = autoImport('FileOutputStream');
+    var stream: Java.FileOutputStream = new FileOutputStream(filename);
+    return GraphSONWriter.buildP()
+      .then((builder: Java.GraphSONWriter$Builder): BluePromise<Java.GraphSONWriter$Builder> => {
+        return _newGraphSONMapper()
+          .then((mapper: Java.GraphSONMapper): BluePromise<Java.GraphSONWriter$Builder> => builder.mapperP(mapper));
+      })
+      .then((builder: Java.GraphSONWriter$Builder): BluePromise<Java.GraphSONWriter> => builder.createP())
+      .then((writer: Java.GraphSONWriter): BluePromise<void> => writer.writeGraphP(stream, graph))
+      .then((): Java.Graph => graph)
+      .nodeify(callback);
+  }
+
+  // ### `saveGraphSONSync(graph: Java.Graph, filename: string)`
+  // Saves the graph as GraphSON, and returns the graph (for fluent API).
+  export function saveGraphSONSync(graph: Java.Graph, filename: string): Java.Graph {
+    var FileOutputStream: Java.FileOutputStream.Static = autoImport('FileOutputStream');
+    var stream: Java.FileOutputStream = new FileOutputStream(filename);
+    var builder: Java.GraphSONWriter$Builder = GraphSONWriter.build();
+    var mapper: Java.GraphSONMapper = _newGraphSONMapperSync();
+    builder.mapper(mapper);
+    var writer: Java.GraphSONWriter = builder.create();
+    writer.writeGraph(stream, graph);
+    return graph;
+  }
+
+  // ### `savePrettyGraphSON(graph: Java.Graph, filename: string)`
+  // Saves the graph as human-readable, deterministic GraphSON, and returns promise to the graph (for fluent API).
+  export
+  function savePrettyGraphSON(graph: Java.Graph, filename: string, callback?: GraphCallback): BluePromise<Java.Graph> {
+    var ByteArrayOutputStream: Java.ByteArrayOutputStream.Static = autoImport('ByteArrayOutputStream');
+    var stream: Java.ByteArrayOutputStream = new ByteArrayOutputStream();
+    return GraphSONWriter.buildP()
+      .then((builder: Java.GraphSONWriter$Builder): BluePromise<Java.GraphSONWriter$Builder> => {
+        return _newGraphSONMapper()
+          .then((mapper: Java.GraphSONMapper): BluePromise<Java.GraphSONWriter$Builder> => builder.mapperP(mapper));
+      })
+      .then((builder: Java.GraphSONWriter$Builder): BluePromise<Java.GraphSONWriter> => builder.createP())
+      .then((writer: Java.GraphSONWriter): BluePromise<void> => writer.writeGraphP(stream, graph))
+      .then((): BluePromise<string> => stream.toStringP())
+      .then((ugly: string): BluePromise<void> => {
+        var prettyString: string = _prettyGraphSONString(ugly);
+        var writeFileP = BluePromise.promisify(fs.writeFile);
+        return writeFileP(filename, prettyString);
+      })
+      .then((): Java.Graph => graph)
+      .nodeify(callback);
+  }
+
+  // ### `savePrettyGraphSONSync(graph: Java.Graph, filename: string)`
+  // Saves the graph as human-readable, deterministic GraphSON, and returns the graph (for fluent API).
+  export function savePrettyGraphSONSync(graph: Java.Graph, filename: string): Java.Graph {
+    // Build the GraphSON in memory in Java.
+    var ByteArrayOutputStream: Java.ByteArrayOutputStream.Static = autoImport('ByteArrayOutputStream');
+    var stream: Java.ByteArrayOutputStream = new ByteArrayOutputStream();
+    var builder: Java.GraphSONWriter$Builder = GraphSONWriter.build();
+    var mapper: Java.GraphSONMapper = _newGraphSONMapperSync();
+    builder.mapper(mapper);
+    var writer: Java.GraphSONWriter = builder.create();
+    writer.writeGraph(stream, graph);
+
+    // Beautify the JSON.
+    var uglyString: string = stream.toString();
+    var prettyString: string = _prettyGraphSONString(uglyString);
+
+    // Write to the file.
+    fs.writeFileSync(filename, prettyString);
+    return graph;
+  }
+
   // ### Non-exported Functions
 
   // #### `function _isClosure(val: string)`
@@ -314,6 +430,46 @@ module Tinkerpop {
       // Recursively convert any other kind of object.
       return _.mapValues(elem, (value: any) => _asJSON(value));
     }
+  }
+
+  // ### `_newGraphSONMapper()`
+  // Create a GraphSONMapper (promise) that preserves types.
+  function _newGraphSONMapper(): BluePromise<Java.GraphSONMapper> {
+    return GraphSONMapper.buildP()
+      .then((builder: Java.GraphSONMapper$Builder): BluePromise<Java.GraphSONMapper$Builder> =>
+            builder.embedTypesP(true))
+      .then((builder: Java.GraphSONMapper$Builder): BluePromise<Java.GraphSONMapper> =>
+            builder.createP());
+  }
+
+  // ### `_newGraphSONMapperSync()`
+  // Create a GraphSONMapper that preserves types.
+  function _newGraphSONMapperSync(): Java.GraphSONMapper {
+    var builder: Java.GraphSONMapper$Builder = GraphSONMapper.build();
+    builder.embedTypes(true);
+    var mapper: Java.GraphSONMapper = builder.create();
+    return mapper;
+  }
+
+  // Make a GraphSON string pretty, adding indentation and deterministic format.
+  function _prettyGraphSONString(ugly: string): string {
+    var json: any = JSON.parse(ugly);
+
+    // Compute the stable JSON.
+    var stringifyOpts: jsonStableStringify.Options = {
+      // GraphSON requires its top level properties to be in the order mode, vertices, edges.
+      space: 2,
+      cmp: (a: jsonStableStringify.Element, b: jsonStableStringify.Element): number => {
+        if (a.key === 'edges')
+          return 1;
+        else if (b.key === 'edges')
+          return -1;
+        return a.key < b.key ? -1 : 1;
+      }
+    };
+
+    var prettyString: string = jsonStableStringify(json, stringifyOpts);
+    return prettyString;
   }
 
   // ### Non-exported variables
