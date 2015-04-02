@@ -126,12 +126,14 @@ declare module Java {
     newArray(className: 'groovy.lang.DelegatingMetaClass', arg: DelegatingMetaClass[]): array_t<groovy.lang.DelegatingMetaClass>;
     newArray(className: 'com.tinkerpop.gremlin.structure.Compare', arg: Compare[]): array_t<com.tinkerpop.gremlin.structure.Compare>;
     newArray(className: 'com.tinkerpop.gremlin.structure.Edge', arg: Edge[]): array_t<com.tinkerpop.gremlin.structure.Edge>;
+    newArray(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder', arg: GraphSONMapper$Builder[]): array_t<com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder>;
     newArray(className: 'javax.script.ScriptEngineFactory', arg: ScriptEngineFactory[]): array_t<javax.script.ScriptEngineFactory>;
     newArray(className: 'java.io.FileInputStream', arg: FileInputStream[]): array_t<java.io.FileInputStream>;
     newArray(className: 'groovy.lang.MetaClass', arg: MetaClass[]): array_t<groovy.lang.MetaClass>;
     newArray(className: 'java.lang.Object', arg: object_t[]): array_t<java.lang.Object>;
     newArray(className: 'java.util.function_.BiConsumer', arg: BiConsumer[]): array_t<java.util.function_.BiConsumer>;
     newArray(className: 'java.lang.Boolean', arg: boolean_t[]): array_t<java.lang.Boolean>;
+    newArray(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder', arg: GraphSONReader$Builder[]): array_t<com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder>;
     newArray(className: 'co.redseal.gremlinnode.function_.IdentityGlobFunction', arg: IdentityGlobFunction[]): array_t<co.redseal.gremlinnode.function_.IdentityGlobFunction>;
     newArray(className: 'org.codehaus.groovy.tools.shell.Groovysh', arg: Groovysh[]): array_t<org.codehaus.groovy.tools.shell.Groovysh>;
     newArray(className: 'java.util.HashSet', arg: HashSet[]): array_t<java.util.HashSet>;
@@ -156,6 +158,7 @@ declare module Java {
     newArray(className: 'com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory', arg: TinkerFactory[]): array_t<com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory>;
     newArray(className: 'javax.script.ScriptEngine', arg: ScriptEngine[]): array_t<javax.script.ScriptEngine>;
     newArray(className: 'javax.script.Bindings', arg: Bindings[]): array_t<javax.script.Bindings>;
+    newArray(className: 'java.io.FileOutputStream', arg: FileOutputStream[]): array_t<java.io.FileOutputStream>;
     newArray(className: 'javax.script.ScriptContext', arg: ScriptContext[]): array_t<javax.script.ScriptContext>;
     newArray(className: 'java.util.AbstractMap', arg: AbstractMap[]): array_t<java.util.AbstractMap>;
     newArray(className: 'com.tinkerpop.gremlin.structure.strategy.GraphStrategy', arg: GraphStrategy[]): array_t<com.tinkerpop.gremlin.structure.strategy.GraphStrategy>;
@@ -236,12 +239,14 @@ declare module Java {
     import(className: 'groovy.lang.DelegatingMetaClass'): groovy.lang.DelegatingMetaClass.Static;
     import(className: 'com.tinkerpop.gremlin.structure.Compare'): com.tinkerpop.gremlin.structure.Compare.Static;
     import(className: 'com.tinkerpop.gremlin.structure.Edge'): com.tinkerpop.gremlin.structure.Edge.Static;
+    import(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder'): com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder.Static;
     import(className: 'javax.script.ScriptEngineFactory'): javax.script.ScriptEngineFactory.Static;
     import(className: 'java.io.FileInputStream'): java.io.FileInputStream.Static;
     import(className: 'groovy.lang.MetaClass'): groovy.lang.MetaClass.Static;
     import(className: 'java.lang.Object'): java.lang.Object.Static;
     import(className: 'java.util.function_.BiConsumer'): java.util.function_.BiConsumer.Static;
     import(className: 'java.lang.Boolean'): java.lang.Boolean.Static;
+    import(className: 'com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder'): com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder.Static;
     import(className: 'co.redseal.gremlinnode.function_.IdentityGlobFunction'): co.redseal.gremlinnode.function_.IdentityGlobFunction.Static;
     import(className: 'org.codehaus.groovy.tools.shell.Groovysh'): org.codehaus.groovy.tools.shell.Groovysh.Static;
     import(className: 'java.util.HashSet'): java.util.HashSet.Static;
@@ -266,6 +271,7 @@ declare module Java {
     import(className: 'com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory'): com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory.Static;
     import(className: 'javax.script.ScriptEngine'): javax.script.ScriptEngine.Static;
     import(className: 'javax.script.Bindings'): javax.script.Bindings.Static;
+    import(className: 'java.io.FileOutputStream'): java.io.FileOutputStream.Static;
     import(className: 'javax.script.ScriptContext'): javax.script.ScriptContext.Static;
     import(className: 'java.util.AbstractMap'): java.util.AbstractMap.Static;
     import(className: 'com.tinkerpop.gremlin.structure.strategy.GraphStrategy'): com.tinkerpop.gremlin.structure.strategy.GraphStrategy.Static;
@@ -385,6 +391,11 @@ declare module Java {
     newInstance(className: 'org.codehaus.groovy.util.ManagedReference', arg0: ReferenceBundle, arg1: object_t, cb: Callback<ManagedReference>): void;
     newInstance(className: 'co.redseal.gremlinnode.function_.NegateGlobFunction', arg0: GlobFunction, cb: Callback<NegateGlobFunction>): void;
     newInstance(className: 'com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory', cb: Callback<TinkerFactory>): void;
+    newInstance(className: 'java.io.FileOutputStream', arg0: string_t, arg1: boolean_t, cb: Callback<FileOutputStream>): void;
+    newInstance(className: 'java.io.FileOutputStream', arg0: object_t, arg1: boolean_t, cb: Callback<FileOutputStream>): void;
+    newInstance(className: 'java.io.FileOutputStream', arg0: object_t, cb: Callback<FileOutputStream>): void;
+    newInstance(className: 'java.io.FileOutputStream', arg0: string_t, cb: Callback<FileOutputStream>): void;
+    newInstance(className: 'java.io.FileOutputStream', arg0: object_t, cb: Callback<FileOutputStream>): void;
     newInstance(className: 'groovy.lang.MetaProperty', arg0: string_t, arg1: Class, cb: Callback<MetaProperty>): void;
     newInstance(className: 'javax.script.AbstractScriptEngine', arg0: Bindings, cb: Callback<AbstractScriptEngine>): void;
     newInstance(className: 'javax.script.AbstractScriptEngine', cb: Callback<AbstractScriptEngine>): void;
@@ -499,6 +510,11 @@ declare module Java {
     newInstanceSync(className: 'org.codehaus.groovy.util.ManagedReference', arg0: ReferenceBundle, arg1: object_t): ManagedReference;
     newInstanceSync(className: 'co.redseal.gremlinnode.function_.NegateGlobFunction', arg0: GlobFunction): NegateGlobFunction;
     newInstanceSync(className: 'com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory'): TinkerFactory;
+    newInstanceSync(className: 'java.io.FileOutputStream', arg0: string_t, arg1: boolean_t): FileOutputStream;
+    newInstanceSync(className: 'java.io.FileOutputStream', arg0: object_t, arg1: boolean_t): FileOutputStream;
+    newInstanceSync(className: 'java.io.FileOutputStream', arg0: object_t): FileOutputStream;
+    newInstanceSync(className: 'java.io.FileOutputStream', arg0: string_t): FileOutputStream;
+    newInstanceSync(className: 'java.io.FileOutputStream', arg0: object_t): FileOutputStream;
     newInstanceSync(className: 'groovy.lang.MetaProperty', arg0: string_t, arg1: Class): MetaProperty;
     newInstanceSync(className: 'javax.script.AbstractScriptEngine', arg0: Bindings): AbstractScriptEngine;
     newInstanceSync(className: 'javax.script.AbstractScriptEngine'): AbstractScriptEngine;
@@ -613,6 +629,11 @@ declare module Java {
     newInstancePromise(className: 'org.codehaus.groovy.util.ManagedReference', arg0: ReferenceBundle, arg1: object_t): Promise<ManagedReference>;
     newInstancePromise(className: 'co.redseal.gremlinnode.function_.NegateGlobFunction', arg0: GlobFunction): Promise<NegateGlobFunction>;
     newInstancePromise(className: 'com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory'): Promise<TinkerFactory>;
+    newInstancePromise(className: 'java.io.FileOutputStream', arg0: string_t, arg1: boolean_t): Promise<FileOutputStream>;
+    newInstancePromise(className: 'java.io.FileOutputStream', arg0: object_t, arg1: boolean_t): Promise<FileOutputStream>;
+    newInstancePromise(className: 'java.io.FileOutputStream', arg0: object_t): Promise<FileOutputStream>;
+    newInstancePromise(className: 'java.io.FileOutputStream', arg0: string_t): Promise<FileOutputStream>;
+    newInstancePromise(className: 'java.io.FileOutputStream', arg0: object_t): Promise<FileOutputStream>;
     newInstancePromise(className: 'groovy.lang.MetaProperty', arg0: string_t, arg1: Class): Promise<MetaProperty>;
     newInstancePromise(className: 'javax.script.AbstractScriptEngine', arg0: Bindings): Promise<AbstractScriptEngine>;
     newInstancePromise(className: 'javax.script.AbstractScriptEngine'): Promise<AbstractScriptEngine>;
@@ -689,12 +710,14 @@ declare module Java {
   export import DelegatingMetaClass = groovy.lang.DelegatingMetaClass;
   export import Compare = com.tinkerpop.gremlin.structure.Compare;
   export import Edge = com.tinkerpop.gremlin.structure.Edge;
+  export import GraphSONMapper$Builder = com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder;
   export import ScriptEngineFactory = javax.script.ScriptEngineFactory;
   export import FileInputStream = java.io.FileInputStream;
   export import MetaClass = groovy.lang.MetaClass;
   export import Object = java.lang.Object;
   export import BiConsumer = java.util.function_.BiConsumer;
   export import Boolean = java.lang.Boolean;
+  export import GraphSONReader$Builder = com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder;
   export import IdentityGlobFunction = co.redseal.gremlinnode.function_.IdentityGlobFunction;
   export import Groovysh = org.codehaus.groovy.tools.shell.Groovysh;
   export import HashSet = java.util.HashSet;
@@ -719,6 +742,7 @@ declare module Java {
   export import TinkerFactory = com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory;
   export import ScriptEngine = javax.script.ScriptEngine;
   export import Bindings = javax.script.Bindings;
+  export import FileOutputStream = java.io.FileOutputStream;
   export import ScriptContext = javax.script.ScriptContext;
   export import AbstractMap = java.util.AbstractMap;
   export import GraphStrategy = com.tinkerpop.gremlin.structure.strategy.GraphStrategy;
@@ -4353,10 +4377,10 @@ declare module Java {
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.range(long,long)
       range(arg0: long_t, arg1: long_t): GraphTraversal;
       rangeP(arg0: long_t, arg1: long_t): Promise<GraphTraversal>;
-      // public abstract void com.tinkerpop.gremlin.structure.Element.remove()
+      // public abstract void com.tinkerpop.gremlin.structure.Property.remove()
       remove(): void;
       removeP(): Promise<void>;
-      // public abstract void com.tinkerpop.gremlin.structure.Property.remove()
+      // public abstract void com.tinkerpop.gremlin.structure.Element.remove()
       remove(): void;
       removeP(): Promise<void>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.repeat(com.tinkerpop.gremlin.process.Traversal<?, A>)
@@ -6486,6 +6510,57 @@ declare module Java {
     }
   }
 
+  export module com.tinkerpop.gremlin.structure.io.graphson {
+    export interface GraphSONMapper$Builder extends Java.java.lang.Object {
+      // public com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder.addCustomModule(com.fasterxml.jackson.databind.module.SimpleModule)
+      addCustomModule(arg0: object_t): GraphSONMapper$Builder;
+      addCustomModuleP(arg0: object_t): Promise<GraphSONMapper$Builder>;
+      // public com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder.create()
+      create(): GraphSONMapper;
+      createP(): Promise<GraphSONMapper>;
+      // public com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder.embedTypes(boolean)
+      embedTypes(arg0: boolean_t): GraphSONMapper$Builder;
+      embedTypesP(arg0: boolean_t): Promise<GraphSONMapper$Builder>;
+      // public boolean java.lang.Object.equals(java.lang.Object)
+      equals(arg0: object_t): boolean;
+      equalsP(arg0: object_t): Promise<boolean>;
+      // public final native java.lang.Class<?> java.lang.Object.getClass()
+      getClass(): Class;
+      getClassP(): Promise<Class>;
+      // public native int java.lang.Object.hashCode()
+      hashCode(): number;
+      hashCodeP(): Promise<number>;
+      // public com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder.loadCustomModules(boolean)
+      loadCustomModules(arg0: boolean_t): GraphSONMapper$Builder;
+      loadCustomModulesP(arg0: boolean_t): Promise<GraphSONMapper$Builder>;
+      // public com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder.normalize(boolean)
+      normalize(arg0: boolean_t): GraphSONMapper$Builder;
+      normalizeP(arg0: boolean_t): Promise<GraphSONMapper$Builder>;
+      // public final native void java.lang.Object.notify()
+      notify(): void;
+      notifyP(): Promise<void>;
+      // public final native void java.lang.Object.notifyAll()
+      notifyAll(): void;
+      notifyAllP(): Promise<void>;
+      // public java.lang.String java.lang.Object.toString()
+      toString(): string;
+      toStringP(): Promise<string>;
+      // public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
+      wait(arg0: long_t, arg1: integer_t): void;
+      waitP(arg0: long_t, arg1: integer_t): Promise<void>;
+      // public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
+      wait(arg0: long_t): void;
+      waitP(arg0: long_t): Promise<void>;
+      // public final void java.lang.Object.wait() throws java.lang.InterruptedException
+      wait(): void;
+      waitP(): Promise<void>;
+    }
+    export module GraphSONMapper$Builder {
+      export interface Static {
+      }
+    }
+  }
+
   export module javax.script {
     export interface ScriptEngineFactory extends Java.java.lang.Object {
       // public abstract java.lang.String javax.script.ScriptEngineFactory.getEngineName()
@@ -6831,6 +6906,57 @@ declare module Java {
         TRUE: boolean;
         FALSE: boolean;
         TYPE: Class;
+      }
+    }
+  }
+
+  export module com.tinkerpop.gremlin.structure.io.graphson {
+    export interface GraphSONReader$Builder extends Java.java.lang.Object {
+      // public com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder.batchSize(long)
+      batchSize(arg0: long_t): GraphSONReader$Builder;
+      batchSizeP(arg0: long_t): Promise<GraphSONReader$Builder>;
+      // public com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder.create()
+      create(): GraphSONReader;
+      createP(): Promise<GraphSONReader>;
+      // public com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder.edgeIdKey(java.lang.String)
+      edgeIdKey(arg0: string_t): GraphSONReader$Builder;
+      edgeIdKeyP(arg0: string_t): Promise<GraphSONReader$Builder>;
+      // public boolean java.lang.Object.equals(java.lang.Object)
+      equals(arg0: object_t): boolean;
+      equalsP(arg0: object_t): Promise<boolean>;
+      // public final native java.lang.Class<?> java.lang.Object.getClass()
+      getClass(): Class;
+      getClassP(): Promise<Class>;
+      // public native int java.lang.Object.hashCode()
+      hashCode(): number;
+      hashCodeP(): Promise<number>;
+      // public com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder.mapper(com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper)
+      mapper(arg0: GraphSONMapper): GraphSONReader$Builder;
+      mapperP(arg0: GraphSONMapper): Promise<GraphSONReader$Builder>;
+      // public final native void java.lang.Object.notify()
+      notify(): void;
+      notifyP(): Promise<void>;
+      // public final native void java.lang.Object.notifyAll()
+      notifyAll(): void;
+      notifyAllP(): Promise<void>;
+      // public java.lang.String java.lang.Object.toString()
+      toString(): string;
+      toStringP(): Promise<string>;
+      // public com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder.vertexIdKey(java.lang.String)
+      vertexIdKey(arg0: string_t): GraphSONReader$Builder;
+      vertexIdKeyP(arg0: string_t): Promise<GraphSONReader$Builder>;
+      // public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
+      wait(arg0: long_t, arg1: integer_t): void;
+      waitP(arg0: long_t, arg1: integer_t): Promise<void>;
+      // public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
+      wait(arg0: long_t): void;
+      waitP(arg0: long_t): Promise<void>;
+      // public final void java.lang.Object.wait() throws java.lang.InterruptedException
+      wait(): void;
+      waitP(): Promise<void>;
+    }
+    export module GraphSONReader$Builder {
+      export interface Static {
       }
     }
   }
@@ -9596,6 +9722,68 @@ declare module Java {
     }
   }
 
+  export module java.io {
+    export interface FileOutputStream extends Java.java.lang.Object {
+      // public void java.io.FileOutputStream.close() throws java.io.IOException
+      close(): void;
+      closeP(): Promise<void>;
+      // public boolean java.lang.Object.equals(java.lang.Object)
+      equals(arg0: object_t): boolean;
+      equalsP(arg0: object_t): Promise<boolean>;
+      // public void java.io.OutputStream.flush() throws java.io.IOException
+      flush(): void;
+      flushP(): Promise<void>;
+      // public java.nio.channels.FileChannel java.io.FileOutputStream.getChannel()
+      getChannel(): object_t;
+      getChannelP(): Promise<object_t>;
+      // public final native java.lang.Class<?> java.lang.Object.getClass()
+      getClass(): Class;
+      getClassP(): Promise<Class>;
+      // public final java.io.FileDescriptor java.io.FileOutputStream.getFD() throws java.io.IOException
+      getFD(): object_t;
+      getFDP(): Promise<object_t>;
+      // public native int java.lang.Object.hashCode()
+      hashCode(): number;
+      hashCodeP(): Promise<number>;
+      // public final native void java.lang.Object.notify()
+      notify(): void;
+      notifyP(): Promise<void>;
+      // public final native void java.lang.Object.notifyAll()
+      notifyAll(): void;
+      notifyAllP(): Promise<void>;
+      // public java.lang.String java.lang.Object.toString()
+      toString(): string;
+      toStringP(): Promise<string>;
+      // public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
+      wait(arg0: long_t, arg1: integer_t): void;
+      waitP(arg0: long_t, arg1: integer_t): Promise<void>;
+      // public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
+      wait(arg0: long_t): void;
+      waitP(arg0: long_t): Promise<void>;
+      // public final void java.lang.Object.wait() throws java.lang.InterruptedException
+      wait(): void;
+      waitP(): Promise<void>;
+      // public void java.io.FileOutputStream.write(byte[],int,int) throws java.io.IOException
+      write(arg0: object_array_t, arg1: integer_t, arg2: integer_t): void;
+      writeP(arg0: object_array_t, arg1: integer_t, arg2: integer_t): Promise<void>;
+      // public void java.io.FileOutputStream.write(byte[]) throws java.io.IOException
+      write(arg0: object_array_t): void;
+      writeP(arg0: object_array_t): Promise<void>;
+      // public void java.io.FileOutputStream.write(int) throws java.io.IOException
+      write(arg0: integer_t): void;
+      writeP(arg0: integer_t): Promise<void>;
+    }
+    export module FileOutputStream {
+      export interface Static {
+        new (arg0: string_t, arg1: boolean_t): java.io.FileOutputStream;
+        new (arg0: object_t, arg1: boolean_t): java.io.FileOutputStream;
+        new (arg0: object_t): java.io.FileOutputStream;
+        new (arg0: string_t): java.io.FileOutputStream;
+        new (arg0: object_t): java.io.FileOutputStream;
+      }
+    }
+  }
+
   export module javax.script {
     export interface ScriptContext extends Java.java.lang.Object {
       // public abstract java.lang.Object javax.script.ScriptContext.getAttribute(java.lang.String,int)
@@ -10272,8 +10460,8 @@ declare module Java {
     export module GraphSONMapper {
       export interface Static {
         // public static com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder com.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper.build()
-        build(): object_t;
-        buildP(): Promise<object_t>;
+        build(): GraphSONMapper$Builder;
+        buildP(): Promise<GraphSONMapper$Builder>;
       }
     }
   }
@@ -11741,8 +11929,8 @@ declare module Java {
       export interface Static {
         new (arg0: GraphSONMapper, arg1: long_t, arg2: string_t, arg3: string_t): com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader;
         // public static com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder com.tinkerpop.gremlin.structure.io.graphson.GraphSONReader.build()
-        build(): object_t;
-        buildP(): Promise<object_t>;
+        build(): GraphSONReader$Builder;
+        buildP(): Promise<GraphSONReader$Builder>;
       }
     }
   }

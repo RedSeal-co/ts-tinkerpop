@@ -5,12 +5,15 @@
 /// <reference path='../typings/glob/glob.d.ts' />
 /// <reference path='../typings/mocha/mocha.d.ts'/>
 /// <reference path='../typings/node/node.d.ts'/>
+/// <reference path='../typings/tmp/tmp.d.ts'/>
 'use strict';
 require('source-map-support').install();
 var BluePromise = require('bluebird');
 var chai = require('chai');
 var debug = require('debug');
+var fs = require('fs');
 var glob = require('glob');
+var tmp = require('tmp');
 var TP = require('../lib/ts-tinkerpop');
 var expect = chai.expect;
 var java = TP.java;
@@ -320,6 +323,130 @@ describe('Groovy support', function () {
         expect(lambda.get().toString()).to.deep.equal('TestClass');
         // Show that it does NOT affect newGroovyLambda.
         expect(function () { return TP.newGroovyLambda('new TestClass()').get(); }).to.throw(/unable to resolve class TestClass/);
+    });
+});
+describe('GraphSON support', function () {
+    var g;
+    beforeEach(function (done) {
+        TP.TinkerFactory.createClassicP().then(function (graph) {
+            g = graph;
+        }).then(function () { return done(); }).catch(done);
+    });
+    // Create an empty, in-memory Gremlin graph.
+    function makeEmptyTinker() {
+        var graph = TP.TinkerGraph.open();
+        var str = graph.toString();
+        var expected = 'tinkergraph[vertices:0 edges:0]';
+        expect(str, 'Expected graph to be empty').to.deep.equal(expected);
+        return graph;
+    }
+    it('can save and load GraphSON synchronously', function (done) {
+        tmp.tmpName(function (err, path) {
+            if (err) {
+                throw err;
+            }
+            expect(TP.saveGraphSONSync(g, path), 'saveGraphSONSync did not return graph').to.deep.equal(g);
+            var g2 = makeEmptyTinker();
+            expect(TP.loadGraphSONSync(g2, path), 'loadGraphSONSync did not return graph').to.deep.equal(g2);
+            var str = g2.toString();
+            var expected = 'tinkergraph[vertices:6 edges:6]';
+            expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
+            fs.unlink(path, done);
+        });
+    });
+    it('can save and load "pretty" GraphSON synchronously', function (done) {
+        tmp.tmpName(function (err, path) {
+            if (err) {
+                throw err;
+            }
+            expect(TP.savePrettyGraphSONSync(g, path), 'savePrettyGraphSONSync did not return graph').to.deep.equal(g);
+            var g2 = makeEmptyTinker();
+            expect(TP.loadGraphSONSync(g2, path), 'loadGraphSONSync did not return graph').to.deep.equal(g2);
+            var str = g2.toString();
+            var expected = 'tinkergraph[vertices:6 edges:6]';
+            expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
+            fs.unlink(path, done);
+        });
+    });
+    it('can save and load GraphSON asynchronously via callback', function (done) {
+        tmp.tmpName(function (err, path) {
+            if (err) {
+                throw err;
+            }
+            TP.saveGraphSON(g, path, function (err, graph) {
+                expect(err).to.not.exist;
+                expect(g, 'saveGraphSON did not return graph').to.deep.equal(graph);
+                var g2 = makeEmptyTinker();
+                TP.loadGraphSON(g2, path, function (err, graph) {
+                    expect(err).to.not.exist;
+                    expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
+                    var str = g2.toString();
+                    var expected = 'tinkergraph[vertices:6 edges:6]';
+                    expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
+                    fs.unlink(path, done);
+                });
+            });
+        });
+    });
+    it('can save and load "pretty" GraphSON asynchronously via callback', function (done) {
+        tmp.tmpName(function (err, path) {
+            if (err) {
+                throw err;
+            }
+            TP.savePrettyGraphSON(g, path, function (err, graph) {
+                expect(err).to.not.exist;
+                expect(g, 'saveGraphSON did not return graph').to.deep.equal(graph);
+                var g2 = makeEmptyTinker();
+                TP.loadGraphSON(g2, path, function (err, graph) {
+                    expect(err).to.not.exist;
+                    expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
+                    var str = g2.toString();
+                    var expected = 'tinkergraph[vertices:6 edges:6]';
+                    expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
+                    fs.unlink(path, done);
+                });
+            });
+        });
+    });
+    it('can save and load GraphSON asynchronously via promise', function () {
+        var tmpNameP = BluePromise.promisify(tmp.tmpName);
+        var g2;
+        var path;
+        return tmpNameP().then(function (_path) {
+            path = _path;
+            return TP.saveGraphSON(g, path);
+        }).then(function (graph) {
+            expect(g, 'saveGraphSON did not return graph').to.deep.equal(graph);
+            g2 = makeEmptyTinker();
+            return TP.loadGraphSON(g2, path);
+        }).then(function (graph) {
+            expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
+            var str = g2.toString();
+            var expected = 'tinkergraph[vertices:6 edges:6]';
+            expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
+            var unlinkP = BluePromise.promisify(fs.unlink);
+            return unlinkP(path);
+        });
+    });
+    it('can save and load "pretty" GraphSON asynchronously via promise', function () {
+        var tmpNameP = BluePromise.promisify(tmp.tmpName);
+        var g2;
+        var path;
+        return tmpNameP().then(function (_path) {
+            path = _path;
+            return TP.savePrettyGraphSON(g, path);
+        }).then(function (graph) {
+            expect(g, 'savePrettyGraphSON did not return graph').to.deep.equal(graph);
+            g2 = makeEmptyTinker();
+            return TP.loadGraphSON(g2, path);
+        }).then(function (graph) {
+            expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
+            var str = g2.toString();
+            var expected = 'tinkergraph[vertices:6 edges:6]';
+            expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
+            var unlinkP = BluePromise.promisify(fs.unlink);
+            return unlinkP(path);
+        });
     });
 });
 //# sourceMappingURL=tinkerpop-test.js.map

@@ -5,6 +5,7 @@
 /// <reference path='../typings/glob/glob.d.ts' />
 /// <reference path='../typings/mocha/mocha.d.ts'/>
 /// <reference path='../typings/node/node.d.ts'/>
+/// <reference path='../typings/tmp/tmp.d.ts'/>
 
 'use strict';
 
@@ -14,7 +15,9 @@ require('source-map-support').install();
 import BluePromise = require('bluebird');
 import chai = require('chai');
 import debug = require('debug');
+import fs = require('fs');
 import glob = require('glob');
+import tmp = require('tmp');
 import TP = require('../lib/ts-tinkerpop');
 import util = require('util');
 
@@ -409,6 +412,162 @@ describe('Groovy support', (): void => {
 
     // Show that it does NOT affect newGroovyLambda.
     expect(() => TP.newGroovyLambda('new TestClass()').get()).to.throw(/unable to resolve class TestClass/);
+  });
+
+});
+
+describe('GraphSON support', () => {
+
+  var g: Java.Graph;
+
+  beforeEach((done: MochaDone): void => {
+    TP.TinkerFactory.createClassicP()
+      .then((graph: Java.Graph): void => {
+        g = graph;
+      })
+      .then((): void => done())
+      .catch(done);
+  });
+
+  // Create an empty, in-memory Gremlin graph.
+  function makeEmptyTinker(): Java.Graph {
+    var graph: Java.Graph = TP.TinkerGraph.open();
+    var str: string = graph.toString();
+    var expected: string = 'tinkergraph[vertices:0 edges:0]';
+    expect(str, 'Expected graph to be empty').to.deep.equal(expected);
+    return graph;
+  }
+
+  it('can save and load GraphSON synchronously', (done: MochaDone): void => {
+    tmp.tmpName((err: any, path: string): void => {
+      if (err) {
+        // A failure in tmpName is not a failure in gremlin-node.
+        // If this ever fails, it is likely some environmental problem.
+        throw err;
+      }
+      expect(TP.saveGraphSONSync(g, path), 'saveGraphSONSync did not return graph').to.deep.equal(g);
+      var g2: Java.Graph = makeEmptyTinker();
+      expect(TP.loadGraphSONSync(g2, path), 'loadGraphSONSync did not return graph').to.deep.equal(g2);
+      var str: string = g2.toString();
+      var expected: string = 'tinkergraph[vertices:6 edges:6]';
+      expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
+      fs.unlink(path, done);
+    });
+  });
+
+  it('can save and load "pretty" GraphSON synchronously', (done: MochaDone): void => {
+    tmp.tmpName((err: any, path: string): void => {
+      if (err) {
+        // A failure in tmpName is not a failure in gremlin-node.
+        // If this ever fails, it is likely some environmental problem.
+        throw err;
+      }
+      expect(TP.savePrettyGraphSONSync(g, path), 'savePrettyGraphSONSync did not return graph').to.deep.equal(g);
+      var g2: Java.Graph = makeEmptyTinker();
+      expect(TP.loadGraphSONSync(g2, path), 'loadGraphSONSync did not return graph').to.deep.equal(g2);
+      var str: string = g2.toString();
+      var expected: string = 'tinkergraph[vertices:6 edges:6]';
+      expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
+      fs.unlink(path, done);
+    });
+  });
+
+  it('can save and load GraphSON asynchronously via callback', (done: MochaDone): void => {
+    tmp.tmpName((err: any, path: string): void => {
+      if (err) {
+        // A failure in tmpName is not a failure in gremlin-node.
+        // If this ever fails, it is likely some environmental problem.
+        throw err;
+      }
+      TP.saveGraphSON(g, path, (err: Error, graph: Java.Graph): void => {
+        expect(err).to.not.exist;
+        expect(g, 'saveGraphSON did not return graph').to.deep.equal(graph);
+
+        var g2: Java.Graph = makeEmptyTinker();
+        TP.loadGraphSON(g2, path, (err: Error, graph: Java.Graph): void => {
+          expect(err).to.not.exist;
+          expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
+          var str: string = g2.toString();
+          var expected: string = 'tinkergraph[vertices:6 edges:6]';
+          expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
+          fs.unlink(path, done);
+        });
+      });
+    });
+  });
+
+  it('can save and load "pretty" GraphSON asynchronously via callback', (done: MochaDone): void => {
+    tmp.tmpName((err: any, path: string): void => {
+      if (err) {
+        // A failure in tmpName is not a failure in gremlin-node.
+        // If this ever fails, it is likely some environmental problem.
+        throw err;
+      }
+      TP.savePrettyGraphSON(g, path, (err: Error, graph: Java.Graph): void => {
+        expect(err).to.not.exist;
+        expect(g, 'saveGraphSON did not return graph').to.deep.equal(graph);
+
+        var g2: Java.Graph = makeEmptyTinker();
+        TP.loadGraphSON(g2, path, (err: Error, graph: Java.Graph): void => {
+          expect(err).to.not.exist;
+          expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
+          var str: string = g2.toString();
+          var expected: string = 'tinkergraph[vertices:6 edges:6]';
+          expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
+          fs.unlink(path, done);
+        });
+      });
+    });
+  });
+
+  it('can save and load GraphSON asynchronously via promise', (): BluePromise<void> => {
+    var tmpNameP = BluePromise.promisify(tmp.tmpName);
+    var g2: Java.Graph;
+    var path: string;
+    return tmpNameP()
+      .then((_path: string): BluePromise<Java.Graph> => {
+        path = _path;
+        return TP.saveGraphSON(g, path);
+      })
+      .then((graph: Java.Graph): BluePromise<Java.Graph> => {
+        expect(g, 'saveGraphSON did not return graph').to.deep.equal(graph);
+        g2 = makeEmptyTinker();
+        return TP.loadGraphSON(g2, path);
+      })
+      .then((graph: Java.Graph): BluePromise<void> => {
+        expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
+        var str: string = g2.toString();
+        var expected: string = 'tinkergraph[vertices:6 edges:6]';
+        expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
+
+        var unlinkP = BluePromise.promisify(fs.unlink);
+        return unlinkP(path);
+      });
+  });
+
+  it('can save and load "pretty" GraphSON asynchronously via promise', (): BluePromise<void> => {
+    var tmpNameP = BluePromise.promisify(tmp.tmpName);
+    var g2: Java.Graph;
+    var path: string;
+    return tmpNameP()
+      .then((_path: string): BluePromise<Java.Graph> => {
+        path = _path;
+        return TP.savePrettyGraphSON(g, path);
+      })
+      .then((graph: Java.Graph): BluePromise<Java.Graph> => {
+        expect(g, 'savePrettyGraphSON did not return graph').to.deep.equal(graph);
+        g2 = makeEmptyTinker();
+        return TP.loadGraphSON(g2, path);
+      })
+      .then((graph: Java.Graph): BluePromise<void> => {
+        expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
+        var str: string = g2.toString();
+        var expected: string = 'tinkergraph[vertices:6 edges:6]';
+        expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
+
+        var unlinkP = BluePromise.promisify(fs.unlink);
+        return unlinkP(path);
+      });
   });
 
 });
