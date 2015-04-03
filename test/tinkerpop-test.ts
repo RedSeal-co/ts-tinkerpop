@@ -573,6 +573,34 @@ describe('GraphSON support', () => {
 
 });
 
+describe('isType', (): void => {
+
+  it('returns false for non-Java objects', (): void => {
+    var type: string = 'java.lang.Object';
+    var objects: any[] = [ null, undefined, 'abc', 123, true, false, {'foo': 9} ];
+    _.forEach(objects, (o: any) => expect(TP.isType(o, type), o).to.be.false);
+  });
+
+  it('returns true on exact match', (): void => {
+    expect(TP.isType(TP.java.newLong(123), 'java.lang.Long')).to.be.true;
+    var ArrayList: Java.ArrayList.Static = TP.autoImport('ArrayList');
+    expect(TP.isType(new ArrayList(), 'java.util.ArrayList')).to.be.true;
+  });
+
+  it('returns true for supertypes', (): void => {
+    expect(TP.isType(TP.java.newLong(123), 'java.lang.Number')).to.be.true;
+    var ArrayList: Java.ArrayList.Static = TP.autoImport('ArrayList');
+    expect(TP.isType(new ArrayList(), 'java.util.List')).to.be.true;
+  });
+
+  it('returns false for unrelated types', (): void => {
+    expect(TP.isType(TP.java.newLong(123), 'java.lang.Integer')).to.be.false;
+    var ArrayList: Java.ArrayList.Static = TP.autoImport('ArrayList');
+    expect(TP.isType(new ArrayList(), 'java.util.HashMap')).to.be.false;
+  });
+
+});
+
 describe('jsify', (): void => {
 
   it('converts Java List to JS array', (): void => {

@@ -445,6 +445,28 @@ describe('GraphSON support', function () {
         });
     });
 });
+describe('isType', function () {
+    it('returns false for non-Java objects', function () {
+        var type = 'java.lang.Object';
+        var objects = [null, undefined, 'abc', 123, true, false, { 'foo': 9 }];
+        _.forEach(objects, function (o) { return expect(TP.isType(o, type), o).to.be.false; });
+    });
+    it('returns true on exact match', function () {
+        expect(TP.isType(TP.java.newLong(123), 'java.lang.Long')).to.be.true;
+        var ArrayList = TP.autoImport('ArrayList');
+        expect(TP.isType(new ArrayList(), 'java.util.ArrayList')).to.be.true;
+    });
+    it('returns true for supertypes', function () {
+        expect(TP.isType(TP.java.newLong(123), 'java.lang.Number')).to.be.true;
+        var ArrayList = TP.autoImport('ArrayList');
+        expect(TP.isType(new ArrayList(), 'java.util.List')).to.be.true;
+    });
+    it('returns false for unrelated types', function () {
+        expect(TP.isType(TP.java.newLong(123), 'java.lang.Integer')).to.be.false;
+        var ArrayList = TP.autoImport('ArrayList');
+        expect(TP.isType(new ArrayList(), 'java.util.HashMap')).to.be.false;
+    });
+});
 describe('jsify', function () {
     it('converts Java List to JS array', function () {
         var ArrayList = TP.autoImport('ArrayList');
