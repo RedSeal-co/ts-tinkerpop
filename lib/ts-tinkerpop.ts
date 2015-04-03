@@ -397,6 +397,44 @@ module Tinkerpop {
     return graph;
   }
 
+  // ### `isType(o: any, typeName: string)`
+  export function isType(o: any, typeName: string): boolean {
+    if (!o || !_.isObject(o)) return false;
+    try {
+      return java.instanceOf(o, typeName);
+    } catch (err) {
+      return false;
+    }
+  }
+
+  // ### `jsify(arg: any)`
+  // Convert certain Java containers into JavaScript equivalents:
+  // - List: any[]
+  // - Map: any
+  // - BulkSet: BulkSetElement[]
+  export function jsify(arg: any): any {
+    if (!_.isObject(arg)) {
+      return arg;
+    }
+
+    if (isType(arg, 'java.util.List')) {
+      return _jsifyList(<Java.List> arg);
+    } else if (isType(arg, 'java.util.Map')) {
+      return _jsifyMap(<Java.Map> arg);
+    } else if (isType(arg, 'com.tinkerpop.gremlin.process.util.BulkSet')) {
+      return _jsifyBulkSet(<Java.BulkSet> arg);
+    } else {
+      return arg;
+    }
+  }
+
+  // ### `interface BulkSetElement`
+  // Element of a jsify-ed BulkSet.
+  interface BulkSetElement {
+    key: string;
+    count: Java.longValue_t;
+  }
+
   // ### Non-exported Functions
 
   // #### `function _isClosure(val: string)`
@@ -459,6 +497,7 @@ module Tinkerpop {
     return mapper;
   }
 
+  // ### `prettyGraphSONString(ugly: string)`
   // Make a GraphSON string pretty, adding indentation and deterministic format.
   function _prettyGraphSONString(ugly: string): string {
     var json: any = JSON.parse(ugly);
@@ -478,6 +517,51 @@ module Tinkerpop {
 
     var prettyString: string = jsonStableStringify(json, stringifyOpts);
     return prettyString;
+  }
+
+  // ### `_jsifyList(javaList: Java.List)`
+  // Turn a Java List into a JavaScript array, recursively calling jsify.
+  function _jsifyList(javaList: Java.List): any[] {
+    var arr: any[] = [];
+    var it = javaList.iterator();
+    while (it.hasNext()) {
+      var elem: any = it.next();
+      var obj: any = jsify(elem);
+      arr.push(obj);
+    }
+    return arr;
+  }
+
+  // ### `_jsifyMap(javaMap: Java.Map)`
+  // Turn a Java Map into a JavaScript object, recursively calling jsify.
+  function _jsifyMap(javaMap: Java.Map): any {
+    // it seems this type of coercion could be ported to node-java
+    // https://github.com/joeferner/node-java/issues/56
+    var map: any = {};
+    var it: Java.Iterator = javaMap.entrySet().iterator();
+    while (it.hasNext()) {
+      var pair: Java.Map$Entry = <Java.Map$Entry> it.next();
+      var key: string = <string> pair.getKey();
+      map[key] = jsify(pair.getValue());
+    }
+    return map;
+  }
+
+  // ### `_jsifyBulkSet(bulkSet: Java.BulkSet)`
+  // Turn a TinkerPop BulkSet into an array of objects with key/count fields.
+  function _jsifyBulkSet(bulkSet: Java.BulkSet): BulkSetElement[] {
+    var arr: BulkSetElement[] = [];
+    var it: Java.Iterator = bulkSet.iterator();
+    while (it.hasNext()) {
+      var key: any = it.next();
+      var count: Java.longValue_t = bulkSet.get(key);
+      var elem: BulkSetElement = {
+        key: jsify(key),
+        count: count
+      };
+      arr.push(elem);
+    }
+    return arr;
   }
 
   // ### Non-exported variables

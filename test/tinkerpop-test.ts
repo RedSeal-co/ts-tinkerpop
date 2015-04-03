@@ -2,6 +2,8 @@
 /// <reference path='../typings/bluebird/bluebird.d.ts' />
 /// <reference path='../typings/chai/chai.d.ts'/>
 /// <reference path='../typings/debug/debug.d.ts' />
+/// <reference path='../typings/glob/glob.d.ts' />
+/// <reference path='../typings/lodash/lodash.d.ts'/>
 /// <reference path='../typings/mocha/mocha.d.ts'/>
 /// <reference path='../typings/node/node.d.ts'/>
 /// <reference path='../typings/tmp/tmp.d.ts'/>
@@ -11,6 +13,7 @@
 declare function require(name: string): any;
 require('source-map-support').install();
 
+import _ = require('lodash');
 import BluePromise = require('bluebird');
 import chai = require('chai');
 import debug = require('debug');
@@ -22,6 +25,13 @@ import util = require('util');
 import expect = chai.expect;
 
 var dlog = debug('ts-tinkerpop:test');
+
+// TODO: Add sortByAll to lodash.d.ts
+interface SortByAll {
+  (collection: any, props: string[]): any[];
+}
+
+var sortByAll: SortByAll = (<any>_).sortByAll;
 
 before((done: MochaDone): void => {
 
@@ -559,6 +569,74 @@ describe('GraphSON support', () => {
         var unlinkP = BluePromise.promisify(fs.unlink);
         return unlinkP(path);
       });
+  });
+
+});
+
+describe('jsify', (): void => {
+
+  it('converts Java List to JS array', (): void => {
+    var ArrayList: Java.ArrayList.Static = TP.autoImport('ArrayList');
+    var javaList: Java.List = new ArrayList();
+    javaList.add('one');
+    javaList.add('two');
+    javaList.add('three');
+
+    var nestedList: Java.List = new ArrayList();
+    nestedList.add('nested');
+    nestedList.add('list');
+    javaList.add(nestedList)
+
+    var jsArray: string[] = TP.jsify(javaList);
+    expect(_.isArray(jsArray)).to.be.true;
+    expect(jsArray).to.deep.equal(['one', 'two', 'three', ['nested', 'list']]);
+  });
+
+  it('converts Java Map to JS object', (): void => {
+    var HashMap: Java.HashMap.Static = TP.autoImport('HashMap');
+    var javaMap: Java.HashMap = new HashMap();
+    javaMap.put('one', 1);
+    javaMap.put('two', 'deux');
+
+    var nestedMap: Java.HashMap = new HashMap();
+    nestedMap.put('nested', 'NIDO');
+    nestedMap.put('map', 'CARTA');
+    javaMap.put('three', nestedMap);
+
+    var js: any = TP.jsify(javaMap);
+    expect(_.isObject(js)).to.be.true;
+    expect(js).to.deep.equal({'one': 1, 'two': 'deux', 'three': {'nested': 'NIDO', 'map': 'CARTA'}});
+  });
+
+  it('converts Java BulkSet to JS array of key/count objects', (): void => {
+    var BulkSet: Java.BulkSet.Static = TP.autoImport('BulkSet');
+    var bulkSet: Java.BulkSet = new BulkSet();
+    bulkSet.add('one', 1);
+    bulkSet.add('two', 2);
+    bulkSet.add('three', 3);
+
+    var actual: any = TP.jsify(bulkSet);
+    expect(_.isArray(actual)).to.be.true;
+    actual = sortByAll(actual, ['key']);
+    dlog('actual:', actual);
+
+    // TODO: Add this to ts-tinkerpop
+    function L(n: number): Java.longValue_t {
+      return TP.java.newLong(n).longValue();
+    }
+
+    var expected: any[] = [
+      { key: 'one', count: L(1) },
+      { key: 'two', count: L(2) },
+      { key: 'two', count: L(2) },
+      { key: 'three', count: L(3) },
+      { key: 'three', count: L(3) },
+      { key: 'three', count: L(3) },
+    ];
+    expected = sortByAll(expected, ['key']);
+    dlog('expected:', expected);
+
+    expect(actual).to.deep.equal(expected);
   });
 
 });

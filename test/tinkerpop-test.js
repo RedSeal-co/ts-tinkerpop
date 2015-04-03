@@ -2,11 +2,14 @@
 /// <reference path='../typings/bluebird/bluebird.d.ts' />
 /// <reference path='../typings/chai/chai.d.ts'/>
 /// <reference path='../typings/debug/debug.d.ts' />
+/// <reference path='../typings/glob/glob.d.ts' />
+/// <reference path='../typings/lodash/lodash.d.ts'/>
 /// <reference path='../typings/mocha/mocha.d.ts'/>
 /// <reference path='../typings/node/node.d.ts'/>
 /// <reference path='../typings/tmp/tmp.d.ts'/>
 'use strict';
 require('source-map-support').install();
+var _ = require('lodash');
 var BluePromise = require('bluebird');
 var chai = require('chai');
 var debug = require('debug');
@@ -15,6 +18,7 @@ var tmp = require('tmp');
 var TP = require('../lib/ts-tinkerpop');
 var expect = chai.expect;
 var dlog = debug('ts-tinkerpop:test');
+var sortByAll = _.sortByAll;
 before(function (done) {
     TP.getTinkerpop().then(function (t) {
         if (TP !== t) {
@@ -439,6 +443,61 @@ describe('GraphSON support', function () {
             var unlinkP = BluePromise.promisify(fs.unlink);
             return unlinkP(path);
         });
+    });
+});
+describe('jsify', function () {
+    it('converts Java List to JS array', function () {
+        var ArrayList = TP.autoImport('ArrayList');
+        var javaList = new ArrayList();
+        javaList.add('one');
+        javaList.add('two');
+        javaList.add('three');
+        var nestedList = new ArrayList();
+        nestedList.add('nested');
+        nestedList.add('list');
+        javaList.add(nestedList);
+        var jsArray = TP.jsify(javaList);
+        expect(_.isArray(jsArray)).to.be.true;
+        expect(jsArray).to.deep.equal(['one', 'two', 'three', ['nested', 'list']]);
+    });
+    it('converts Java Map to JS object', function () {
+        var HashMap = TP.autoImport('HashMap');
+        var javaMap = new HashMap();
+        javaMap.put('one', 1);
+        javaMap.put('two', 'deux');
+        var nestedMap = new HashMap();
+        nestedMap.put('nested', 'NIDO');
+        nestedMap.put('map', 'CARTA');
+        javaMap.put('three', nestedMap);
+        var js = TP.jsify(javaMap);
+        expect(_.isObject(js)).to.be.true;
+        expect(js).to.deep.equal({ 'one': 1, 'two': 'deux', 'three': { 'nested': 'NIDO', 'map': 'CARTA' } });
+    });
+    it('converts Java BulkSet to JS array of key/count objects', function () {
+        var BulkSet = TP.autoImport('BulkSet');
+        var bulkSet = new BulkSet();
+        bulkSet.add('one', 1);
+        bulkSet.add('two', 2);
+        bulkSet.add('three', 3);
+        var actual = TP.jsify(bulkSet);
+        expect(_.isArray(actual)).to.be.true;
+        actual = sortByAll(actual, ['key']);
+        dlog('actual:', actual);
+        // TODO: Add this to ts-tinkerpop
+        function L(n) {
+            return TP.java.newLong(n).longValue();
+        }
+        var expected = [
+            { key: 'one', count: L(1) },
+            { key: 'two', count: L(2) },
+            { key: 'two', count: L(2) },
+            { key: 'three', count: L(3) },
+            { key: 'three', count: L(3) },
+            { key: 'three', count: L(3) },
+        ];
+        expected = sortByAll(expected, ['key']);
+        dlog('expected:', expected);
+        expect(actual).to.deep.equal(expected);
     });
 });
 //# sourceMappingURL=tinkerpop-test.js.map
