@@ -16,6 +16,7 @@ import debug = require('debug');
 import fs = require('fs');
 import glob = require('glob');
 import jsonStableStringify = require('json-stable-stringify');
+import path = require('path');
 
 var dlog = debug('ts-tinkerpop');
 
@@ -573,7 +574,7 @@ module Tinkerpop {
 
 function beforeJvm(): BluePromise<void> {
   var globP = BluePromise.promisify(glob);
-  return globP('target/**/*.jar').then((filenames: string[]) => {
+  return globP(path.join(__dirname, '..', 'target', '**', '*.jar')).then((filenames: string[]) => {
     filenames.forEach((name: string): void => {
       dlog('classpath:', name);
       _java.classpath.push(name);
