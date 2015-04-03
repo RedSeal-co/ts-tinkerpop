@@ -13,6 +13,14 @@ declare module 'java' {
   export = Java;
 }
 
+declare module JavaAsyncOptions {
+  // Promisify must be defined outside of the Java module, because inside the module
+  // Function may be redefined to be the interface for java.util.function.Function.
+  interface Promisify {
+    (funct: Function, receiver?: any): Function;
+  }
+}
+
 declare module Java {
   // Node-java has special handling for methods that return long or java.lang.Long,
   // returning a Javascript Number but with an additional property longValue.
@@ -26,7 +34,7 @@ declare module Java {
 
   // Java methods that take java.lang.Object parameters implicitly will take a java.lang.String.
   // But string_t is not sufficient for this case, we need object_t.
-  export type object_t = java.lang.Object | string | number | longValue_t;
+  export type object_t = java.lang.Object | string | boolean | number | longValue_t;
 
   // Java methods that take long or java.lang.Long parameters may take javascript numbers,
   // longValue_t (see above) or java.lang.Long.
@@ -58,7 +66,7 @@ declare module Java {
     syncSuffix: string;
     asyncSuffix?: string;
     promiseSuffix?: string;
-    promisify?: Function;
+    promisify?: JavaAsyncOptions.Promisify;
   }
 
   // *NodeAPI* declares methods & members exported by the node java module.
@@ -1351,7 +1359,7 @@ declare module Java {
       getConstructor(...arg0: Class[]): object_t;
       getConstructor(arg0: array_t<Class>): object_t;
       getConstructorP(...arg0: Class[]): Promise<object_t>;
-      getConstructorP(arg0: array_t<Class>): object_t;
+      getConstructorP(arg0: array_t<Class>): Promise<object_t>;
       // public java.lang.reflect.Constructor<?>[] java.lang.Class.getConstructors() throws java.lang.SecurityException
       getConstructors(): object_t[];
       getConstructorsP(): Promise<object_t[]>;
@@ -1371,7 +1379,7 @@ declare module Java {
       getDeclaredConstructor(...arg0: Class[]): object_t;
       getDeclaredConstructor(arg0: array_t<Class>): object_t;
       getDeclaredConstructorP(...arg0: Class[]): Promise<object_t>;
-      getDeclaredConstructorP(arg0: array_t<Class>): object_t;
+      getDeclaredConstructorP(arg0: array_t<Class>): Promise<object_t>;
       // public java.lang.reflect.Constructor<?>[] java.lang.Class.getDeclaredConstructors() throws java.lang.SecurityException
       getDeclaredConstructors(): object_t[];
       getDeclaredConstructorsP(): Promise<object_t[]>;
@@ -1385,7 +1393,7 @@ declare module Java {
       getDeclaredMethod(arg0: string_t, ...arg1: Class[]): object_t;
       getDeclaredMethod(arg0: string_t, arg1: array_t<Class>): object_t;
       getDeclaredMethodP(arg0: string_t, ...arg1: Class[]): Promise<object_t>;
-      getDeclaredMethodP(arg0: string_t, arg1: array_t<Class>): object_t;
+      getDeclaredMethodP(arg0: string_t, arg1: array_t<Class>): Promise<object_t>;
       // public java.lang.reflect.Method[] java.lang.Class.getDeclaredMethods() throws java.lang.SecurityException
       getDeclaredMethods(): object_t[];
       getDeclaredMethodsP(): Promise<object_t[]>;
@@ -1423,7 +1431,7 @@ declare module Java {
       getMethod(arg0: string_t, ...arg1: Class[]): object_t;
       getMethod(arg0: string_t, arg1: array_t<Class>): object_t;
       getMethodP(arg0: string_t, ...arg1: Class[]): Promise<object_t>;
-      getMethodP(arg0: string_t, arg1: array_t<Class>): object_t;
+      getMethodP(arg0: string_t, arg1: array_t<Class>): Promise<object_t>;
       // public java.lang.reflect.Method[] java.lang.Class.getMethods() throws java.lang.SecurityException
       getMethods(): object_t[];
       getMethodsP(): Promise<object_t[]>;
@@ -2208,17 +2216,17 @@ declare module Java {
         format(arg0: object_t, arg1: string_t, ...arg2: object_t[]): string;
         format(arg0: object_t, arg1: string_t, arg2: object_array_t): string;
         formatP(arg0: object_t, arg1: string_t, ...arg2: object_t[]): Promise<string>;
-        formatP(arg0: object_t, arg1: string_t, arg2: object_array_t): string;
+        formatP(arg0: object_t, arg1: string_t, arg2: object_array_t): Promise<string>;
         // public static java.lang.String java.lang.String.format(java.lang.String,java.lang.Object...)
         format(arg0: string_t, ...arg1: object_t[]): string;
         format(arg0: string_t, arg1: object_array_t): string;
         formatP(arg0: string_t, ...arg1: object_t[]): Promise<string>;
-        formatP(arg0: string_t, arg1: object_array_t): string;
+        formatP(arg0: string_t, arg1: object_array_t): Promise<string>;
         // public static java.lang.String java.lang.String.join(java.lang.CharSequence,java.lang.CharSequence...)
         join(arg0: object_t, ...arg1: object_t[]): string;
         join(arg0: object_t, arg1: object_array_t): string;
         joinP(arg0: object_t, ...arg1: object_t[]): Promise<string>;
-        joinP(arg0: object_t, arg1: object_array_t): string;
+        joinP(arg0: object_t, arg1: object_array_t): Promise<string>;
         // public static java.lang.String java.lang.String.join(java.lang.CharSequence,java.lang.Iterable<? extends java.lang.CharSequence>)
         join(arg0: object_t, arg1: Iterable): string;
         joinP(arg0: object_t, arg1: Iterable): Promise<string>;
@@ -2260,7 +2268,7 @@ declare module Java {
       addCompilationCustomizers(...arg0: CompilationCustomizer[]): CompilerConfiguration;
       addCompilationCustomizers(arg0: array_t<CompilationCustomizer>): CompilerConfiguration;
       addCompilationCustomizersP(...arg0: CompilationCustomizer[]): Promise<CompilerConfiguration>;
-      addCompilationCustomizersP(arg0: array_t<CompilationCustomizer>): CompilerConfiguration;
+      addCompilationCustomizersP(arg0: array_t<CompilationCustomizer>): Promise<CompilerConfiguration>;
       // public void org.codehaus.groovy.control.CompilerConfiguration.configure(java.util.Properties) throws org.codehaus.groovy.control.ConfigurationException
       configure(arg0: object_t): void;
       configureP(arg0: object_t): Promise<void>;
@@ -2935,22 +2943,22 @@ declare module Java {
         addBothE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
         addBothE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
         addBothEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-        addBothEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+        addBothEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.__.addE(com.tinkerpop.gremlin.structure.Direction,java.lang.String,java.lang.String,java.lang.Object...)
         addE(arg0: Direction, arg1: string_t, arg2: string_t, ...arg3: object_t[]): GraphTraversal;
         addE(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): GraphTraversal;
         addEP(arg0: Direction, arg1: string_t, arg2: string_t, ...arg3: object_t[]): Promise<GraphTraversal>;
-        addEP(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): GraphTraversal;
+        addEP(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.__.addInE(java.lang.String,java.lang.String,java.lang.Object...)
         addInE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
         addInE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
         addInEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-        addInEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+        addInEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.__.addOutE(java.lang.String,java.lang.String,java.lang.Object...)
         addOutE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
         addOutE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
         addOutEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-        addOutEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+        addOutEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.__.aggregate(java.lang.String)
         aggregate(arg0: string_t): GraphTraversal;
         aggregateP(arg0: string_t): Promise<GraphTraversal>;
@@ -2961,7 +2969,7 @@ declare module Java {
         and(...arg0: Traversal[]): GraphTraversal;
         and(arg0: array_t<Traversal>): GraphTraversal;
         andP(...arg0: Traversal[]): Promise<GraphTraversal>;
-        andP(arg0: array_t<Traversal>): GraphTraversal;
+        andP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.__.as(java.lang.String)
         as(arg0: string_t): GraphTraversal;
         asP(arg0: string_t): Promise<GraphTraversal>;
@@ -2975,12 +2983,12 @@ declare module Java {
         both(...arg0: string_t[]): GraphTraversal;
         both(arg0: array_t<string_t>): GraphTraversal;
         bothP(...arg0: string_t[]): Promise<GraphTraversal>;
-        bothP(arg0: array_t<string_t>): GraphTraversal;
+        bothP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.__.bothE(java.lang.String...)
         bothE(...arg0: string_t[]): GraphTraversal;
         bothE(arg0: array_t<string_t>): GraphTraversal;
         bothEP(...arg0: string_t[]): Promise<GraphTraversal>;
-        bothEP(arg0: array_t<string_t>): GraphTraversal;
+        bothEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.__.bothV()
         bothV(): GraphTraversal;
         bothVP(): Promise<GraphTraversal>;
@@ -2994,7 +3002,7 @@ declare module Java {
         cap(...arg0: string_t[]): GraphTraversal;
         cap(arg0: array_t<string_t>): GraphTraversal;
         capP(...arg0: string_t[]): Promise<GraphTraversal>;
-        capP(arg0: array_t<string_t>): GraphTraversal;
+        capP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A,M,E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.__.choose(com.tinkerpop.gremlin.process.Traversal<?, M>,com.tinkerpop.gremlin.process.Traversal<?, E2>,com.tinkerpop.gremlin.process.Traversal<?, E2>)
         choose(arg0: Traversal, arg1: Traversal, arg2: Traversal): GraphTraversal;
         chooseP(arg0: Traversal, arg1: Traversal, arg2: Traversal): Promise<GraphTraversal>;
@@ -3011,7 +3019,7 @@ declare module Java {
         coalesce(...arg0: Traversal[]): GraphTraversal;
         coalesce(arg0: array_t<Traversal>): GraphTraversal;
         coalesceP(...arg0: Traversal[]): Promise<GraphTraversal>;
-        coalesceP(arg0: array_t<Traversal>): GraphTraversal;
+        coalesceP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.__.coin(double)
         coin(arg0: double_t): GraphTraversal;
         coinP(arg0: double_t): Promise<GraphTraversal>;
@@ -3094,17 +3102,17 @@ declare module Java {
         hasId(...arg0: object_t[]): GraphTraversal;
         hasId(arg0: object_array_t): GraphTraversal;
         hasIdP(...arg0: object_t[]): Promise<GraphTraversal>;
-        hasIdP(arg0: object_array_t): GraphTraversal;
+        hasIdP(arg0: object_array_t): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.__.hasKey(java.lang.String...)
         hasKey(...arg0: string_t[]): GraphTraversal;
         hasKey(arg0: array_t<string_t>): GraphTraversal;
         hasKeyP(...arg0: string_t[]): Promise<GraphTraversal>;
-        hasKeyP(arg0: array_t<string_t>): GraphTraversal;
+        hasKeyP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.__.hasLabel(java.lang.String...)
         hasLabel(...arg0: string_t[]): GraphTraversal;
         hasLabel(arg0: array_t<string_t>): GraphTraversal;
         hasLabelP(...arg0: string_t[]): Promise<GraphTraversal>;
-        hasLabelP(arg0: array_t<string_t>): GraphTraversal;
+        hasLabelP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.__.hasNot(java.lang.String)
         hasNot(arg0: string_t): GraphTraversal;
         hasNotP(arg0: string_t): Promise<GraphTraversal>;
@@ -3112,7 +3120,7 @@ declare module Java {
         hasValue(...arg0: object_t[]): GraphTraversal;
         hasValue(arg0: object_array_t): GraphTraversal;
         hasValueP(...arg0: object_t[]): Promise<GraphTraversal>;
-        hasValueP(arg0: object_array_t): GraphTraversal;
+        hasValueP(arg0: object_array_t): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, java.lang.Object> com.tinkerpop.gremlin.process.graph.traversal.__.id()
         id(): GraphTraversal;
         idP(): Promise<GraphTraversal>;
@@ -3123,17 +3131,17 @@ declare module Java {
         in(...arg0: string_t[]): GraphTraversal;
         in(arg0: array_t<string_t>): GraphTraversal;
         inP(...arg0: string_t[]): Promise<GraphTraversal>;
-        inP(arg0: array_t<string_t>): GraphTraversal;
+        inP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.__.inE(java.lang.String...)
         inE(...arg0: string_t[]): GraphTraversal;
         inE(arg0: array_t<string_t>): GraphTraversal;
         inEP(...arg0: string_t[]): Promise<GraphTraversal>;
-        inEP(arg0: array_t<string_t>): GraphTraversal;
+        inEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.__.inject(java.lang.Object...)
         inject(...arg0: object_t[]): GraphTraversal;
         inject(arg0: object_array_t): GraphTraversal;
         injectP(...arg0: object_t[]): Promise<GraphTraversal>;
-        injectP(arg0: object_array_t): GraphTraversal;
+        injectP(arg0: object_array_t): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.__.inV()
         inV(): GraphTraversal;
         inVP(): Promise<GraphTraversal>;
@@ -3165,7 +3173,7 @@ declare module Java {
         match(arg0: string_t, ...arg1: Traversal[]): GraphTraversal;
         match(arg0: string_t, arg1: array_t<Traversal>): GraphTraversal;
         matchP(arg0: string_t, ...arg1: Traversal[]): Promise<GraphTraversal>;
-        matchP(arg0: string_t, arg1: array_t<Traversal>): GraphTraversal;
+        matchP(arg0: string_t, arg1: array_t<Traversal>): Promise<GraphTraversal>;
         // public static <A,E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.__.max()
         max(): GraphTraversal;
         maxP(): Promise<GraphTraversal>;
@@ -3179,7 +3187,7 @@ declare module Java {
         or(...arg0: Traversal[]): GraphTraversal;
         or(arg0: array_t<Traversal>): GraphTraversal;
         orP(...arg0: Traversal[]): Promise<GraphTraversal>;
-        orP(arg0: array_t<Traversal>): GraphTraversal;
+        orP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.__.order(com.tinkerpop.gremlin.process.Scope)
         order(arg0: Scope): GraphTraversal;
         orderP(arg0: Scope): Promise<GraphTraversal>;
@@ -3193,12 +3201,12 @@ declare module Java {
         out(...arg0: string_t[]): GraphTraversal;
         out(arg0: array_t<string_t>): GraphTraversal;
         outP(...arg0: string_t[]): Promise<GraphTraversal>;
-        outP(arg0: array_t<string_t>): GraphTraversal;
+        outP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.__.outE(java.lang.String...)
         outE(...arg0: string_t[]): GraphTraversal;
         outE(arg0: array_t<string_t>): GraphTraversal;
         outEP(...arg0: string_t[]): Promise<GraphTraversal>;
-        outEP(arg0: array_t<string_t>): GraphTraversal;
+        outEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.__.outV()
         outV(): GraphTraversal;
         outVP(): Promise<GraphTraversal>;
@@ -3212,12 +3220,12 @@ declare module Java {
         properties(...arg0: string_t[]): GraphTraversal;
         properties(arg0: array_t<string_t>): GraphTraversal;
         propertiesP(...arg0: string_t[]): Promise<GraphTraversal>;
-        propertiesP(arg0: array_t<string_t>): GraphTraversal;
+        propertiesP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A,E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, java.util.Map<java.lang.String, E2>> com.tinkerpop.gremlin.process.graph.traversal.__.propertyMap(java.lang.String...)
         propertyMap(...arg0: string_t[]): GraphTraversal;
         propertyMap(arg0: array_t<string_t>): GraphTraversal;
         propertyMapP(...arg0: string_t[]): Promise<GraphTraversal>;
-        propertyMapP(arg0: array_t<string_t>): GraphTraversal;
+        propertyMapP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.__.range(long,long)
         range(arg0: long_t, arg1: long_t): GraphTraversal;
         rangeP(arg0: long_t, arg1: long_t): Promise<GraphTraversal>;
@@ -3249,7 +3257,7 @@ declare module Java {
         select(...arg0: string_t[]): GraphTraversal;
         select(arg0: array_t<string_t>): GraphTraversal;
         selectP(...arg0: string_t[]): Promise<GraphTraversal>;
-        selectP(arg0: array_t<string_t>): GraphTraversal;
+        selectP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A,E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.__.select(java.lang.String)
         select(arg0: string_t): GraphTraversal;
         selectP(arg0: string_t): Promise<GraphTraversal>;
@@ -3290,12 +3298,12 @@ declare module Java {
         to(arg0: Direction, ...arg1: string_t[]): GraphTraversal;
         to(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
         toP(arg0: Direction, ...arg1: string_t[]): Promise<GraphTraversal>;
-        toP(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
+        toP(arg0: Direction, arg1: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.__.toE(com.tinkerpop.gremlin.structure.Direction,java.lang.String...)
         toE(arg0: Direction, ...arg1: string_t[]): GraphTraversal;
         toE(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
         toEP(arg0: Direction, ...arg1: string_t[]): Promise<GraphTraversal>;
-        toEP(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
+        toEP(arg0: Direction, arg1: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.__.toV(com.tinkerpop.gremlin.structure.Direction)
         toV(arg0: Direction): GraphTraversal;
         toVP(arg0: Direction): Promise<GraphTraversal>;
@@ -3312,7 +3320,7 @@ declare module Java {
         union(...arg0: Traversal[]): GraphTraversal;
         union(arg0: array_t<Traversal>): GraphTraversal;
         unionP(...arg0: Traversal[]): Promise<GraphTraversal>;
-        unionP(arg0: array_t<Traversal>): GraphTraversal;
+        unionP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
         // public static <A> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.__.until(com.tinkerpop.gremlin.process.Traversal<?, ?>)
         until(arg0: Traversal): GraphTraversal;
         untilP(arg0: Traversal): Promise<GraphTraversal>;
@@ -3326,17 +3334,17 @@ declare module Java {
         valueMap(arg0: boolean_t, ...arg1: string_t[]): GraphTraversal;
         valueMap(arg0: boolean_t, arg1: array_t<string_t>): GraphTraversal;
         valueMapP(arg0: boolean_t, ...arg1: string_t[]): Promise<GraphTraversal>;
-        valueMapP(arg0: boolean_t, arg1: array_t<string_t>): GraphTraversal;
+        valueMapP(arg0: boolean_t, arg1: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A,E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, java.util.Map<java.lang.String, E2>> com.tinkerpop.gremlin.process.graph.traversal.__.valueMap(java.lang.String...)
         valueMap(...arg0: string_t[]): GraphTraversal;
         valueMap(arg0: array_t<string_t>): GraphTraversal;
         valueMapP(...arg0: string_t[]): Promise<GraphTraversal>;
-        valueMapP(arg0: array_t<string_t>): GraphTraversal;
+        valueMapP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A,E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.__.values(java.lang.String...)
         values(...arg0: string_t[]): GraphTraversal;
         values(arg0: array_t<string_t>): GraphTraversal;
         valuesP(...arg0: string_t[]): Promise<GraphTraversal>;
-        valuesP(arg0: array_t<string_t>): GraphTraversal;
+        valuesP(arg0: array_t<string_t>): Promise<GraphTraversal>;
         // public static <A,E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, java.util.Map<java.lang.String, E2>> com.tinkerpop.gremlin.process.graph.traversal.__.where(java.lang.String,java.util.function.BiPredicate,java.lang.String)
         where(arg0: string_t, arg1: BiPredicate, arg2: string_t): GraphTraversal;
         whereP(arg0: string_t, arg1: BiPredicate, arg2: string_t): Promise<GraphTraversal>;
@@ -4056,22 +4064,22 @@ declare module Java {
       addBothE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
       addBothE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
       addBothEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-      addBothEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+      addBothEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.addE(com.tinkerpop.gremlin.structure.Direction,java.lang.String,java.lang.String,java.lang.Object...)
       addE(arg0: Direction, arg1: string_t, arg2: string_t, ...arg3: object_t[]): GraphTraversal;
       addE(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): GraphTraversal;
       addEP(arg0: Direction, arg1: string_t, arg2: string_t, ...arg3: object_t[]): Promise<GraphTraversal>;
-      addEP(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): GraphTraversal;
+      addEP(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.addInE(java.lang.String,java.lang.String,java.lang.Object...)
       addInE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
       addInE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
       addInEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-      addInEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+      addInEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.addOutE(java.lang.String,java.lang.String,java.lang.Object...)
       addOutE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
       addOutE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
       addOutEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-      addOutEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+      addOutEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.aggregate(java.lang.String)
       aggregate(arg0: string_t): GraphTraversal;
       aggregateP(arg0: string_t): Promise<GraphTraversal>;
@@ -4082,7 +4090,7 @@ declare module Java {
       and(...arg0: Traversal[]): GraphTraversal;
       and(arg0: array_t<Traversal>): GraphTraversal;
       andP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      andP(arg0: array_t<Traversal>): GraphTraversal;
+      andP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.as(java.lang.String)
       as(arg0: string_t): GraphTraversal;
       asP(arg0: string_t): Promise<GraphTraversal>;
@@ -4096,12 +4104,12 @@ declare module Java {
       both(...arg0: string_t[]): GraphTraversal;
       both(arg0: array_t<string_t>): GraphTraversal;
       bothP(...arg0: string_t[]): Promise<GraphTraversal>;
-      bothP(arg0: array_t<string_t>): GraphTraversal;
+      bothP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.bothE(java.lang.String...)
       bothE(...arg0: string_t[]): GraphTraversal;
       bothE(arg0: array_t<string_t>): GraphTraversal;
       bothEP(...arg0: string_t[]): Promise<GraphTraversal>;
-      bothEP(arg0: array_t<string_t>): GraphTraversal;
+      bothEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.bothV()
       bothV(): GraphTraversal;
       bothVP(): Promise<GraphTraversal>;
@@ -4115,7 +4123,7 @@ declare module Java {
       cap(...arg0: string_t[]): GraphTraversal;
       cap(arg0: array_t<string_t>): GraphTraversal;
       capP(...arg0: string_t[]): Promise<GraphTraversal>;
-      capP(arg0: array_t<string_t>): GraphTraversal;
+      capP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <M,E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.choose(com.tinkerpop.gremlin.process.Traversal<?, M>,com.tinkerpop.gremlin.process.Traversal<?, E2>,com.tinkerpop.gremlin.process.Traversal<?, E2>)
       choose(arg0: Traversal, arg1: Traversal, arg2: Traversal): GraphTraversal;
       chooseP(arg0: Traversal, arg1: Traversal, arg2: Traversal): Promise<GraphTraversal>;
@@ -4132,7 +4140,7 @@ declare module Java {
       coalesce(...arg0: Traversal[]): GraphTraversal;
       coalesce(arg0: array_t<Traversal>): GraphTraversal;
       coalesceP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      coalesceP(arg0: array_t<Traversal>): GraphTraversal;
+      coalesceP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.coin(double)
       coin(arg0: double_t): GraphTraversal;
       coinP(arg0: double_t): Promise<GraphTraversal>;
@@ -4224,17 +4232,17 @@ declare module Java {
       hasId(...arg0: object_t[]): GraphTraversal;
       hasId(arg0: object_array_t): GraphTraversal;
       hasIdP(...arg0: object_t[]): Promise<GraphTraversal>;
-      hasIdP(arg0: object_array_t): GraphTraversal;
+      hasIdP(arg0: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.hasKey(java.lang.String...)
       hasKey(...arg0: string_t[]): GraphTraversal;
       hasKey(arg0: array_t<string_t>): GraphTraversal;
       hasKeyP(...arg0: string_t[]): Promise<GraphTraversal>;
-      hasKeyP(arg0: array_t<string_t>): GraphTraversal;
+      hasKeyP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.hasLabel(java.lang.String...)
       hasLabel(...arg0: string_t[]): GraphTraversal;
       hasLabel(arg0: array_t<string_t>): GraphTraversal;
       hasLabelP(...arg0: string_t[]): Promise<GraphTraversal>;
-      hasLabelP(arg0: array_t<string_t>): GraphTraversal;
+      hasLabelP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.hasNot(java.lang.String)
       hasNot(arg0: string_t): GraphTraversal;
       hasNotP(arg0: string_t): Promise<GraphTraversal>;
@@ -4242,7 +4250,7 @@ declare module Java {
       hasValue(...arg0: object_t[]): GraphTraversal;
       hasValue(arg0: object_array_t): GraphTraversal;
       hasValueP(...arg0: object_t[]): Promise<GraphTraversal>;
-      hasValueP(arg0: object_array_t): GraphTraversal;
+      hasValueP(arg0: object_array_t): Promise<GraphTraversal>;
       // public abstract java.lang.Object com.tinkerpop.gremlin.structure.Element.id()
       id(): object_t;
       idP(): Promise<object_t>;
@@ -4256,17 +4264,17 @@ declare module Java {
       in(...arg0: string_t[]): GraphTraversal;
       in(arg0: array_t<string_t>): GraphTraversal;
       inP(...arg0: string_t[]): Promise<GraphTraversal>;
-      inP(arg0: array_t<string_t>): GraphTraversal;
+      inP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.inE(java.lang.String...)
       inE(...arg0: string_t[]): GraphTraversal;
       inE(arg0: array_t<string_t>): GraphTraversal;
       inEP(...arg0: string_t[]): Promise<GraphTraversal>;
-      inEP(arg0: array_t<string_t>): GraphTraversal;
+      inEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.inject(java.lang.Object...)
       inject(...arg0: object_t[]): GraphTraversal;
       inject(arg0: object_array_t): GraphTraversal;
       injectP(...arg0: object_t[]): Promise<GraphTraversal>;
-      injectP(arg0: object_array_t): GraphTraversal;
+      injectP(arg0: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.inV()
       inV(): GraphTraversal;
       inVP(): Promise<GraphTraversal>;
@@ -4310,7 +4318,7 @@ declare module Java {
       match(arg0: string_t, ...arg1: Traversal[]): GraphTraversal;
       match(arg0: string_t, arg1: array_t<Traversal>): GraphTraversal;
       matchP(arg0: string_t, ...arg1: Traversal[]): Promise<GraphTraversal>;
-      matchP(arg0: string_t, arg1: array_t<Traversal>): GraphTraversal;
+      matchP(arg0: string_t, arg1: array_t<Traversal>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.max()
       max(): GraphTraversal;
       maxP(): Promise<GraphTraversal>;
@@ -4324,7 +4332,7 @@ declare module Java {
       or(...arg0: Traversal[]): GraphTraversal;
       or(arg0: array_t<Traversal>): GraphTraversal;
       orP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      orP(arg0: array_t<Traversal>): GraphTraversal;
+      orP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.order(com.tinkerpop.gremlin.process.Scope)
       order(arg0: Scope): GraphTraversal;
       orderP(arg0: Scope): Promise<GraphTraversal>;
@@ -4347,12 +4355,12 @@ declare module Java {
       out(...arg0: string_t[]): GraphTraversal;
       out(arg0: array_t<string_t>): GraphTraversal;
       outP(...arg0: string_t[]): Promise<GraphTraversal>;
-      outP(arg0: array_t<string_t>): GraphTraversal;
+      outP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.outE(java.lang.String...)
       outE(...arg0: string_t[]): GraphTraversal;
       outE(arg0: array_t<string_t>): GraphTraversal;
       outEP(...arg0: string_t[]): Promise<GraphTraversal>;
-      outEP(arg0: array_t<string_t>): GraphTraversal;
+      outEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.outV()
       outV(): GraphTraversal;
       outVP(): Promise<GraphTraversal>;
@@ -4366,7 +4374,7 @@ declare module Java {
       properties(...arg0: string_t[]): GraphTraversal;
       properties(arg0: array_t<string_t>): GraphTraversal;
       propertiesP(...arg0: string_t[]): Promise<GraphTraversal>;
-      propertiesP(arg0: array_t<string_t>): GraphTraversal;
+      propertiesP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public abstract <V> com.tinkerpop.gremlin.structure.Property<V> com.tinkerpop.gremlin.structure.Element.property(java.lang.String,V)
       property(arg0: string_t, arg1: object_t): Property;
       propertyP(arg0: string_t, arg1: object_t): Promise<Property>;
@@ -4377,14 +4385,14 @@ declare module Java {
       propertyMap(...arg0: string_t[]): GraphTraversal;
       propertyMap(arg0: array_t<string_t>): GraphTraversal;
       propertyMapP(...arg0: string_t[]): Promise<GraphTraversal>;
-      propertyMapP(arg0: array_t<string_t>): GraphTraversal;
+      propertyMapP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.range(long,long)
       range(arg0: long_t, arg1: long_t): GraphTraversal;
       rangeP(arg0: long_t, arg1: long_t): Promise<GraphTraversal>;
-      // public abstract void com.tinkerpop.gremlin.structure.Element.remove()
+      // public abstract void com.tinkerpop.gremlin.structure.Property.remove()
       remove(): void;
       removeP(): Promise<void>;
-      // public abstract void com.tinkerpop.gremlin.structure.Property.remove()
+      // public abstract void com.tinkerpop.gremlin.structure.Element.remove()
       remove(): void;
       removeP(): Promise<void>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.repeat(com.tinkerpop.gremlin.process.Traversal<?, A>)
@@ -4415,7 +4423,7 @@ declare module Java {
       select(...arg0: string_t[]): GraphTraversal;
       select(arg0: array_t<string_t>): GraphTraversal;
       selectP(...arg0: string_t[]): Promise<GraphTraversal>;
-      selectP(arg0: array_t<string_t>): GraphTraversal;
+      selectP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.select(java.lang.String)
       select(arg0: string_t): GraphTraversal;
       selectP(arg0: string_t): Promise<GraphTraversal>;
@@ -4456,12 +4464,12 @@ declare module Java {
       to(arg0: Direction, ...arg1: string_t[]): GraphTraversal;
       to(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
       toP(arg0: Direction, ...arg1: string_t[]): Promise<GraphTraversal>;
-      toP(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
+      toP(arg0: Direction, arg1: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.toE(com.tinkerpop.gremlin.structure.Direction,java.lang.String...)
       toE(arg0: Direction, ...arg1: string_t[]): GraphTraversal;
       toE(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
       toEP(arg0: Direction, ...arg1: string_t[]): Promise<GraphTraversal>;
-      toEP(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
+      toEP(arg0: Direction, arg1: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.toV(com.tinkerpop.gremlin.structure.Direction)
       toV(arg0: Direction): GraphTraversal;
       toVP(arg0: Direction): Promise<GraphTraversal>;
@@ -4478,7 +4486,7 @@ declare module Java {
       union(...arg0: Traversal[]): GraphTraversal;
       union(arg0: array_t<Traversal>): GraphTraversal;
       unionP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      unionP(arg0: array_t<Traversal>): GraphTraversal;
+      unionP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.until(com.tinkerpop.gremlin.process.Traversal<?, ?>)
       until(arg0: Traversal): GraphTraversal;
       untilP(arg0: Traversal): Promise<GraphTraversal>;
@@ -4495,17 +4503,17 @@ declare module Java {
       valueMap(arg0: boolean_t, ...arg1: string_t[]): GraphTraversal;
       valueMap(arg0: boolean_t, arg1: array_t<string_t>): GraphTraversal;
       valueMapP(arg0: boolean_t, ...arg1: string_t[]): Promise<GraphTraversal>;
-      valueMapP(arg0: boolean_t, arg1: array_t<string_t>): GraphTraversal;
+      valueMapP(arg0: boolean_t, arg1: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<com.tinkerpop.gremlin.structure.VertexProperty, java.util.Map<java.lang.String, E2>> com.tinkerpop.gremlin.process.graph.traversal.VertexPropertyTraversal.valueMap(java.lang.String...)
       valueMap(...arg0: string_t[]): GraphTraversal;
       valueMap(arg0: array_t<string_t>): GraphTraversal;
       valueMapP(...arg0: string_t[]): Promise<GraphTraversal>;
-      valueMapP(arg0: array_t<string_t>): GraphTraversal;
+      valueMapP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.values(java.lang.String...)
       values(...arg0: string_t[]): GraphTraversal;
       values(arg0: array_t<string_t>): GraphTraversal;
       valuesP(...arg0: string_t[]): Promise<GraphTraversal>;
-      valuesP(arg0: array_t<string_t>): GraphTraversal;
+      valuesP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, java.util.Map<java.lang.String, E2>> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.where(java.lang.String,java.util.function.BiPredicate,java.lang.String)
       where(arg0: string_t, arg1: BiPredicate, arg2: string_t): GraphTraversal;
       whereP(arg0: string_t, arg1: BiPredicate, arg2: string_t): Promise<GraphTraversal>;
@@ -6062,22 +6070,22 @@ declare module Java {
       addBothE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
       addBothE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
       addBothEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-      addBothEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+      addBothEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.addE(com.tinkerpop.gremlin.structure.Direction,java.lang.String,java.lang.String,java.lang.Object...)
       addE(arg0: Direction, arg1: string_t, arg2: string_t, ...arg3: object_t[]): GraphTraversal;
       addE(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): GraphTraversal;
       addEP(arg0: Direction, arg1: string_t, arg2: string_t, ...arg3: object_t[]): Promise<GraphTraversal>;
-      addEP(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): GraphTraversal;
+      addEP(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.addInE(java.lang.String,java.lang.String,java.lang.Object...)
       addInE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
       addInE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
       addInEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-      addInEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+      addInEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.addOutE(java.lang.String,java.lang.String,java.lang.Object...)
       addOutE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
       addOutE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
       addOutEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-      addOutEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+      addOutEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.aggregate(java.lang.String)
       aggregate(arg0: string_t): GraphTraversal;
       aggregateP(arg0: string_t): Promise<GraphTraversal>;
@@ -6088,7 +6096,7 @@ declare module Java {
       and(...arg0: Traversal[]): GraphTraversal;
       and(arg0: array_t<Traversal>): GraphTraversal;
       andP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      andP(arg0: array_t<Traversal>): GraphTraversal;
+      andP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.as(java.lang.String)
       as(arg0: string_t): GraphTraversal;
       asP(arg0: string_t): Promise<GraphTraversal>;
@@ -6102,12 +6110,12 @@ declare module Java {
       both(...arg0: string_t[]): GraphTraversal;
       both(arg0: array_t<string_t>): GraphTraversal;
       bothP(...arg0: string_t[]): Promise<GraphTraversal>;
-      bothP(arg0: array_t<string_t>): GraphTraversal;
+      bothP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.bothE(java.lang.String...)
       bothE(...arg0: string_t[]): GraphTraversal;
       bothE(arg0: array_t<string_t>): GraphTraversal;
       bothEP(...arg0: string_t[]): Promise<GraphTraversal>;
-      bothEP(arg0: array_t<string_t>): GraphTraversal;
+      bothEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.bothV()
       bothV(): GraphTraversal;
       bothVP(): Promise<GraphTraversal>;
@@ -6121,7 +6129,7 @@ declare module Java {
       cap(...arg0: string_t[]): GraphTraversal;
       cap(arg0: array_t<string_t>): GraphTraversal;
       capP(...arg0: string_t[]): Promise<GraphTraversal>;
-      capP(arg0: array_t<string_t>): GraphTraversal;
+      capP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <M,E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.choose(com.tinkerpop.gremlin.process.Traversal<?, M>,com.tinkerpop.gremlin.process.Traversal<?, E2>,com.tinkerpop.gremlin.process.Traversal<?, E2>)
       choose(arg0: Traversal, arg1: Traversal, arg2: Traversal): GraphTraversal;
       chooseP(arg0: Traversal, arg1: Traversal, arg2: Traversal): Promise<GraphTraversal>;
@@ -6138,7 +6146,7 @@ declare module Java {
       coalesce(...arg0: Traversal[]): GraphTraversal;
       coalesce(arg0: array_t<Traversal>): GraphTraversal;
       coalesceP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      coalesceP(arg0: array_t<Traversal>): GraphTraversal;
+      coalesceP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.coin(double)
       coin(arg0: double_t): GraphTraversal;
       coinP(arg0: double_t): Promise<GraphTraversal>;
@@ -6224,17 +6232,17 @@ declare module Java {
       hasId(...arg0: object_t[]): GraphTraversal;
       hasId(arg0: object_array_t): GraphTraversal;
       hasIdP(...arg0: object_t[]): Promise<GraphTraversal>;
-      hasIdP(arg0: object_array_t): GraphTraversal;
+      hasIdP(arg0: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.hasKey(java.lang.String...)
       hasKey(...arg0: string_t[]): GraphTraversal;
       hasKey(arg0: array_t<string_t>): GraphTraversal;
       hasKeyP(...arg0: string_t[]): Promise<GraphTraversal>;
-      hasKeyP(arg0: array_t<string_t>): GraphTraversal;
+      hasKeyP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.hasLabel(java.lang.String...)
       hasLabel(...arg0: string_t[]): GraphTraversal;
       hasLabel(arg0: array_t<string_t>): GraphTraversal;
       hasLabelP(...arg0: string_t[]): Promise<GraphTraversal>;
-      hasLabelP(arg0: array_t<string_t>): GraphTraversal;
+      hasLabelP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.hasNot(java.lang.String)
       hasNot(arg0: string_t): GraphTraversal;
       hasNotP(arg0: string_t): Promise<GraphTraversal>;
@@ -6242,7 +6250,7 @@ declare module Java {
       hasValue(...arg0: object_t[]): GraphTraversal;
       hasValue(arg0: object_array_t): GraphTraversal;
       hasValueP(...arg0: object_t[]): Promise<GraphTraversal>;
-      hasValueP(arg0: object_array_t): GraphTraversal;
+      hasValueP(arg0: object_array_t): Promise<GraphTraversal>;
       // public abstract java.lang.Object com.tinkerpop.gremlin.structure.Element.id()
       id(): object_t;
       idP(): Promise<object_t>;
@@ -6253,17 +6261,17 @@ declare module Java {
       in(...arg0: string_t[]): GraphTraversal;
       in(arg0: array_t<string_t>): GraphTraversal;
       inP(...arg0: string_t[]): Promise<GraphTraversal>;
-      inP(arg0: array_t<string_t>): GraphTraversal;
+      inP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.inE(java.lang.String...)
       inE(...arg0: string_t[]): GraphTraversal;
       inE(arg0: array_t<string_t>): GraphTraversal;
       inEP(...arg0: string_t[]): Promise<GraphTraversal>;
-      inEP(arg0: array_t<string_t>): GraphTraversal;
+      inEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.inject(java.lang.Object...)
       inject(...arg0: object_t[]): GraphTraversal;
       inject(arg0: object_array_t): GraphTraversal;
       injectP(...arg0: object_t[]): Promise<GraphTraversal>;
-      injectP(arg0: object_array_t): GraphTraversal;
+      injectP(arg0: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.inV()
       inV(): GraphTraversal;
       inVP(): Promise<GraphTraversal>;
@@ -6301,7 +6309,7 @@ declare module Java {
       match(arg0: string_t, ...arg1: Traversal[]): GraphTraversal;
       match(arg0: string_t, arg1: array_t<Traversal>): GraphTraversal;
       matchP(arg0: string_t, ...arg1: Traversal[]): Promise<GraphTraversal>;
-      matchP(arg0: string_t, arg1: array_t<Traversal>): GraphTraversal;
+      matchP(arg0: string_t, arg1: array_t<Traversal>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.max()
       max(): GraphTraversal;
       maxP(): Promise<GraphTraversal>;
@@ -6315,7 +6323,7 @@ declare module Java {
       or(...arg0: Traversal[]): GraphTraversal;
       or(arg0: array_t<Traversal>): GraphTraversal;
       orP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      orP(arg0: array_t<Traversal>): GraphTraversal;
+      orP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.order(com.tinkerpop.gremlin.process.Scope)
       order(arg0: Scope): GraphTraversal;
       orderP(arg0: Scope): Promise<GraphTraversal>;
@@ -6329,12 +6337,12 @@ declare module Java {
       out(...arg0: string_t[]): GraphTraversal;
       out(arg0: array_t<string_t>): GraphTraversal;
       outP(...arg0: string_t[]): Promise<GraphTraversal>;
-      outP(arg0: array_t<string_t>): GraphTraversal;
+      outP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.outE(java.lang.String...)
       outE(...arg0: string_t[]): GraphTraversal;
       outE(arg0: array_t<string_t>): GraphTraversal;
       outEP(...arg0: string_t[]): Promise<GraphTraversal>;
-      outEP(arg0: array_t<string_t>): GraphTraversal;
+      outEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.outV()
       outV(): GraphTraversal;
       outVP(): Promise<GraphTraversal>;
@@ -6348,7 +6356,7 @@ declare module Java {
       properties(...arg0: string_t[]): GraphTraversal;
       properties(arg0: array_t<string_t>): GraphTraversal;
       propertiesP(...arg0: string_t[]): Promise<GraphTraversal>;
-      propertiesP(arg0: array_t<string_t>): GraphTraversal;
+      propertiesP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public abstract <V> com.tinkerpop.gremlin.structure.Property<V> com.tinkerpop.gremlin.structure.Element.property(java.lang.String,V)
       property(arg0: string_t, arg1: object_t): Property;
       propertyP(arg0: string_t, arg1: object_t): Promise<Property>;
@@ -6359,7 +6367,7 @@ declare module Java {
       propertyMap(...arg0: string_t[]): GraphTraversal;
       propertyMap(arg0: array_t<string_t>): GraphTraversal;
       propertyMapP(...arg0: string_t[]): Promise<GraphTraversal>;
-      propertyMapP(arg0: array_t<string_t>): GraphTraversal;
+      propertyMapP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.range(long,long)
       range(arg0: long_t, arg1: long_t): GraphTraversal;
       rangeP(arg0: long_t, arg1: long_t): Promise<GraphTraversal>;
@@ -6394,7 +6402,7 @@ declare module Java {
       select(...arg0: string_t[]): GraphTraversal;
       select(arg0: array_t<string_t>): GraphTraversal;
       selectP(...arg0: string_t[]): Promise<GraphTraversal>;
-      selectP(arg0: array_t<string_t>): GraphTraversal;
+      selectP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.select(java.lang.String)
       select(arg0: string_t): GraphTraversal;
       selectP(arg0: string_t): Promise<GraphTraversal>;
@@ -6435,12 +6443,12 @@ declare module Java {
       to(arg0: Direction, ...arg1: string_t[]): GraphTraversal;
       to(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
       toP(arg0: Direction, ...arg1: string_t[]): Promise<GraphTraversal>;
-      toP(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
+      toP(arg0: Direction, arg1: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.toE(com.tinkerpop.gremlin.structure.Direction,java.lang.String...)
       toE(arg0: Direction, ...arg1: string_t[]): GraphTraversal;
       toE(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
       toEP(arg0: Direction, ...arg1: string_t[]): Promise<GraphTraversal>;
-      toEP(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
+      toEP(arg0: Direction, arg1: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.toV(com.tinkerpop.gremlin.structure.Direction)
       toV(arg0: Direction): GraphTraversal;
       toVP(arg0: Direction): Promise<GraphTraversal>;
@@ -6457,7 +6465,7 @@ declare module Java {
       union(...arg0: Traversal[]): GraphTraversal;
       union(arg0: array_t<Traversal>): GraphTraversal;
       unionP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      unionP(arg0: array_t<Traversal>): GraphTraversal;
+      unionP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.until(com.tinkerpop.gremlin.process.Traversal<?, ?>)
       until(arg0: Traversal): GraphTraversal;
       untilP(arg0: Traversal): Promise<GraphTraversal>;
@@ -6474,17 +6482,17 @@ declare module Java {
       valueMap(arg0: boolean_t, ...arg1: string_t[]): GraphTraversal;
       valueMap(arg0: boolean_t, arg1: array_t<string_t>): GraphTraversal;
       valueMapP(arg0: boolean_t, ...arg1: string_t[]): Promise<GraphTraversal>;
-      valueMapP(arg0: boolean_t, arg1: array_t<string_t>): GraphTraversal;
+      valueMapP(arg0: boolean_t, arg1: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<com.tinkerpop.gremlin.structure.Edge, java.util.Map<java.lang.String, E2>> com.tinkerpop.gremlin.process.graph.traversal.EdgeTraversal.valueMap(java.lang.String...)
       valueMap(...arg0: string_t[]): GraphTraversal;
       valueMap(arg0: array_t<string_t>): GraphTraversal;
       valueMapP(...arg0: string_t[]): Promise<GraphTraversal>;
-      valueMapP(arg0: array_t<string_t>): GraphTraversal;
+      valueMapP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.values(java.lang.String...)
       values(...arg0: string_t[]): GraphTraversal;
       values(arg0: array_t<string_t>): GraphTraversal;
       valuesP(...arg0: string_t[]): Promise<GraphTraversal>;
-      valuesP(arg0: array_t<string_t>): GraphTraversal;
+      valuesP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, java.util.Map<java.lang.String, E2>> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.where(java.lang.String,java.util.function.BiPredicate,java.lang.String)
       where(arg0: string_t, arg1: BiPredicate, arg2: string_t): GraphTraversal;
       whereP(arg0: string_t, arg1: BiPredicate, arg2: string_t): Promise<GraphTraversal>;
@@ -6586,7 +6594,7 @@ declare module Java {
       getMethodCallSyntax(arg0: string_t, arg1: string_t, ...arg2: string_t[]): string;
       getMethodCallSyntax(arg0: string_t, arg1: string_t, arg2: array_t<string_t>): string;
       getMethodCallSyntaxP(arg0: string_t, arg1: string_t, ...arg2: string_t[]): Promise<string>;
-      getMethodCallSyntaxP(arg0: string_t, arg1: string_t, arg2: array_t<string_t>): string;
+      getMethodCallSyntaxP(arg0: string_t, arg1: string_t, arg2: array_t<string_t>): Promise<string>;
       // public abstract java.util.List<java.lang.String> javax.script.ScriptEngineFactory.getMimeTypes()
       getMimeTypes(): List;
       getMimeTypesP(): Promise<List>;
@@ -6603,7 +6611,7 @@ declare module Java {
       getProgram(...arg0: string_t[]): string;
       getProgram(arg0: array_t<string_t>): string;
       getProgramP(...arg0: string_t[]): Promise<string>;
-      getProgramP(arg0: array_t<string_t>): string;
+      getProgramP(arg0: array_t<string_t>): Promise<string>;
       // public abstract javax.script.ScriptEngine javax.script.ScriptEngineFactory.getScriptEngine()
       getScriptEngine(): ScriptEngine;
       getScriptEngineP(): Promise<ScriptEngine>;
@@ -7431,7 +7439,7 @@ declare module Java {
         newInstance(arg0: Class, ...arg1: integer_t[]): object_t;
         newInstance(arg0: Class, arg1: array_t<integer_t>): object_t;
         newInstanceP(arg0: Class, ...arg1: integer_t[]): Promise<object_t>;
-        newInstanceP(arg0: Class, arg1: array_t<integer_t>): object_t;
+        newInstanceP(arg0: Class, arg1: array_t<integer_t>): Promise<object_t>;
         // public static java.lang.Object java.lang.reflect.Array.newInstance(java.lang.Class<?>,int) throws java.lang.NegativeArraySizeException
         newInstance(arg0: Class, arg1: integer_t): object_t;
         newInstanceP(arg0: Class, arg1: integer_t): Promise<object_t>;
@@ -7472,7 +7480,7 @@ declare module Java {
       addVertex(...arg0: object_t[]): Vertex;
       addVertex(arg0: object_array_t): Vertex;
       addVertexP(...arg0: object_t[]): Promise<Vertex>;
-      addVertexP(arg0: object_array_t): Vertex;
+      addVertexP(arg0: object_array_t): Promise<Vertex>;
       // public default com.tinkerpop.gremlin.structure.Vertex com.tinkerpop.gremlin.structure.Graph.addVertex(java.lang.String)
       addVertex(arg0: string_t): Vertex;
       addVertexP(arg0: string_t): Promise<Vertex>;
@@ -7486,7 +7494,7 @@ declare module Java {
       compute(...arg0: Class[]): GraphComputer;
       compute(arg0: array_t<Class>): GraphComputer;
       computeP(...arg0: Class[]): Promise<GraphComputer>;
-      computeP(arg0: array_t<Class>): GraphComputer;
+      computeP(arg0: array_t<Class>): Promise<GraphComputer>;
       // public org.apache.commons.configuration.Configuration com.tinkerpop.gremlin.structure.strategy.StrategyGraph.configuration()
       configuration(): object_t;
       configurationP(): Promise<object_t>;
@@ -7494,12 +7502,12 @@ declare module Java {
       E(...arg0: object_t[]): GraphTraversal;
       E(arg0: object_array_t): GraphTraversal;
       EP(...arg0: object_t[]): Promise<GraphTraversal>;
-      EP(arg0: object_array_t): GraphTraversal;
+      EP(arg0: object_array_t): Promise<GraphTraversal>;
       // public java.util.Iterator<com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.structure.strategy.StrategyGraph.edgeIterator(java.lang.Object...)
       edgeIterator(...arg0: object_t[]): Iterator;
       edgeIterator(arg0: object_array_t): Iterator;
       edgeIteratorP(...arg0: object_t[]): Promise<Iterator>;
-      edgeIteratorP(arg0: object_array_t): Iterator;
+      edgeIteratorP(arg0: object_array_t): Promise<Iterator>;
       // public boolean java.lang.Object.equals(java.lang.Object)
       equals(arg0: object_t): boolean;
       equalsP(arg0: object_t): Promise<boolean>;
@@ -7540,7 +7548,7 @@ declare module Java {
       strategy(...arg0: GraphStrategy[]): StrategyGraph;
       strategy(arg0: array_t<GraphStrategy>): StrategyGraph;
       strategyP(...arg0: GraphStrategy[]): Promise<StrategyGraph>;
-      strategyP(arg0: array_t<GraphStrategy>): StrategyGraph;
+      strategyP(arg0: array_t<GraphStrategy>): Promise<StrategyGraph>;
       // public java.lang.String com.tinkerpop.gremlin.structure.strategy.StrategyGraph.toString()
       toString(): string;
       toStringP(): Promise<string>;
@@ -7551,7 +7559,7 @@ declare module Java {
       V(...arg0: object_t[]): GraphTraversal;
       V(arg0: object_array_t): GraphTraversal;
       VP(...arg0: object_t[]): Promise<GraphTraversal>;
-      VP(arg0: object_array_t): GraphTraversal;
+      VP(arg0: object_array_t): Promise<GraphTraversal>;
       // public com.tinkerpop.gremlin.structure.Graph$Variables com.tinkerpop.gremlin.structure.strategy.StrategyGraph.variables()
       variables(): object_t;
       variablesP(): Promise<object_t>;
@@ -7559,7 +7567,7 @@ declare module Java {
       vertexIterator(...arg0: object_t[]): Iterator;
       vertexIterator(arg0: object_array_t): Iterator;
       vertexIteratorP(...arg0: object_t[]): Promise<Iterator>;
-      vertexIteratorP(arg0: object_array_t): Iterator;
+      vertexIteratorP(arg0: object_array_t): Promise<Iterator>;
       // public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
       wait(arg0: long_t, arg1: integer_t): void;
       waitP(arg0: long_t, arg1: integer_t): Promise<void>;
@@ -8271,22 +8279,22 @@ declare module Java {
       addBothE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
       addBothE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
       addBothEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-      addBothEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+      addBothEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.addE(com.tinkerpop.gremlin.structure.Direction,java.lang.String,java.lang.String,java.lang.Object...)
       addE(arg0: Direction, arg1: string_t, arg2: string_t, ...arg3: object_t[]): GraphTraversal;
       addE(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): GraphTraversal;
       addEP(arg0: Direction, arg1: string_t, arg2: string_t, ...arg3: object_t[]): Promise<GraphTraversal>;
-      addEP(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): GraphTraversal;
+      addEP(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.addInE(java.lang.String,java.lang.String,java.lang.Object...)
       addInE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
       addInE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
       addInEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-      addInEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+      addInEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.addOutE(java.lang.String,java.lang.String,java.lang.Object...)
       addOutE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
       addOutE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
       addOutEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-      addOutEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+      addOutEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.aggregate(java.lang.String)
       aggregate(arg0: string_t): GraphTraversal;
       aggregateP(arg0: string_t): Promise<GraphTraversal>;
@@ -8297,7 +8305,7 @@ declare module Java {
       and(...arg0: Traversal[]): GraphTraversal;
       and(arg0: array_t<Traversal>): GraphTraversal;
       andP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      andP(arg0: array_t<Traversal>): GraphTraversal;
+      andP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.as(java.lang.String)
       as(arg0: string_t): GraphTraversal;
       asP(arg0: string_t): Promise<GraphTraversal>;
@@ -8317,12 +8325,12 @@ declare module Java {
       both(...arg0: string_t[]): GraphTraversal;
       both(arg0: array_t<string_t>): GraphTraversal;
       bothP(...arg0: string_t[]): Promise<GraphTraversal>;
-      bothP(arg0: array_t<string_t>): GraphTraversal;
+      bothP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.bothE(java.lang.String...)
       bothE(...arg0: string_t[]): GraphTraversal;
       bothE(arg0: array_t<string_t>): GraphTraversal;
       bothEP(...arg0: string_t[]): Promise<GraphTraversal>;
-      bothEP(arg0: array_t<string_t>): GraphTraversal;
+      bothEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.bothV()
       bothV(): GraphTraversal;
       bothVP(): Promise<GraphTraversal>;
@@ -8363,7 +8371,7 @@ declare module Java {
       cap(...arg0: string_t[]): GraphTraversal;
       cap(arg0: array_t<string_t>): GraphTraversal;
       capP(...arg0: string_t[]): Promise<GraphTraversal>;
-      capP(arg0: array_t<string_t>): GraphTraversal;
+      capP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.choose(com.tinkerpop.gremlin.process.Traversal<?, ?>,com.tinkerpop.gremlin.process.Traversal<?, E2>,com.tinkerpop.gremlin.process.Traversal<?, E2>)
       choose(arg0: Traversal, arg1: Traversal, arg2: Traversal): GraphTraversal;
       chooseP(arg0: Traversal, arg1: Traversal, arg2: Traversal): Promise<GraphTraversal>;
@@ -8380,7 +8388,7 @@ declare module Java {
       coalesce(...arg0: Traversal[]): GraphTraversal;
       coalesce(arg0: array_t<Traversal>): GraphTraversal;
       coalesceP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      coalesceP(arg0: array_t<Traversal>): GraphTraversal;
+      coalesceP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.coin(double)
       coin(arg0: double_t): GraphTraversal;
       coinP(arg0: double_t): Promise<GraphTraversal>;
@@ -8472,17 +8480,17 @@ declare module Java {
       hasId(...arg0: object_t[]): GraphTraversal;
       hasId(arg0: object_array_t): GraphTraversal;
       hasIdP(...arg0: object_t[]): Promise<GraphTraversal>;
-      hasIdP(arg0: object_array_t): GraphTraversal;
+      hasIdP(arg0: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.hasKey(java.lang.String...)
       hasKey(...arg0: string_t[]): GraphTraversal;
       hasKey(arg0: array_t<string_t>): GraphTraversal;
       hasKeyP(...arg0: string_t[]): Promise<GraphTraversal>;
-      hasKeyP(arg0: array_t<string_t>): GraphTraversal;
+      hasKeyP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.hasLabel(java.lang.String...)
       hasLabel(...arg0: string_t[]): GraphTraversal;
       hasLabel(arg0: array_t<string_t>): GraphTraversal;
       hasLabelP(...arg0: string_t[]): Promise<GraphTraversal>;
-      hasLabelP(arg0: array_t<string_t>): GraphTraversal;
+      hasLabelP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public abstract boolean java.util.Iterator.hasNext()
       hasNext(): boolean;
       hasNextP(): Promise<boolean>;
@@ -8493,7 +8501,7 @@ declare module Java {
       hasValue(...arg0: object_t[]): GraphTraversal;
       hasValue(arg0: object_array_t): GraphTraversal;
       hasValueP(...arg0: object_t[]): Promise<GraphTraversal>;
-      hasValueP(arg0: object_array_t): GraphTraversal;
+      hasValueP(arg0: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, java.lang.Object> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.id()
       id(): GraphTraversal;
       idP(): Promise<GraphTraversal>;
@@ -8504,17 +8512,17 @@ declare module Java {
       in(...arg0: string_t[]): GraphTraversal;
       in(arg0: array_t<string_t>): GraphTraversal;
       inP(...arg0: string_t[]): Promise<GraphTraversal>;
-      inP(arg0: array_t<string_t>): GraphTraversal;
+      inP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.inE(java.lang.String...)
       inE(...arg0: string_t[]): GraphTraversal;
       inE(arg0: array_t<string_t>): GraphTraversal;
       inEP(...arg0: string_t[]): Promise<GraphTraversal>;
-      inEP(arg0: array_t<string_t>): GraphTraversal;
+      inEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.inject(E...)
       inject(...arg0: object_t[]): GraphTraversal;
       inject(arg0: object_array_t): GraphTraversal;
       injectP(...arg0: object_t[]): Promise<GraphTraversal>;
-      injectP(arg0: object_array_t): GraphTraversal;
+      injectP(arg0: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.inV()
       inV(): GraphTraversal;
       inVP(): Promise<GraphTraversal>;
@@ -8549,7 +8557,7 @@ declare module Java {
       match(arg0: string_t, ...arg1: Traversal[]): GraphTraversal;
       match(arg0: string_t, arg1: array_t<Traversal>): GraphTraversal;
       matchP(arg0: string_t, ...arg1: Traversal[]): Promise<GraphTraversal>;
-      matchP(arg0: string_t, arg1: array_t<Traversal>): GraphTraversal;
+      matchP(arg0: string_t, arg1: array_t<Traversal>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.max()
       max(): GraphTraversal;
       maxP(): Promise<GraphTraversal>;
@@ -8575,7 +8583,7 @@ declare module Java {
       or(...arg0: Traversal[]): GraphTraversal;
       or(arg0: array_t<Traversal>): GraphTraversal;
       orP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      orP(arg0: array_t<Traversal>): GraphTraversal;
+      orP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.order(com.tinkerpop.gremlin.process.Scope)
       order(arg0: Scope): GraphTraversal;
       orderP(arg0: Scope): Promise<GraphTraversal>;
@@ -8589,12 +8597,12 @@ declare module Java {
       out(...arg0: string_t[]): GraphTraversal;
       out(arg0: array_t<string_t>): GraphTraversal;
       outP(...arg0: string_t[]): Promise<GraphTraversal>;
-      outP(arg0: array_t<string_t>): GraphTraversal;
+      outP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.outE(java.lang.String...)
       outE(...arg0: string_t[]): GraphTraversal;
       outE(arg0: array_t<string_t>): GraphTraversal;
       outEP(...arg0: string_t[]): Promise<GraphTraversal>;
-      outEP(arg0: array_t<string_t>): GraphTraversal;
+      outEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.outV()
       outV(): GraphTraversal;
       outVP(): Promise<GraphTraversal>;
@@ -8608,12 +8616,12 @@ declare module Java {
       properties(...arg0: string_t[]): GraphTraversal;
       properties(arg0: array_t<string_t>): GraphTraversal;
       propertiesP(...arg0: string_t[]): Promise<GraphTraversal>;
-      propertiesP(arg0: array_t<string_t>): GraphTraversal;
+      propertiesP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, java.util.Map<java.lang.String, E2>> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.propertyMap(java.lang.String...)
       propertyMap(...arg0: string_t[]): GraphTraversal;
       propertyMap(arg0: array_t<string_t>): GraphTraversal;
       propertyMapP(...arg0: string_t[]): Promise<GraphTraversal>;
-      propertyMapP(arg0: array_t<string_t>): GraphTraversal;
+      propertyMapP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.range(long,long)
       range(arg0: long_t, arg1: long_t): GraphTraversal;
       rangeP(arg0: long_t, arg1: long_t): Promise<GraphTraversal>;
@@ -8648,7 +8656,7 @@ declare module Java {
       select(...arg0: string_t[]): GraphTraversal;
       select(arg0: array_t<string_t>): GraphTraversal;
       selectP(...arg0: string_t[]): Promise<GraphTraversal>;
-      selectP(arg0: array_t<string_t>): GraphTraversal;
+      selectP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.select(java.lang.String)
       select(arg0: string_t): GraphTraversal;
       selectP(arg0: string_t): Promise<GraphTraversal>;
@@ -8689,7 +8697,7 @@ declare module Java {
       to(arg0: Direction, ...arg1: string_t[]): GraphTraversal;
       to(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
       toP(arg0: Direction, ...arg1: string_t[]): Promise<GraphTraversal>;
-      toP(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
+      toP(arg0: Direction, arg1: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.util.BulkSet<E> com.tinkerpop.gremlin.process.Traversal.toBulkSet()
       toBulkSet(): BulkSet;
       toBulkSetP(): Promise<BulkSet>;
@@ -8697,7 +8705,7 @@ declare module Java {
       toE(arg0: Direction, ...arg1: string_t[]): GraphTraversal;
       toE(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
       toEP(arg0: Direction, ...arg1: string_t[]): Promise<GraphTraversal>;
-      toEP(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
+      toEP(arg0: Direction, arg1: array_t<string_t>): Promise<GraphTraversal>;
       // public default java.util.List<E> com.tinkerpop.gremlin.process.Traversal.toList()
       toList(): List;
       toListP(): Promise<List>;
@@ -8723,7 +8731,7 @@ declare module Java {
       union(...arg0: Traversal[]): GraphTraversal;
       union(arg0: array_t<Traversal>): GraphTraversal;
       unionP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      unionP(arg0: array_t<Traversal>): GraphTraversal;
+      unionP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.until(com.tinkerpop.gremlin.process.Traversal<?, ?>)
       until(arg0: Traversal): GraphTraversal;
       untilP(arg0: Traversal): Promise<GraphTraversal>;
@@ -8737,17 +8745,17 @@ declare module Java {
       valueMap(arg0: boolean_t, ...arg1: string_t[]): GraphTraversal;
       valueMap(arg0: boolean_t, arg1: array_t<string_t>): GraphTraversal;
       valueMapP(arg0: boolean_t, ...arg1: string_t[]): Promise<GraphTraversal>;
-      valueMapP(arg0: boolean_t, arg1: array_t<string_t>): GraphTraversal;
+      valueMapP(arg0: boolean_t, arg1: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, java.util.Map<java.lang.String, E2>> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.valueMap(java.lang.String...)
       valueMap(...arg0: string_t[]): GraphTraversal;
       valueMap(arg0: array_t<string_t>): GraphTraversal;
       valueMapP(...arg0: string_t[]): Promise<GraphTraversal>;
-      valueMapP(arg0: array_t<string_t>): GraphTraversal;
+      valueMapP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.values(java.lang.String...)
       values(...arg0: string_t[]): GraphTraversal;
       values(arg0: array_t<string_t>): GraphTraversal;
       valuesP(...arg0: string_t[]): Promise<GraphTraversal>;
-      valuesP(arg0: array_t<string_t>): GraphTraversal;
+      valuesP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<S, java.util.Map<java.lang.String, E2>> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal.where(java.lang.String,java.util.function.BiPredicate,java.lang.String)
       where(arg0: string_t, arg1: BiPredicate, arg2: string_t): GraphTraversal;
       whereP(arg0: string_t, arg1: BiPredicate, arg2: string_t): Promise<GraphTraversal>;
@@ -8941,27 +8949,27 @@ declare module Java {
       addBothE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
       addBothE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
       addBothEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-      addBothEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+      addBothEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.addE(com.tinkerpop.gremlin.structure.Direction,java.lang.String,java.lang.String,java.lang.Object...)
       addE(arg0: Direction, arg1: string_t, arg2: string_t, ...arg3: object_t[]): GraphTraversal;
       addE(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): GraphTraversal;
       addEP(arg0: Direction, arg1: string_t, arg2: string_t, ...arg3: object_t[]): Promise<GraphTraversal>;
-      addEP(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): GraphTraversal;
+      addEP(arg0: Direction, arg1: string_t, arg2: string_t, arg3: object_array_t): Promise<GraphTraversal>;
       // public abstract com.tinkerpop.gremlin.structure.Edge com.tinkerpop.gremlin.structure.Vertex.addEdge(java.lang.String,com.tinkerpop.gremlin.structure.Vertex,java.lang.Object...)
       addEdge(arg0: string_t, arg1: Vertex, ...arg2: object_t[]): Edge;
       addEdge(arg0: string_t, arg1: Vertex, arg2: object_array_t): Edge;
       addEdgeP(arg0: string_t, arg1: Vertex, ...arg2: object_t[]): Promise<Edge>;
-      addEdgeP(arg0: string_t, arg1: Vertex, arg2: object_array_t): Edge;
+      addEdgeP(arg0: string_t, arg1: Vertex, arg2: object_array_t): Promise<Edge>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.addInE(java.lang.String,java.lang.String,java.lang.Object...)
       addInE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
       addInE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
       addInEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-      addInEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+      addInEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.addOutE(java.lang.String,java.lang.String,java.lang.Object...)
       addOutE(arg0: string_t, arg1: string_t, ...arg2: object_t[]): GraphTraversal;
       addOutE(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
       addOutEP(arg0: string_t, arg1: string_t, ...arg2: object_t[]): Promise<GraphTraversal>;
-      addOutEP(arg0: string_t, arg1: string_t, arg2: object_array_t): GraphTraversal;
+      addOutEP(arg0: string_t, arg1: string_t, arg2: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.aggregate(java.lang.String)
       aggregate(arg0: string_t): GraphTraversal;
       aggregateP(arg0: string_t): Promise<GraphTraversal>;
@@ -8972,7 +8980,7 @@ declare module Java {
       and(...arg0: Traversal[]): GraphTraversal;
       and(arg0: array_t<Traversal>): GraphTraversal;
       andP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      andP(arg0: array_t<Traversal>): GraphTraversal;
+      andP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.as(java.lang.String)
       as(arg0: string_t): GraphTraversal;
       asP(arg0: string_t): Promise<GraphTraversal>;
@@ -8986,12 +8994,12 @@ declare module Java {
       both(...arg0: string_t[]): GraphTraversal;
       both(arg0: array_t<string_t>): GraphTraversal;
       bothP(...arg0: string_t[]): Promise<GraphTraversal>;
-      bothP(arg0: array_t<string_t>): GraphTraversal;
+      bothP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.bothE(java.lang.String...)
       bothE(...arg0: string_t[]): GraphTraversal;
       bothE(arg0: array_t<string_t>): GraphTraversal;
       bothEP(...arg0: string_t[]): Promise<GraphTraversal>;
-      bothEP(arg0: array_t<string_t>): GraphTraversal;
+      bothEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.bothV()
       bothV(): GraphTraversal;
       bothVP(): Promise<GraphTraversal>;
@@ -9005,7 +9013,7 @@ declare module Java {
       cap(...arg0: string_t[]): GraphTraversal;
       cap(arg0: array_t<string_t>): GraphTraversal;
       capP(...arg0: string_t[]): Promise<GraphTraversal>;
-      capP(arg0: array_t<string_t>): GraphTraversal;
+      capP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <M,E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.choose(com.tinkerpop.gremlin.process.Traversal<?, M>,com.tinkerpop.gremlin.process.Traversal<?, E2>,com.tinkerpop.gremlin.process.Traversal<?, E2>)
       choose(arg0: Traversal, arg1: Traversal, arg2: Traversal): GraphTraversal;
       chooseP(arg0: Traversal, arg1: Traversal, arg2: Traversal): Promise<GraphTraversal>;
@@ -9022,7 +9030,7 @@ declare module Java {
       coalesce(...arg0: Traversal[]): GraphTraversal;
       coalesce(arg0: array_t<Traversal>): GraphTraversal;
       coalesceP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      coalesceP(arg0: array_t<Traversal>): GraphTraversal;
+      coalesceP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.coin(double)
       coin(arg0: double_t): GraphTraversal;
       coinP(arg0: double_t): Promise<GraphTraversal>;
@@ -9108,17 +9116,17 @@ declare module Java {
       hasId(...arg0: object_t[]): GraphTraversal;
       hasId(arg0: object_array_t): GraphTraversal;
       hasIdP(...arg0: object_t[]): Promise<GraphTraversal>;
-      hasIdP(arg0: object_array_t): GraphTraversal;
+      hasIdP(arg0: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.hasKey(java.lang.String...)
       hasKey(...arg0: string_t[]): GraphTraversal;
       hasKey(arg0: array_t<string_t>): GraphTraversal;
       hasKeyP(...arg0: string_t[]): Promise<GraphTraversal>;
-      hasKeyP(arg0: array_t<string_t>): GraphTraversal;
+      hasKeyP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.hasLabel(java.lang.String...)
       hasLabel(...arg0: string_t[]): GraphTraversal;
       hasLabel(arg0: array_t<string_t>): GraphTraversal;
       hasLabelP(...arg0: string_t[]): Promise<GraphTraversal>;
-      hasLabelP(arg0: array_t<string_t>): GraphTraversal;
+      hasLabelP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.hasNot(java.lang.String)
       hasNot(arg0: string_t): GraphTraversal;
       hasNotP(arg0: string_t): Promise<GraphTraversal>;
@@ -9126,7 +9134,7 @@ declare module Java {
       hasValue(...arg0: object_t[]): GraphTraversal;
       hasValue(arg0: object_array_t): GraphTraversal;
       hasValueP(...arg0: object_t[]): Promise<GraphTraversal>;
-      hasValueP(arg0: object_array_t): GraphTraversal;
+      hasValueP(arg0: object_array_t): Promise<GraphTraversal>;
       // public abstract java.lang.Object com.tinkerpop.gremlin.structure.Element.id()
       id(): object_t;
       idP(): Promise<object_t>;
@@ -9137,17 +9145,17 @@ declare module Java {
       in(...arg0: string_t[]): GraphTraversal;
       in(arg0: array_t<string_t>): GraphTraversal;
       inP(...arg0: string_t[]): Promise<GraphTraversal>;
-      inP(arg0: array_t<string_t>): GraphTraversal;
+      inP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.inE(java.lang.String...)
       inE(...arg0: string_t[]): GraphTraversal;
       inE(arg0: array_t<string_t>): GraphTraversal;
       inEP(...arg0: string_t[]): Promise<GraphTraversal>;
-      inEP(arg0: array_t<string_t>): GraphTraversal;
+      inEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.inject(java.lang.Object...)
       inject(...arg0: object_t[]): GraphTraversal;
       inject(arg0: object_array_t): GraphTraversal;
       injectP(...arg0: object_t[]): Promise<GraphTraversal>;
-      injectP(arg0: object_array_t): GraphTraversal;
+      injectP(arg0: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.inV()
       inV(): GraphTraversal;
       inVP(): Promise<GraphTraversal>;
@@ -9185,7 +9193,7 @@ declare module Java {
       match(arg0: string_t, ...arg1: Traversal[]): GraphTraversal;
       match(arg0: string_t, arg1: array_t<Traversal>): GraphTraversal;
       matchP(arg0: string_t, ...arg1: Traversal[]): Promise<GraphTraversal>;
-      matchP(arg0: string_t, arg1: array_t<Traversal>): GraphTraversal;
+      matchP(arg0: string_t, arg1: array_t<Traversal>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.max()
       max(): GraphTraversal;
       maxP(): Promise<GraphTraversal>;
@@ -9199,7 +9207,7 @@ declare module Java {
       or(...arg0: Traversal[]): GraphTraversal;
       or(arg0: array_t<Traversal>): GraphTraversal;
       orP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      orP(arg0: array_t<Traversal>): GraphTraversal;
+      orP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.order(com.tinkerpop.gremlin.process.Scope)
       order(arg0: Scope): GraphTraversal;
       orderP(arg0: Scope): Promise<GraphTraversal>;
@@ -9213,12 +9221,12 @@ declare module Java {
       out(...arg0: string_t[]): GraphTraversal;
       out(arg0: array_t<string_t>): GraphTraversal;
       outP(...arg0: string_t[]): Promise<GraphTraversal>;
-      outP(arg0: array_t<string_t>): GraphTraversal;
+      outP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.outE(java.lang.String...)
       outE(...arg0: string_t[]): GraphTraversal;
       outE(arg0: array_t<string_t>): GraphTraversal;
       outEP(...arg0: string_t[]): Promise<GraphTraversal>;
-      outEP(arg0: array_t<string_t>): GraphTraversal;
+      outEP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.outV()
       outV(): GraphTraversal;
       outVP(): Promise<GraphTraversal>;
@@ -9232,12 +9240,12 @@ declare module Java {
       properties(...arg0: string_t[]): GraphTraversal;
       properties(arg0: array_t<string_t>): GraphTraversal;
       propertiesP(...arg0: string_t[]): Promise<GraphTraversal>;
-      propertiesP(arg0: array_t<string_t>): GraphTraversal;
+      propertiesP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <V> com.tinkerpop.gremlin.structure.VertexProperty<V> com.tinkerpop.gremlin.structure.Vertex.property(java.lang.String,V,java.lang.Object...)
       property(arg0: string_t, arg1: object_t, ...arg2: object_t[]): VertexProperty;
       property(arg0: string_t, arg1: object_t, arg2: object_array_t): VertexProperty;
       propertyP(arg0: string_t, arg1: object_t, ...arg2: object_t[]): Promise<VertexProperty>;
-      propertyP(arg0: string_t, arg1: object_t, arg2: object_array_t): VertexProperty;
+      propertyP(arg0: string_t, arg1: object_t, arg2: object_array_t): Promise<VertexProperty>;
       // public abstract <V> com.tinkerpop.gremlin.structure.VertexProperty<V> com.tinkerpop.gremlin.structure.Vertex.property(java.lang.String,V)
       property(arg0: string_t, arg1: object_t): VertexProperty;
       propertyP(arg0: string_t, arg1: object_t): Promise<VertexProperty>;
@@ -9254,7 +9262,7 @@ declare module Java {
       propertyMap(...arg0: string_t[]): GraphTraversal;
       propertyMap(arg0: array_t<string_t>): GraphTraversal;
       propertyMapP(...arg0: string_t[]): Promise<GraphTraversal>;
-      propertyMapP(arg0: array_t<string_t>): GraphTraversal;
+      propertyMapP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.range(long,long)
       range(arg0: long_t, arg1: long_t): GraphTraversal;
       rangeP(arg0: long_t, arg1: long_t): Promise<GraphTraversal>;
@@ -9289,7 +9297,7 @@ declare module Java {
       select(...arg0: string_t[]): GraphTraversal;
       select(arg0: array_t<string_t>): GraphTraversal;
       selectP(...arg0: string_t[]): Promise<GraphTraversal>;
-      selectP(arg0: array_t<string_t>): GraphTraversal;
+      selectP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.select(java.lang.String)
       select(arg0: string_t): GraphTraversal;
       selectP(arg0: string_t): Promise<GraphTraversal>;
@@ -9303,7 +9311,7 @@ declare module Java {
       singleProperty(arg0: string_t, arg1: object_t, ...arg2: object_t[]): VertexProperty;
       singleProperty(arg0: string_t, arg1: object_t, arg2: object_array_t): VertexProperty;
       singlePropertyP(arg0: string_t, arg1: object_t, ...arg2: object_t[]): Promise<VertexProperty>;
-      singlePropertyP(arg0: string_t, arg1: object_t, arg2: object_array_t): VertexProperty;
+      singlePropertyP(arg0: string_t, arg1: object_t, arg2: object_array_t): Promise<VertexProperty>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<com.tinkerpop.gremlin.structure.Vertex, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.VertexTraversal.start()
       start(): GraphTraversal;
       startP(): Promise<GraphTraversal>;
@@ -9335,12 +9343,12 @@ declare module Java {
       to(arg0: Direction, ...arg1: string_t[]): GraphTraversal;
       to(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
       toP(arg0: Direction, ...arg1: string_t[]): Promise<GraphTraversal>;
-      toP(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
+      toP(arg0: Direction, arg1: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.toE(com.tinkerpop.gremlin.structure.Direction,java.lang.String...)
       toE(arg0: Direction, ...arg1: string_t[]): GraphTraversal;
       toE(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
       toEP(arg0: Direction, ...arg1: string_t[]): Promise<GraphTraversal>;
-      toEP(arg0: Direction, arg1: array_t<string_t>): GraphTraversal;
+      toEP(arg0: Direction, arg1: array_t<string_t>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, com.tinkerpop.gremlin.structure.Vertex> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.toV(com.tinkerpop.gremlin.structure.Direction)
       toV(arg0: Direction): GraphTraversal;
       toVP(arg0: Direction): Promise<GraphTraversal>;
@@ -9357,7 +9365,7 @@ declare module Java {
       union(...arg0: Traversal[]): GraphTraversal;
       union(arg0: array_t<Traversal>): GraphTraversal;
       unionP(...arg0: Traversal[]): Promise<GraphTraversal>;
-      unionP(arg0: array_t<Traversal>): GraphTraversal;
+      unionP(arg0: array_t<Traversal>): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.until(com.tinkerpop.gremlin.process.Traversal<?, ?>)
       until(arg0: Traversal): GraphTraversal;
       untilP(arg0: Traversal): Promise<GraphTraversal>;
@@ -9374,17 +9382,17 @@ declare module Java {
       valueMap(arg0: boolean_t, ...arg1: string_t[]): GraphTraversal;
       valueMap(arg0: boolean_t, arg1: array_t<string_t>): GraphTraversal;
       valueMapP(arg0: boolean_t, ...arg1: string_t[]): Promise<GraphTraversal>;
-      valueMapP(arg0: boolean_t, arg1: array_t<string_t>): GraphTraversal;
+      valueMapP(arg0: boolean_t, arg1: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<com.tinkerpop.gremlin.structure.Vertex, java.util.Map<java.lang.String, java.util.List<E2>>> com.tinkerpop.gremlin.process.graph.traversal.VertexTraversal.valueMap(java.lang.String...)
       valueMap(...arg0: string_t[]): GraphTraversal;
       valueMap(arg0: array_t<string_t>): GraphTraversal;
       valueMapP(...arg0: string_t[]): Promise<GraphTraversal>;
-      valueMapP(arg0: array_t<string_t>): GraphTraversal;
+      valueMapP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, E2> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.values(java.lang.String...)
       values(...arg0: string_t[]): GraphTraversal;
       values(arg0: array_t<string_t>): GraphTraversal;
       valuesP(...arg0: string_t[]): Promise<GraphTraversal>;
-      valuesP(arg0: array_t<string_t>): GraphTraversal;
+      valuesP(arg0: array_t<string_t>): Promise<GraphTraversal>;
       // public default <E2> com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, java.util.Map<java.lang.String, E2>> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.where(java.lang.String,java.util.function.BiPredicate,java.lang.String)
       where(arg0: string_t, arg1: BiPredicate, arg2: string_t): GraphTraversal;
       whereP(arg0: string_t, arg1: BiPredicate, arg2: string_t): Promise<GraphTraversal>;
@@ -10167,7 +10175,7 @@ declare module Java {
       addVertex(...arg0: object_t[]): Vertex;
       addVertex(arg0: object_array_t): Vertex;
       addVertexP(...arg0: object_t[]): Promise<Vertex>;
-      addVertexP(arg0: object_array_t): Vertex;
+      addVertexP(arg0: object_array_t): Promise<Vertex>;
       // public default com.tinkerpop.gremlin.structure.Vertex com.tinkerpop.gremlin.structure.Graph.addVertex(java.lang.String)
       addVertex(arg0: string_t): Vertex;
       addVertexP(arg0: string_t): Promise<Vertex>;
@@ -10178,7 +10186,7 @@ declare module Java {
       compute(...arg0: Class[]): GraphComputer;
       compute(arg0: array_t<Class>): GraphComputer;
       computeP(...arg0: Class[]): Promise<GraphComputer>;
-      computeP(arg0: array_t<Class>): GraphComputer;
+      computeP(arg0: array_t<Class>): Promise<GraphComputer>;
       // public abstract org.apache.commons.configuration.Configuration com.tinkerpop.gremlin.structure.Graph.configuration()
       configuration(): object_t;
       configurationP(): Promise<object_t>;
@@ -10186,7 +10194,7 @@ declare module Java {
       E(...arg0: object_t[]): GraphTraversal;
       E(arg0: object_array_t): GraphTraversal;
       EP(...arg0: object_t[]): Promise<GraphTraversal>;
-      EP(arg0: object_array_t): GraphTraversal;
+      EP(arg0: object_array_t): Promise<GraphTraversal>;
       // public default com.tinkerpop.gremlin.structure.Graph$Features com.tinkerpop.gremlin.structure.Graph.features()
       features(): object_t;
       featuresP(): Promise<object_t>;
@@ -10203,7 +10211,7 @@ declare module Java {
       strategy(...arg0: GraphStrategy[]): StrategyGraph;
       strategy(arg0: array_t<GraphStrategy>): StrategyGraph;
       strategyP(...arg0: GraphStrategy[]): Promise<StrategyGraph>;
-      strategyP(arg0: array_t<GraphStrategy>): StrategyGraph;
+      strategyP(arg0: array_t<GraphStrategy>): Promise<StrategyGraph>;
       // public abstract com.tinkerpop.gremlin.structure.Transaction com.tinkerpop.gremlin.structure.Graph.tx()
       tx(): Transaction;
       txP(): Promise<Transaction>;
@@ -10211,7 +10219,7 @@ declare module Java {
       V(...arg0: object_t[]): GraphTraversal;
       V(arg0: object_array_t): GraphTraversal;
       VP(...arg0: object_t[]): Promise<GraphTraversal>;
-      VP(arg0: object_array_t): GraphTraversal;
+      VP(arg0: object_array_t): Promise<GraphTraversal>;
       // public abstract com.tinkerpop.gremlin.structure.Graph$Variables com.tinkerpop.gremlin.structure.Graph.variables()
       variables(): object_t;
       variablesP(): Promise<object_t>;
@@ -10690,7 +10698,7 @@ declare module Java {
       call(...arg0: object_t[]): object_t;
       call(arg0: object_array_t): object_t;
       callP(...arg0: object_t[]): Promise<object_t>;
-      callP(arg0: object_array_t): object_t;
+      callP(arg0: object_array_t): Promise<object_t>;
       // public V groovy.lang.Closure.call(java.lang.Object)
       call(arg0: object_t): object_t;
       callP(arg0: object_t): Promise<object_t>;
@@ -10704,7 +10712,7 @@ declare module Java {
       curry(...arg0: object_t[]): Closure;
       curry(arg0: object_array_t): Closure;
       curryP(...arg0: object_t[]): Promise<Closure>;
-      curryP(arg0: object_array_t): Closure;
+      curryP(arg0: object_array_t): Promise<Closure>;
       // public groovy.lang.Closure<V> groovy.lang.Closure.curry(java.lang.Object)
       curry(arg0: object_t): Closure;
       curryP(arg0: object_t): Promise<Closure>;
@@ -10775,7 +10783,7 @@ declare module Java {
       ncurry(arg0: integer_t, ...arg1: object_t[]): Closure;
       ncurry(arg0: integer_t, arg1: object_array_t): Closure;
       ncurryP(arg0: integer_t, ...arg1: object_t[]): Promise<Closure>;
-      ncurryP(arg0: integer_t, arg1: object_array_t): Closure;
+      ncurryP(arg0: integer_t, arg1: object_array_t): Promise<Closure>;
       // public groovy.lang.Closure<V> groovy.lang.Closure.ncurry(int,java.lang.Object)
       ncurry(arg0: integer_t, arg1: object_t): Closure;
       ncurryP(arg0: integer_t, arg1: object_t): Promise<Closure>;
@@ -10789,7 +10797,7 @@ declare module Java {
       rcurry(...arg0: object_t[]): Closure;
       rcurry(arg0: object_array_t): Closure;
       rcurryP(...arg0: object_t[]): Promise<Closure>;
-      rcurryP(arg0: object_array_t): Closure;
+      rcurryP(arg0: object_array_t): Promise<Closure>;
       // public groovy.lang.Closure<V> groovy.lang.Closure.rcurry(java.lang.Object)
       rcurry(arg0: object_t): Closure;
       rcurryP(arg0: object_t): Promise<Closure>;
@@ -10824,7 +10832,7 @@ declare module Java {
       trampoline(...arg0: object_t[]): Closure;
       trampoline(arg0: object_array_t): Closure;
       trampolineP(...arg0: object_t[]): Promise<Closure>;
-      trampolineP(arg0: object_array_t): Closure;
+      trampolineP(arg0: object_array_t): Promise<Closure>;
       // public groovy.lang.Closure<V> groovy.lang.Closure.trampoline()
       trampoline(): Closure;
       trampolineP(): Promise<Closure>;
@@ -11329,7 +11337,7 @@ declare module Java {
       addVertex(...arg0: object_t[]): Vertex;
       addVertex(arg0: object_array_t): Vertex;
       addVertexP(...arg0: object_t[]): Promise<Vertex>;
-      addVertexP(arg0: object_array_t): Vertex;
+      addVertexP(arg0: object_array_t): Promise<Vertex>;
       // public default com.tinkerpop.gremlin.structure.Vertex com.tinkerpop.gremlin.structure.Graph.addVertex(java.lang.String)
       addVertex(arg0: string_t): Vertex;
       addVertexP(arg0: string_t): Promise<Vertex>;
@@ -11343,7 +11351,7 @@ declare module Java {
       compute(...arg0: Class[]): GraphComputer;
       compute(arg0: array_t<Class>): GraphComputer;
       computeP(...arg0: Class[]): Promise<GraphComputer>;
-      computeP(arg0: array_t<Class>): GraphComputer;
+      computeP(arg0: array_t<Class>): Promise<GraphComputer>;
       // public org.apache.commons.configuration.Configuration com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.configuration()
       configuration(): object_t;
       configurationP(): Promise<object_t>;
@@ -11360,12 +11368,12 @@ declare module Java {
       E(...arg0: object_t[]): GraphTraversal;
       E(arg0: object_array_t): GraphTraversal;
       EP(...arg0: object_t[]): Promise<GraphTraversal>;
-      EP(arg0: object_array_t): GraphTraversal;
+      EP(arg0: object_array_t): Promise<GraphTraversal>;
       // public java.util.Iterator<com.tinkerpop.gremlin.structure.Edge> com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.edgeIterator(java.lang.Object...)
       edgeIterator(...arg0: object_t[]): Iterator;
       edgeIterator(arg0: object_array_t): Iterator;
       edgeIteratorP(...arg0: object_t[]): Promise<Iterator>;
-      edgeIteratorP(arg0: object_array_t): Iterator;
+      edgeIteratorP(arg0: object_array_t): Promise<Iterator>;
       // public boolean java.lang.Object.equals(java.lang.Object)
       equals(arg0: object_t): boolean;
       equalsP(arg0: object_t): Promise<boolean>;
@@ -11400,7 +11408,7 @@ declare module Java {
       strategy(...arg0: GraphStrategy[]): StrategyGraph;
       strategy(arg0: array_t<GraphStrategy>): StrategyGraph;
       strategyP(...arg0: GraphStrategy[]): Promise<StrategyGraph>;
-      strategyP(arg0: array_t<GraphStrategy>): StrategyGraph;
+      strategyP(arg0: array_t<GraphStrategy>): Promise<StrategyGraph>;
       // public java.lang.String com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.toString()
       toString(): string;
       toStringP(): Promise<string>;
@@ -11411,7 +11419,7 @@ declare module Java {
       V(...arg0: object_t[]): GraphTraversal;
       V(arg0: object_array_t): GraphTraversal;
       VP(...arg0: object_t[]): Promise<GraphTraversal>;
-      VP(arg0: object_array_t): GraphTraversal;
+      VP(arg0: object_array_t): Promise<GraphTraversal>;
       // public com.tinkerpop.gremlin.structure.Graph$Variables com.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.variables()
       variables(): object_t;
       variablesP(): Promise<object_t>;
@@ -11419,7 +11427,7 @@ declare module Java {
       vertexIterator(...arg0: object_t[]): Iterator;
       vertexIterator(arg0: object_array_t): Iterator;
       vertexIteratorP(...arg0: object_t[]): Promise<Iterator>;
-      vertexIteratorP(arg0: object_array_t): Iterator;
+      vertexIteratorP(arg0: object_array_t): Promise<Iterator>;
       // public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
       wait(arg0: long_t, arg1: integer_t): void;
       waitP(arg0: long_t, arg1: integer_t): Promise<void>;
