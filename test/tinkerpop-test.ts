@@ -296,7 +296,7 @@ describe('Gremlin', (): void => {
 
     it('TP.asJSON(vertices) with simplifyVertex', (): void => {
       var traversal = graph.V().has('lang', TP.Compare.eq, 'java');
-      var json: any = TP.simplifyVertexProperties(TP.asJSON(traversal));
+      var json: any[] = TP.simplifyVertexProperties(TP.asJSON(traversal));
       var expected = [
         {
           id: 3,

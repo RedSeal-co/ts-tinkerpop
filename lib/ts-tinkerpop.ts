@@ -278,11 +278,15 @@ module Tinkerpop {
   // #### `function simplifyVertexProperties(obj: any)`
   // Given *obj* which is a javascript object created by asJSON(),
   // return a simpler representation of the object that is more convenient for unit tests.
+  // - If an array is provided, each of its elements will be simplified.
+  export function simplifyVertexProperties(obj: any[]): any[];
+  export function simplifyVertexProperties(obj: any): any;
   export function simplifyVertexProperties(obj: any): any {
     if (_.isArray(obj)) {
       return _.map(obj, simplifyVertexProperties);
     }
-
+    assert('type' in obj);
+    assert.strictEqual(obj.type, 'vertex');
     obj.properties = _.mapValues(obj.properties, (propValue: any) => {
       var values = _.pluck(propValue, 'value');
       return (values.length === 1) ? values[0] : values;
