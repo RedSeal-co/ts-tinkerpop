@@ -270,7 +270,7 @@ module Tinkerpop {
 
   // #### `function asJSON(traversal: Java.Traversal)`
   // Executes a traversal (synchronously!), returning a json object for all of the returned objects.
-  export function asJSON(traversal: Java.Traversal): any {
+  export function asJSON(traversal: Java.Traversal): any[] {
     var array: any[] = traversal.toList().toArray().map((elem: any) => _asJSON(elem));
     return JSON.parse(JSON.stringify(array));
   };

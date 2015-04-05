@@ -268,7 +268,7 @@ describe('Gremlin', (): void => {
 
     it('TP.asJSON(vertices)', (): void => {
       var traversal = graph.V().has('lang', TP.Compare.eq, 'java');
-      var json: any = TP.asJSON(traversal);
+      var json: any[] = TP.asJSON(traversal);
       var expected = [
         {
           id: 3,
@@ -324,7 +324,7 @@ describe('Gremlin', (): void => {
 
     it('TP.asJSON(edges)', (): void => {
       var traversal = graph.E().has('weight', TP.Compare.eq, TP.java.newFloat(1.0));
-      var json: any = TP.asJSON(traversal);
+      var json: any[] = TP.asJSON(traversal);
       var expected = [
         {
           inV: 4,
