@@ -270,7 +270,7 @@ module Tinkerpop {
 
   // #### `function asJSON(traversal: Java.Traversal)`
   // Executes a traversal (synchronously!), returning a json object for all of the returned objects.
-  export function asJSON(traversal: Java.Traversal): any {
+  export function asJSON(traversal: Java.Traversal): any[] {
     var array: any[] = traversal.toList().toArray().map((elem: any) => _asJSON(elem));
     return JSON.parse(JSON.stringify(array));
   };
@@ -278,11 +278,15 @@ module Tinkerpop {
   // #### `function simplifyVertexProperties(obj: any)`
   // Given *obj* which is a javascript object created by asJSON(),
   // return a simpler representation of the object that is more convenient for unit tests.
+  // - If an array is provided, each of its elements will be simplified.
+  export function simplifyVertexProperties(obj: any[]): any[];
+  export function simplifyVertexProperties(obj: any): any;
   export function simplifyVertexProperties(obj: any): any {
     if (_.isArray(obj)) {
       return _.map(obj, simplifyVertexProperties);
     }
-
+    assert('type' in obj);
+    assert.strictEqual(obj.type, 'vertex');
     obj.properties = _.mapValues(obj.properties, (propValue: any) => {
       var values = _.pluck(propValue, 'value');
       return (values.length === 1) ? values[0] : values;
@@ -446,8 +450,10 @@ module Tinkerpop {
   };
 
   // #### `function _asJSON(elem: any)`
-  // A utility function used by `asJSONSync`.
-  function _asJSON(elem: any): any {
+  // A utility function used by `asJSON`.
+  function _asJSON(rawElem: any): any {
+    var elem: any = jsify(rawElem);
+
     if (!_.isObject(elem)) {
       // Scalars should stay that way.
       return elem;
