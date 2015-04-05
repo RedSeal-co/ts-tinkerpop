@@ -350,7 +350,48 @@ describe('Gremlin', (): void => {
       expect(json).to.deep.equal(expected);
     });
 
+    it('TP.asJSON(maps)', (): void => {
+      var traversal = graph.V().as('a').out().as('b').select().by(TP.T.id);
+      var json: any[] = TP.asJSON(traversal);
+      var expected: any[] = [
+        { a: 1, b: 2 },
+        { a: 1, b: 3 },
+        { a: 1, b: 4 },
+        { a: 4, b: 3 },
+        { a: 4, b: 5 },
+        { a: 6, b: 3 },
+      ];
+      expect(sortByAll(json, ['a', 'b'])).to.deep.equal(expected);
+    });
 
+    it('TP.asJSON(map of vertices)', (): void => {
+      var traversal = graph.V(1).as('a').out().has(TP.T.id, 2).as('b').select();
+      var json: any[] = TP.asJSON(traversal);
+      var simplified: any[] = _.map(json, (map: any): any => _.mapValues(map, TP.simplifyVertexProperties));
+      var expected: any[] = [
+        {
+          a: {
+            id: 1,
+            label: 'vertex',
+            type: 'vertex',
+            properties: {
+              name: 'marko',
+              age: 29
+            }
+          },
+          b: {
+            id: 2,
+            label: 'vertex',
+            type: 'vertex',
+            properties: {
+              name: 'vadas',
+              age: 27
+            }
+          }
+        }
+      ];
+      expect(json).to.deep.equal(expected);
+    });
 
   });
 

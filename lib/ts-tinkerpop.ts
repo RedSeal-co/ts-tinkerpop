@@ -450,8 +450,10 @@ module Tinkerpop {
   };
 
   // #### `function _asJSON(elem: any)`
-  // A utility function used by `asJSONSync`.
-  function _asJSON(elem: any): any {
+  // A utility function used by `asJSON`.
+  function _asJSON(rawElem: any): any {
+    var elem: any = jsify(rawElem);
+
     if (!_.isObject(elem)) {
       // Scalars should stay that way.
       return elem;
