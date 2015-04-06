@@ -418,7 +418,9 @@ module Tinkerpop {
   // - Map: any
   // - BulkSet: BulkSetElement[]
   export function jsify(arg: any): any {
-    if (!_.isObject(arg)) {
+    if (_.isArray(arg)) {
+      return _.map(arg, jsify);
+    } else if (!_.isObject(arg)) {
       return arg;
     }
 

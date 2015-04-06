@@ -523,6 +523,20 @@ describe('jsify', function () {
         expect(_.isArray(jsArray)).to.be.true;
         expect(jsArray).to.deep.equal(['one', 'two', 'three', ['nested', 'list']]);
     });
+    it('recurses into a Java array', function () {
+        var ArrayList = TP.autoImport('ArrayList');
+        var javaList = new ArrayList();
+        javaList.add('one');
+        javaList.add('two');
+        javaList.add('three');
+        var nestedList = new ArrayList();
+        nestedList.add('nested');
+        nestedList.add('list');
+        javaList.add(nestedList);
+        var jsArray = TP.jsify(javaList.toArray());
+        expect(_.isArray(jsArray)).to.be.true;
+        expect(jsArray).to.deep.equal(['one', 'two', 'three', ['nested', 'list']]);
+    });
     it('converts Java Map to JS object', function () {
         var HashMap = TP.autoImport('HashMap');
         var javaMap = new HashMap();

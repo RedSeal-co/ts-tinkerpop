@@ -661,6 +661,23 @@ describe('jsify', (): void => {
     expect(jsArray).to.deep.equal(['one', 'two', 'three', ['nested', 'list']]);
   });
 
+  it('recurses into a Java array', (): void => {
+    var ArrayList: Java.ArrayList.Static = TP.autoImport('ArrayList');
+    var javaList: Java.List = new ArrayList();
+    javaList.add('one');
+    javaList.add('two');
+    javaList.add('three');
+
+    var nestedList: Java.List = new ArrayList();
+    nestedList.add('nested');
+    nestedList.add('list');
+    javaList.add(nestedList)
+
+    var jsArray: string[] = TP.jsify(javaList.toArray());
+    expect(_.isArray(jsArray)).to.be.true;
+    expect(jsArray).to.deep.equal(['one', 'two', 'three', ['nested', 'list']]);
+  });
+
   it('converts Java Map to JS object', (): void => {
     var HashMap: Java.HashMap.Static = TP.autoImport('HashMap');
     var javaMap: Java.HashMap = new HashMap();
