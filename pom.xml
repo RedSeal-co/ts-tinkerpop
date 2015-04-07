@@ -11,12 +11,17 @@
 
   <properties>
     <junit.version>4.11</junit.version>
-    <gremlin.version>3.0.0-SNAPSHOT</gremlin.version>
+    <gremlin.version>3.0.0.M8</gremlin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <!-- Point to the RedSeal Artifactory snapshot repo, so that we don't depend on Apache snapshots -->
   <repositories>
+    <repository>
+      <id>redseal-artifactory-releases</id>
+      <name>RedSeal Artifactory Releases</name>
+      <url>http://artifactory.lab.redseal.net:8081/artifactory/libs-release</url>
+    </repository>
     <repository>
       <snapshots />
       <id>redseal-artifactory-snapshots</id>
@@ -28,19 +33,19 @@
   <dependencies>
 
     <dependency>
-      <groupId>com.tinkerpop</groupId>
+      <groupId>org.apache.tinkerpop</groupId>
       <artifactId>gremlin-core</artifactId>
       <version>${gremlin.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>com.tinkerpop</groupId>
+      <groupId>org.apache.tinkerpop</groupId>
       <artifactId>gremlin-groovy</artifactId>
       <version>${gremlin.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>com.tinkerpop</groupId>
+      <groupId>org.apache.tinkerpop</groupId>
       <artifactId>tinkergraph-gremlin</artifactId>
       <version>${gremlin.version}</version>
     </dependency>
