@@ -197,6 +197,12 @@ describe('Gremlin', function () {
                 return BluePromise.resolve();
             });
         });
+        it('TP.asJSON(long)', function () {
+            var traversal = graph.V().count();
+            var json = TP.asJSON(traversal);
+            var expected = ['6'];
+            expect(json).to.deep.equal(expected);
+        });
         it('TP.asJSON(vertices)', function () {
             var traversal = graph.V().has('lang', TP.Compare.eq, 'java');
             var json = TP.asJSON(traversal);
@@ -604,6 +610,12 @@ describe('isType', function () {
     });
 });
 describe('jsify', function () {
+    it('converts Java long to JS string', function () {
+        var javaLong = L(123);
+        var jsLong = TP.jsify(javaLong);
+        expect(jsLong).to.deep.equal('123');
+        expect(TP.isJavaObject(jsLong), 'JS long representation should not be a Java object').to.be.false;
+    });
     it('converts Java List to JS array', function () {
         var ArrayList = TP.autoImport('ArrayList');
         var javaList = new ArrayList();

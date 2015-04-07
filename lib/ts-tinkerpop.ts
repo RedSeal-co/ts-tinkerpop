@@ -434,9 +434,10 @@ module Tinkerpop {
       return _.map(arg, jsify);
     } else if (!_.isObject(arg)) {
       return arg;
-    }
-
-    if (isType(arg, 'java.util.List')) {
+    } else if (isLongValue(arg)) {
+      // Represent longValue_t as string
+      return arg.longValue;
+    } else if (isType(arg, 'java.util.List')) {
       return _jsifyList(<Java.List> arg);
     } else if (isType(arg, 'java.util.Map')) {
       return _jsifyMap(<Java.Map> arg);

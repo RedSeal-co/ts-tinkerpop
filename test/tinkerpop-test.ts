@@ -267,6 +267,13 @@ describe('Gremlin', (): void => {
       });
     });
 
+    it('TP.asJSON(long)', (): void => {
+      var traversal = graph.V().count();
+      var json: any[] = TP.asJSON(traversal);
+      var expected = [ '6' ];
+      expect(json).to.deep.equal(expected);
+    });
+
     it('TP.asJSON(vertices)', (): void => {
       var traversal = graph.V().has('lang', TP.Compare.eq, 'java');
       var json: any[] = TP.asJSON(traversal);
@@ -744,6 +751,13 @@ describe('isType', (): void => {
 });
 
 describe('jsify', (): void => {
+
+  it('converts Java long to JS string', (): void => {
+    var javaLong: Java.longValue_t = L(123);
+    var jsLong: any = TP.jsify(javaLong);
+    expect(jsLong).to.deep.equal('123');
+    expect(TP.isJavaObject(jsLong), 'JS long representation should not be a Java object').to.be.false;
+  });
 
   it('converts Java List to JS array', (): void => {
     var ArrayList: Java.ArrayList.Static = TP.autoImport('ArrayList');
