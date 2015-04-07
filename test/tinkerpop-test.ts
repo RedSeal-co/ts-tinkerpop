@@ -404,8 +404,8 @@ describe('Gremlin', (): void => {
     it('TP.asJSON(map entries)', (): void => {
       var traversal = graph.traversal().V().as('v')
         .values('name').as('name')
-        .back('v').out().groupCount().by(TP.__.back('name'))
-        .cap()
+        .back('v').out().groupCount('c').by(TP.__.back('name'))
+        .cap('c')
         .unfold();
 
       dlog(TP.jsify((<any>traversal.asAdmin()).clone().toList()));

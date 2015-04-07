@@ -322,7 +322,7 @@ describe('Gremlin', function () {
             expect(json).to.deep.equal(expected);
         });
         it('TP.asJSON(map entries)', function () {
-            var traversal = graph.traversal().V().as('v').values('name').as('name').back('v').out().groupCount().by(TP.__.back('name')).cap().unfold();
+            var traversal = graph.traversal().V().as('v').values('name').as('name').back('v').out().groupCount('c').by(TP.__.back('name')).cap('c').unfold();
             dlog(TP.jsify(traversal.asAdmin().clone().toList()));
             var json = TP.asJSON(traversal);
             var expected = [
