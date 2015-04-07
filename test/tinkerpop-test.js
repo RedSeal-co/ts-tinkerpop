@@ -17,6 +17,7 @@ var fs = require('fs');
 var tmp = require('tmp');
 var TP = require('../lib/ts-tinkerpop');
 var expect = chai.expect;
+var L = TP.L;
 var dlog = debug('ts-tinkerpop:test');
 var sortByAll = _.sortByAll;
 before(function (done) {
@@ -362,6 +363,46 @@ describe('Groovy support', function () {
         expect(function () { return TP.newGroovyLambda('new TestClass()').get(); }).to.throw(/unable to resolve class TestClass/);
     });
 });
+describe('isLongValue', function () {
+    it('returns false on JS scalar types', function () {
+        var scalars = [
+            undefined,
+            null,
+            0,
+            1,
+            2,
+            0.0,
+            1.1,
+            2.2,
+            'one',
+            'two',
+            'three',
+            true,
+            false,
+        ];
+        _.forEach(scalars, function (scalar) { return expect(TP.isLongValue(scalar), scalar).to.be.false; });
+    });
+    it('returns false on Number', function () {
+        expect(TP.isLongValue(new Number(123))).to.be.false;
+    });
+    it('returns false on Number subtype that has additional fields', function () {
+        var hybrid = new Number(123);
+        hybrid.longValue = '123';
+        hybrid.reverse = '321';
+        expect(TP.isLongValue(hybrid)).to.be.false;
+    });
+    it('returns true on L literal', function () {
+        expect(TP.isLongValue(L(123))).to.be.true;
+    });
+    it('returns true on hand-crafted longValue_t', function () {
+        var fake = new Number(123);
+        fake.longValue = '123';
+        expect(TP.isLongValue(fake)).to.be.true;
+    });
+    it('returns false on Java Long', function () {
+        expect(TP.isLongValue(TP.java.newLong(123))).to.be.false;
+    });
+});
 describe('GraphSON support', function () {
     var g;
     beforeEach(function (done) {
@@ -560,10 +601,6 @@ describe('jsify', function () {
         expect(_.isArray(actual)).to.be.true;
         actual = sortByAll(actual, ['key']);
         dlog('actual:', actual);
-        // TODO: Add this to ts-tinkerpop
-        function L(n) {
-            return TP.java.newLong(n).longValue();
-        }
         var expected = [
             { key: 'one', count: L(1) },
             { key: 'two', count: L(2) },

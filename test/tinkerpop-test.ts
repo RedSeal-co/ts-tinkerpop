@@ -23,6 +23,7 @@ import TP = require('../lib/ts-tinkerpop');
 import util = require('util');
 
 import expect = chai.expect;
+import L = TP.L;
 
 var dlog = debug('ts-tinkerpop:test');
 
@@ -458,6 +459,48 @@ describe('Groovy support', (): void => {
 
 });
 
+describe('isLongValue', () => {
+
+  it('returns false on JS scalar types', () => {
+    var scalars: any[] = [
+      undefined,
+      null,
+      0, 1, 2,
+      0.0, 1.1, 2.2,
+      'one', 'two', 'three',
+      true, false,
+    ];
+
+    _.forEach(scalars, (scalar: any) => expect(TP.isLongValue(scalar), scalar).to.be.false);
+  });
+
+  it('returns false on Number', () => {
+    expect(TP.isLongValue(new Number(123))).to.be.false;
+  });
+
+  it('returns false on Number subtype that has additional fields', () => {
+    var hybrid: any = new Number(123);
+    hybrid.longValue = '123';
+    hybrid.reverse = '321';
+    expect(TP.isLongValue(hybrid)).to.be.false;
+  });
+
+  it('returns true on L literal', () => {
+    expect(TP.isLongValue(L(123))).to.be.true;
+  });
+
+  it('returns true on hand-crafted longValue_t', () => {
+    var fake: any = new Number(123);
+    fake.longValue = '123';
+    expect(TP.isLongValue(fake)).to.be.true;
+  });
+
+  it('returns false on Java Long', () => {
+    expect(TP.isLongValue(TP.java.newLong(123))).to.be.false;
+  });
+
+});
+
 describe('GraphSON support', () => {
 
   var g: Java.Graph;
@@ -705,11 +748,6 @@ describe('jsify', (): void => {
     expect(_.isArray(actual)).to.be.true;
     actual = sortByAll(actual, ['key']);
     dlog('actual:', actual);
-
-    // TODO: Add this to ts-tinkerpop
-    function L(n: number): Java.longValue_t {
-      return TP.java.newLong(n).longValue();
-    }
 
     var expected: any[] = [
       { key: 'one', count: L(1) },

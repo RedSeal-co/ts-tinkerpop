@@ -187,6 +187,18 @@ module Tinkerpop {
     return JSON.parse(edgeStringify(edge));
   };
 
+  // ### `function L(n: number)`
+  // Produce a longValue_t literal.
+  export function L(n: number): Java.longValue_t {
+    return java.newLong(n).longValue();
+  }
+
+  // ### `function isLongValue(e: any)`
+  // Checks whether an object is a longValue_t, which is the representation of Java long primitives.
+  export function isLongValue(obj: any): boolean {
+    return _.isObject(obj) && obj instanceof Number && 'longValue' in obj && _.keys(obj).length == 1;
+  }
+
   // #### `function isJavaObject(e: any)`
   // Returns true if the obj is a Java object.
   // Useful for determining the runtime type of object_t returned by many java methods.
