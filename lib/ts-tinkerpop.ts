@@ -452,14 +452,14 @@ module Tinkerpop {
   }
 
   // ### `interface MapEntry`
-  interface MapEntry {
+  export interface MapEntry {
     key: any;
     value: any;
   }
 
   // ### `interface BulkSetElement`
   // Element of a jsify-ed BulkSet.
-  interface BulkSetElement {
+  export interface BulkSetElement {
     key: string;
     count: Java.longValue_t;
   }
