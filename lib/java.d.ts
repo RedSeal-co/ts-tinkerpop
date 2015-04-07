@@ -153,6 +153,7 @@ declare module Java {
     newArray(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyGraph', arg: StrategyGraph[]): array_t<com.tinkerpop.gremlin.structure.strategy.StrategyGraph>;
     newArray(className: 'java.lang.Enum', arg: Enum[]): array_t<java.lang.Enum>;
     newArray(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyContext', arg: StrategyContext[]): array_t<com.tinkerpop.gremlin.structure.strategy.StrategyContext>;
+    newArray(className: 'java.util.LinkedHashMap', arg: LinkedHashMap[]): array_t<java.util.LinkedHashMap>;
     newArray(className: 'java.util.function.BiFunction', arg: BiFunction[]): array_t<java.util.function_.BiFunction>;
     newArray(className: 'java.io.ByteArrayOutputStream', arg: ByteArrayOutputStream[]): array_t<java.io.ByteArrayOutputStream>;
     newArray(className: 'groovy.lang.GroovyCodeSource', arg: GroovyCodeSource[]): array_t<groovy.lang.GroovyCodeSource>;
@@ -266,6 +267,7 @@ declare module Java {
     import(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyGraph'): com.tinkerpop.gremlin.structure.strategy.StrategyGraph.Static;
     import(className: 'java.lang.Enum'): java.lang.Enum.Static;
     import(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyContext'): com.tinkerpop.gremlin.structure.strategy.StrategyContext.Static;
+    import(className: 'java.util.LinkedHashMap'): java.util.LinkedHashMap.Static;
     import(className: 'java.util.function.BiFunction'): java.util.function_.BiFunction.Static;
     import(className: 'java.io.ByteArrayOutputStream'): java.io.ByteArrayOutputStream.Static;
     import(className: 'groovy.lang.GroovyCodeSource'): groovy.lang.GroovyCodeSource.Static;
@@ -386,6 +388,11 @@ declare module Java {
     newInstance(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyGraph', arg0: Graph, arg1: GraphStrategy, cb: Callback<StrategyGraph>): void;
     newInstance(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyGraph', arg0: Graph, cb: Callback<StrategyGraph>): void;
     newInstance(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyContext', arg0: StrategyGraph, arg1: object_t, cb: Callback<StrategyContext>): void;
+    newInstance(className: 'java.util.LinkedHashMap', arg0: integer_t, arg1: float_t, arg2: boolean_t, cb: Callback<LinkedHashMap>): void;
+    newInstance(className: 'java.util.LinkedHashMap', arg0: integer_t, arg1: float_t, cb: Callback<LinkedHashMap>): void;
+    newInstance(className: 'java.util.LinkedHashMap', arg0: Map, cb: Callback<LinkedHashMap>): void;
+    newInstance(className: 'java.util.LinkedHashMap', arg0: integer_t, cb: Callback<LinkedHashMap>): void;
+    newInstance(className: 'java.util.LinkedHashMap', cb: Callback<LinkedHashMap>): void;
     newInstance(className: 'java.io.ByteArrayOutputStream', arg0: integer_t, cb: Callback<ByteArrayOutputStream>): void;
     newInstance(className: 'java.io.ByteArrayOutputStream', cb: Callback<ByteArrayOutputStream>): void;
     newInstance(className: 'groovy.lang.GroovyCodeSource', arg0: string_t, arg1: string_t, arg2: string_t, cb: Callback<GroovyCodeSource>): void;
@@ -505,6 +512,11 @@ declare module Java {
     newInstanceSync(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyGraph', arg0: Graph, arg1: GraphStrategy): StrategyGraph;
     newInstanceSync(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyGraph', arg0: Graph): StrategyGraph;
     newInstanceSync(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyContext', arg0: StrategyGraph, arg1: object_t): StrategyContext;
+    newInstanceSync(className: 'java.util.LinkedHashMap', arg0: integer_t, arg1: float_t, arg2: boolean_t): LinkedHashMap;
+    newInstanceSync(className: 'java.util.LinkedHashMap', arg0: integer_t, arg1: float_t): LinkedHashMap;
+    newInstanceSync(className: 'java.util.LinkedHashMap', arg0: Map): LinkedHashMap;
+    newInstanceSync(className: 'java.util.LinkedHashMap', arg0: integer_t): LinkedHashMap;
+    newInstanceSync(className: 'java.util.LinkedHashMap'): LinkedHashMap;
     newInstanceSync(className: 'java.io.ByteArrayOutputStream', arg0: integer_t): ByteArrayOutputStream;
     newInstanceSync(className: 'java.io.ByteArrayOutputStream'): ByteArrayOutputStream;
     newInstanceSync(className: 'groovy.lang.GroovyCodeSource', arg0: string_t, arg1: string_t, arg2: string_t): GroovyCodeSource;
@@ -624,6 +636,11 @@ declare module Java {
     newInstancePromise(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyGraph', arg0: Graph, arg1: GraphStrategy): Promise<StrategyGraph>;
     newInstancePromise(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyGraph', arg0: Graph): Promise<StrategyGraph>;
     newInstancePromise(className: 'com.tinkerpop.gremlin.structure.strategy.StrategyContext', arg0: StrategyGraph, arg1: object_t): Promise<StrategyContext>;
+    newInstancePromise(className: 'java.util.LinkedHashMap', arg0: integer_t, arg1: float_t, arg2: boolean_t): Promise<LinkedHashMap>;
+    newInstancePromise(className: 'java.util.LinkedHashMap', arg0: integer_t, arg1: float_t): Promise<LinkedHashMap>;
+    newInstancePromise(className: 'java.util.LinkedHashMap', arg0: Map): Promise<LinkedHashMap>;
+    newInstancePromise(className: 'java.util.LinkedHashMap', arg0: integer_t): Promise<LinkedHashMap>;
+    newInstancePromise(className: 'java.util.LinkedHashMap'): Promise<LinkedHashMap>;
     newInstancePromise(className: 'java.io.ByteArrayOutputStream', arg0: integer_t): Promise<ByteArrayOutputStream>;
     newInstancePromise(className: 'java.io.ByteArrayOutputStream'): Promise<ByteArrayOutputStream>;
     newInstancePromise(className: 'groovy.lang.GroovyCodeSource', arg0: string_t, arg1: string_t, arg2: string_t): Promise<GroovyCodeSource>;
@@ -737,6 +754,7 @@ declare module Java {
   export import StrategyGraph = com.tinkerpop.gremlin.structure.strategy.StrategyGraph;
   export import Enum = java.lang.Enum;
   export import StrategyContext = com.tinkerpop.gremlin.structure.strategy.StrategyContext;
+  export import LinkedHashMap = java.util.LinkedHashMap;
   export import BiFunction = java.util.function_.BiFunction;
   export import ByteArrayOutputStream = java.io.ByteArrayOutputStream;
   export import GroovyCodeSource = groovy.lang.GroovyCodeSource;
@@ -4389,10 +4407,10 @@ declare module Java {
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.range(long,long)
       range(arg0: long_t, arg1: long_t): GraphTraversal;
       rangeP(arg0: long_t, arg1: long_t): Promise<GraphTraversal>;
-      // public abstract void com.tinkerpop.gremlin.structure.Property.remove()
+      // public abstract void com.tinkerpop.gremlin.structure.Element.remove()
       remove(): void;
       removeP(): Promise<void>;
-      // public abstract void com.tinkerpop.gremlin.structure.Element.remove()
+      // public abstract void com.tinkerpop.gremlin.structure.Property.remove()
       remove(): void;
       removeP(): Promise<void>;
       // public default com.tinkerpop.gremlin.process.graph.traversal.GraphTraversal<A, A> com.tinkerpop.gremlin.process.graph.traversal.ElementTraversal.repeat(com.tinkerpop.gremlin.process.Traversal<?, A>)
@@ -7680,6 +7698,119 @@ declare module Java {
     export module StrategyContext {
       export interface Static {
         new (arg0: StrategyGraph, arg1: object_t): com.tinkerpop.gremlin.structure.strategy.StrategyContext;
+      }
+    }
+  }
+
+  export module java.util {
+    export interface LinkedHashMap extends Java.java.util.HashMap,Java.java.util.Map {
+      // public void java.util.LinkedHashMap.clear()
+      clear(): void;
+      clearP(): Promise<void>;
+      // public java.lang.Object java.util.HashMap.clone()
+      clone(): object_t;
+      cloneP(): Promise<object_t>;
+      // public V java.util.HashMap.compute(K,java.util.function.BiFunction<? super K, ? super V, ? extends V>)
+      compute(arg0: object_t, arg1: BiFunction): object_t;
+      computeP(arg0: object_t, arg1: BiFunction): Promise<object_t>;
+      // public V java.util.HashMap.computeIfAbsent(K,java.util.function.Function<? super K, ? extends V>)
+      computeIfAbsent(arg0: object_t, arg1: Function): object_t;
+      computeIfAbsentP(arg0: object_t, arg1: Function): Promise<object_t>;
+      // public V java.util.HashMap.computeIfPresent(K,java.util.function.BiFunction<? super K, ? super V, ? extends V>)
+      computeIfPresent(arg0: object_t, arg1: BiFunction): object_t;
+      computeIfPresentP(arg0: object_t, arg1: BiFunction): Promise<object_t>;
+      // public boolean java.util.HashMap.containsKey(java.lang.Object)
+      containsKey(arg0: object_t): boolean;
+      containsKeyP(arg0: object_t): Promise<boolean>;
+      // public boolean java.util.LinkedHashMap.containsValue(java.lang.Object)
+      containsValue(arg0: object_t): boolean;
+      containsValueP(arg0: object_t): Promise<boolean>;
+      // public java.util.Set<java.util.Map.java.util.Map$Entry<K, V>> java.util.LinkedHashMap.entrySet()
+      entrySet(): Set;
+      entrySetP(): Promise<Set>;
+      // public boolean java.util.AbstractMap.equals(java.lang.Object)
+      equals(arg0: object_t): boolean;
+      equalsP(arg0: object_t): Promise<boolean>;
+      // public void java.util.LinkedHashMap.forEach(java.util.function.BiConsumer<? super K, ? super V>)
+      forEach(arg0: BiConsumer): void;
+      forEachP(arg0: BiConsumer): Promise<void>;
+      // public V java.util.LinkedHashMap.get(java.lang.Object)
+      get(arg0: object_t): object_t;
+      getP(arg0: object_t): Promise<object_t>;
+      // public final native java.lang.Class<?> java.lang.Object.getClass()
+      getClass(): Class;
+      getClassP(): Promise<Class>;
+      // public V java.util.LinkedHashMap.getOrDefault(java.lang.Object,V)
+      getOrDefault(arg0: object_t, arg1: object_t): object_t;
+      getOrDefaultP(arg0: object_t, arg1: object_t): Promise<object_t>;
+      // public int java.util.AbstractMap.hashCode()
+      hashCode(): number;
+      hashCodeP(): Promise<number>;
+      // public boolean java.util.HashMap.isEmpty()
+      isEmpty(): boolean;
+      isEmptyP(): Promise<boolean>;
+      // public java.util.Set<K> java.util.LinkedHashMap.keySet()
+      keySet(): Set;
+      keySetP(): Promise<Set>;
+      // public V java.util.HashMap.merge(K,V,java.util.function.BiFunction<? super V, ? super V, ? extends V>)
+      merge(arg0: object_t, arg1: object_t, arg2: BiFunction): object_t;
+      mergeP(arg0: object_t, arg1: object_t, arg2: BiFunction): Promise<object_t>;
+      // public final native void java.lang.Object.notify()
+      notify(): void;
+      notifyP(): Promise<void>;
+      // public final native void java.lang.Object.notifyAll()
+      notifyAll(): void;
+      notifyAllP(): Promise<void>;
+      // public V java.util.HashMap.put(K,V)
+      put(arg0: object_t, arg1: object_t): object_t;
+      putP(arg0: object_t, arg1: object_t): Promise<object_t>;
+      // public void java.util.HashMap.putAll(java.util.Map<? extends K, ? extends V>)
+      putAll(arg0: Map): void;
+      putAllP(arg0: Map): Promise<void>;
+      // public V java.util.HashMap.putIfAbsent(K,V)
+      putIfAbsent(arg0: object_t, arg1: object_t): object_t;
+      putIfAbsentP(arg0: object_t, arg1: object_t): Promise<object_t>;
+      // public boolean java.util.HashMap.remove(java.lang.Object,java.lang.Object)
+      remove(arg0: object_t, arg1: object_t): boolean;
+      removeP(arg0: object_t, arg1: object_t): Promise<boolean>;
+      // public V java.util.HashMap.remove(java.lang.Object)
+      remove(arg0: object_t): object_t;
+      removeP(arg0: object_t): Promise<object_t>;
+      // public boolean java.util.HashMap.replace(K,V,V)
+      replace(arg0: object_t, arg1: object_t, arg2: object_t): boolean;
+      replaceP(arg0: object_t, arg1: object_t, arg2: object_t): Promise<boolean>;
+      // public V java.util.HashMap.replace(K,V)
+      replace(arg0: object_t, arg1: object_t): object_t;
+      replaceP(arg0: object_t, arg1: object_t): Promise<object_t>;
+      // public void java.util.LinkedHashMap.replaceAll(java.util.function.BiFunction<? super K, ? super V, ? extends V>)
+      replaceAll(arg0: BiFunction): void;
+      replaceAllP(arg0: BiFunction): Promise<void>;
+      // public int java.util.HashMap.size()
+      size(): number;
+      sizeP(): Promise<number>;
+      // public java.lang.String java.util.AbstractMap.toString()
+      toString(): string;
+      toStringP(): Promise<string>;
+      // public java.util.Collection<V> java.util.LinkedHashMap.values()
+      values(): Collection;
+      valuesP(): Promise<Collection>;
+      // public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
+      wait(arg0: long_t, arg1: integer_t): void;
+      waitP(arg0: long_t, arg1: integer_t): Promise<void>;
+      // public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
+      wait(arg0: long_t): void;
+      waitP(arg0: long_t): Promise<void>;
+      // public final void java.lang.Object.wait() throws java.lang.InterruptedException
+      wait(): void;
+      waitP(): Promise<void>;
+    }
+    export module LinkedHashMap {
+      export interface Static {
+        new (arg0: integer_t, arg1: float_t, arg2: boolean_t): java.util.LinkedHashMap;
+        new (arg0: integer_t, arg1: float_t): java.util.LinkedHashMap;
+        new (arg0: Map): java.util.LinkedHashMap;
+        new (arg0: integer_t): java.util.LinkedHashMap;
+        new (): java.util.LinkedHashMap;
       }
     }
   }

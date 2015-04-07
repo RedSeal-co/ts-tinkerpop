@@ -130,6 +130,7 @@
       "java.util.HashMap",
       "java.util.HashSet",
       "java.util.Iterator",
+      "java.util.LinkedHashMap",
       "java.util.List",
       "java.util.ListIterator",
       "java.util.Map",
