@@ -1,13 +1,13 @@
 package co.redseal.gremlinnode.traversal;
 
 import co.redseal.gremlinnode.function.GroovyLambda;
-import com.tinkerpop.gremlin.process.T;
-import com.tinkerpop.gremlin.process.Traversal;
-import com.tinkerpop.gremlin.process.graph.traversal.__;
-import com.tinkerpop.gremlin.process.util.MapHelper;
-import com.tinkerpop.gremlin.structure.Graph;
-import com.tinkerpop.gremlin.structure.Vertex;
-import com.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory;
+import org.apache.tinkerpop.gremlin.process.traversal.T;
+import org.apache.tinkerpop.gremlin.process.traversal.Traversal;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.MapHelper;
+import org.apache.tinkerpop.gremlin.structure.Graph;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,9 +38,10 @@ public class ChooseTest {
     @Test
     public void trivialChoosePredicateWorks() {
         final Traversal<Vertex, String> traversal =
-            graph.V().choose(v -> false,
-                             __.inject("foo"),
-                             __.inject("bar"));
+            graph.traversal()
+            .V().choose(v -> false,
+                        __.inject("foo"),
+                        __.inject("bar"));
 
         Map<String, Long> counts = new HashMap<>();
         int counter = 0;
@@ -73,7 +74,8 @@ public class ChooseTest {
     @Test
     public void simpleChoosePredicateWorks() {
         final Traversal<Vertex, String> traversal =
-            graph.V()
+            graph.traversal()
+            .V()
             .choose(v -> v.<String>value("name").length() == 5,
                    __.out(),
                    __.in())
@@ -102,7 +104,8 @@ public class ChooseTest {
     @Test
     public void simpleChooseFunctionWorks() {
         final Traversal<Vertex, String> traversal =
-            graph.V()
+            graph.traversal()
+            .V()
             .has("age")
             .choose(v -> v.<String>value("name").length())
             .option(5, __.in())
@@ -140,7 +143,8 @@ public class ChooseTest {
         }
 
         final Traversal<Vertex, String> traversal =
-            graph.V()
+            graph.traversal()
+            .V()
             .has("age")
             .choose(lambda)
             .option(5, __.in())

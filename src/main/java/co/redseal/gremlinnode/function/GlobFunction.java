@@ -1,6 +1,6 @@
 package co.redseal.gremlinnode.function;
 
-import com.tinkerpop.gremlin.util.function.TriConsumer;
+import org.apache.tinkerpop.gremlin.util.function.TriConsumer;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;

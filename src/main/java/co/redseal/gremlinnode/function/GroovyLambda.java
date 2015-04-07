@@ -1,6 +1,6 @@
 package co.redseal.gremlinnode.function;
 
-import com.tinkerpop.gremlin.process.computer.util.ScriptEngineCache;
+import org.apache.tinkerpop.gremlin.process.computer.util.ScriptEngineCache;
 import groovy.lang.Closure;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
