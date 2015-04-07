@@ -403,6 +403,60 @@ describe('isLongValue', function () {
         expect(TP.isLongValue(TP.java.newLong(123))).to.be.false;
     });
 });
+// Used in testing isJavaObject.
+var Foo = (function () {
+    function Foo(s) {
+        this.s = s;
+    }
+    return Foo;
+})();
+describe('isJavaObject', function () {
+    it('returns false on JS scalar types', function () {
+        var scalars = [
+            undefined,
+            null,
+            0,
+            1,
+            2,
+            0.0,
+            1.1,
+            2.2,
+            'one',
+            'two',
+            'three',
+            true,
+            false,
+        ];
+        _.forEach(scalars, function (scalar) { return expect(TP.isJavaObject(scalar), scalar).to.be.false; });
+    });
+    it('returns false on JS Number', function () {
+        expect(TP.isJavaObject(new Number(123))).to.be.false;
+    });
+    it('returns false on JS String', function () {
+        expect(TP.isJavaObject(new String('foo'))).to.be.false;
+    });
+    it('returns false on JS Boolean', function () {
+        expect(TP.isJavaObject(new Boolean(true))).to.be.false;
+    });
+    it('returns false on Java.longValue_t', function () {
+        var longValue = L(123);
+        expect(TP.isJavaObject(longValue)).to.be.false;
+    });
+    it('returns true on Java.Long', function () {
+        expect(TP.isJavaObject(TP.java.newLong(123))).to.be.true;
+    });
+    it('returns false on non-Java JS object', function () {
+        expect(TP.isJavaObject(new Foo('foo'))).to.be.false;
+    });
+    it('returns false on Java class representations', function () {
+        expect(TP.isJavaObject(TP.autoImport('HashMap'))).to.be.false;
+    });
+    it('returns true on Java object', function () {
+        var HashMap = TP.autoImport('HashMap');
+        var hashMap = new HashMap();
+        expect(TP.isJavaObject(hashMap)).to.be.true;
+    });
+});
 describe('GraphSON support', function () {
     var g;
     beforeEach(function (done) {
