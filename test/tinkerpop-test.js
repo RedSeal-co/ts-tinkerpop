@@ -321,6 +321,17 @@ describe('Gremlin', function () {
             ];
             expect(json).to.deep.equal(expected);
         });
+        it('TP.asJSON(map entries)', function () {
+            var traversal = graph.V().as('v').values('name').as('name').back('v').out().groupCount().by(TP.__.back('name')).cap().unfold();
+            dlog(TP.jsify(traversal.asAdmin().clone().toList()));
+            var json = TP.asJSON(traversal);
+            var expected = [
+                { key: 'josh', value: '2' },
+                { key: 'marko', value: '3' },
+                { key: 'peter', value: '1' },
+            ];
+            expect(sortByAll(json, ['key'])).to.deep.equal(expected);
+        });
     });
 });
 describe('Groovy support', function () {
@@ -678,6 +689,35 @@ describe('jsify', function () {
         expected = sortByAll(expected, ['key']);
         dlog('expected:', expected);
         expect(actual).to.deep.equal(expected);
+    });
+    it('converts Java Map$Entry to JS key/value map', function () {
+        var LinkedHashMap = TP.autoImport('LinkedHashMap');
+        var javaMap = new LinkedHashMap();
+        javaMap.put('one', 1);
+        javaMap.put('two', 'deux');
+        javaMap.put('long', L(123));
+        var nestedMap = new LinkedHashMap();
+        nestedMap.put('nested', 'NIDO');
+        nestedMap.put('map', 'CARTA');
+        // Create a List containing Map$Entry's
+        var ArrayList = TP.autoImport('ArrayList');
+        var nestedList = new ArrayList();
+        var it = nestedMap.entrySet().iterator();
+        while (it.hasNext()) {
+            nestedList.add(it.next());
+        }
+        javaMap.put('nested', nestedList);
+        var js = TP.jsify(javaMap.entrySet().toArray());
+        expect(_.isObject(js)).to.be.true;
+        expect(js).to.deep.equal([
+            { key: 'one', value: 1 },
+            { key: 'two', value: 'deux' },
+            { key: 'long', value: '123' },
+            { key: 'nested', value: [
+                { key: 'nested', value: 'NIDO' },
+                { key: 'map', value: 'CARTA' }
+            ] }
+        ]);
     });
 });
 //# sourceMappingURL=tinkerpop-test.js.map

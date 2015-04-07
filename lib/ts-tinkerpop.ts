@@ -428,6 +428,7 @@ module Tinkerpop {
   // Convert certain Java containers into JavaScript equivalents:
   // - List: any[]
   // - Map: any
+  // - Map$Entry: MapEntry
   // - BulkSet: BulkSetElement[]
   export function jsify(arg: any): any {
     if (_.isArray(arg)) {
@@ -441,11 +442,19 @@ module Tinkerpop {
       return _jsifyList(<Java.List> arg);
     } else if (isType(arg, 'java.util.Map')) {
       return _jsifyMap(<Java.Map> arg);
+    } else if (isType(arg, 'java.util.Map$Entry')) {
+      return _jsifyMapEntry(<Java.Map$Entry> arg);
     } else if (isType(arg, 'com.tinkerpop.gremlin.process.util.BulkSet')) {
       return _jsifyBulkSet(<Java.BulkSet> arg);
     } else {
       return arg;
     }
+  }
+
+  // ### `interface MapEntry`
+  interface MapEntry {
+    key: any;
+    value: any;
   }
 
   // ### `interface BulkSetElement`
@@ -567,6 +576,16 @@ module Tinkerpop {
       map[key] = jsify(pair.getValue());
     }
     return map;
+  }
+
+  // ### `_jsifyMap(javaMapEntry: Java.Map$Entry)`
+  // Turn a Java Map$Entry into a MapEntry object, recursively calling jsify.
+  function _jsifyMapEntry(javaMapEntry: Java.Map$Entry): MapEntry {
+    var mapEntry: MapEntry = {
+      key: jsify(javaMapEntry.getKey()),
+      value: jsify(javaMapEntry.getValue())
+    };
+    return mapEntry;
   }
 
   // ### `_jsifyBulkSet(bulkSet: Java.BulkSet)`
