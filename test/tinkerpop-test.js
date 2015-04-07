@@ -17,6 +17,7 @@ var fs = require('fs');
 var tmp = require('tmp');
 var TP = require('../lib/ts-tinkerpop');
 var expect = chai.expect;
+var L = TP.L;
 var dlog = debug('ts-tinkerpop:test');
 var sortByAll = _.sortByAll;
 before(function (done) {
@@ -196,6 +197,12 @@ describe('Gremlin', function () {
                 return BluePromise.resolve();
             });
         });
+        it('TP.asJSON(long)', function () {
+            var traversal = graph.V().count();
+            var json = TP.asJSON(traversal);
+            var expected = ['6'];
+            expect(json).to.deep.equal(expected);
+        });
         it('TP.asJSON(vertices)', function () {
             var traversal = graph.V().has('lang', TP.Compare.eq, 'java');
             var json = TP.asJSON(traversal);
@@ -314,6 +321,17 @@ describe('Gremlin', function () {
             ];
             expect(json).to.deep.equal(expected);
         });
+        it('TP.asJSON(map entries)', function () {
+            var traversal = graph.V().as('v').values('name').as('name').back('v').out().groupCount().by(TP.__.back('name')).cap().unfold();
+            dlog(TP.jsify(traversal.asAdmin().clone().toList()));
+            var json = TP.asJSON(traversal);
+            var expected = [
+                { key: 'josh', value: '2' },
+                { key: 'marko', value: '3' },
+                { key: 'peter', value: '1' },
+            ];
+            expect(sortByAll(json, ['key'])).to.deep.equal(expected);
+        });
     });
 });
 describe('Groovy support', function () {
@@ -360,6 +378,100 @@ describe('Groovy support', function () {
         expect(lambda.get().toString()).to.deep.equal('TestClass');
         // Show that it does NOT affect newGroovyLambda.
         expect(function () { return TP.newGroovyLambda('new TestClass()').get(); }).to.throw(/unable to resolve class TestClass/);
+    });
+});
+describe('isLongValue', function () {
+    it('returns false on JS scalar types', function () {
+        var scalars = [
+            undefined,
+            null,
+            0,
+            1,
+            2,
+            0.0,
+            1.1,
+            2.2,
+            'one',
+            'two',
+            'three',
+            true,
+            false,
+        ];
+        _.forEach(scalars, function (scalar) { return expect(TP.isLongValue(scalar), scalar).to.be.false; });
+    });
+    it('returns false on Number', function () {
+        expect(TP.isLongValue(new Number(123))).to.be.false;
+    });
+    it('returns false on Number subtype that has additional fields', function () {
+        var hybrid = new Number(123);
+        hybrid.longValue = '123';
+        hybrid.reverse = '321';
+        expect(TP.isLongValue(hybrid)).to.be.false;
+    });
+    it('returns true on L literal', function () {
+        expect(TP.isLongValue(L(123))).to.be.true;
+    });
+    it('returns true on hand-crafted longValue_t', function () {
+        var fake = new Number(123);
+        fake.longValue = '123';
+        expect(TP.isLongValue(fake)).to.be.true;
+    });
+    it('returns false on Java Long', function () {
+        expect(TP.isLongValue(TP.java.newLong(123))).to.be.false;
+    });
+});
+// Used in testing isJavaObject.
+var Foo = (function () {
+    function Foo(s) {
+        this.s = s;
+    }
+    return Foo;
+})();
+describe('isJavaObject', function () {
+    it('returns false on JS scalar types', function () {
+        var scalars = [
+            undefined,
+            null,
+            0,
+            1,
+            2,
+            0.0,
+            1.1,
+            2.2,
+            'one',
+            'two',
+            'three',
+            true,
+            false,
+        ];
+        _.forEach(scalars, function (scalar) { return expect(TP.isJavaObject(scalar), scalar).to.be.false; });
+    });
+    it('returns false on JS Number', function () {
+        expect(TP.isJavaObject(new Number(123))).to.be.false;
+    });
+    it('returns false on JS String', function () {
+        expect(TP.isJavaObject(new String('foo'))).to.be.false;
+    });
+    it('returns false on JS Boolean', function () {
+        expect(TP.isJavaObject(new Boolean(true))).to.be.false;
+    });
+    it('returns false on Java.longValue_t', function () {
+        var longValue = L(123);
+        expect(TP.isJavaObject(longValue)).to.be.false;
+    });
+    it('returns true on Java.Long', function () {
+        expect(TP.isJavaObject(TP.java.newLong(123))).to.be.true;
+    });
+    it('returns false on non-Java JS object', function () {
+        expect(TP.isJavaObject(new Foo('foo'))).to.be.false;
+    });
+    it('returns false on Java class representations', function () {
+        expect(TP.isJavaObject(TP.autoImport('HashMap'))).to.be.false;
+    });
+    it('returns true on Java object', function () {
+        var HashMap = TP.autoImport('HashMap');
+        var hashMap = new HashMap();
+        expect(TP.isJavaObject(hashMap)).to.be.true;
     });
 });
 describe('GraphSON support', function () {
@@ -509,6 +621,12 @@ describe('isType', function () {
     });
 });
 describe('jsify', function () {
+    it('converts Java long to JS string', function () {
+        var javaLong = L(123);
+        var jsLong = TP.jsify(javaLong);
+        expect(jsLong).to.deep.equal('123');
+        expect(TP.isJavaObject(jsLong), 'JS long representation should not be a Java object').to.be.false;
+    });
     it('converts Java List to JS array', function () {
         var ArrayList = TP.autoImport('ArrayList');
         var javaList = new ArrayList();
@@ -520,6 +638,20 @@ describe('jsify', function () {
         nestedList.add('list');
         javaList.add(nestedList);
         var jsArray = TP.jsify(javaList);
+        expect(_.isArray(jsArray)).to.be.true;
+        expect(jsArray).to.deep.equal(['one', 'two', 'three', ['nested', 'list']]);
+    });
+    it('recurses into a Java array', function () {
+        var ArrayList = TP.autoImport('ArrayList');
+        var javaList = new ArrayList();
+        javaList.add('one');
+        javaList.add('two');
+        javaList.add('three');
+        var nestedList = new ArrayList();
+        nestedList.add('nested');
+        nestedList.add('list');
+        javaList.add(nestedList);
+        var jsArray = TP.jsify(javaList.toArray());
         expect(_.isArray(jsArray)).to.be.true;
         expect(jsArray).to.deep.equal(['one', 'two', 'three', ['nested', 'list']]);
     });
@@ -546,10 +678,6 @@ describe('jsify', function () {
         expect(_.isArray(actual)).to.be.true;
         actual = sortByAll(actual, ['key']);
         dlog('actual:', actual);
-        // TODO: Add this to ts-tinkerpop
-        function L(n) {
-            return TP.java.newLong(n).longValue();
-        }
         var expected = [
             { key: 'one', count: L(1) },
             { key: 'two', count: L(2) },
@@ -561,6 +689,35 @@ describe('jsify', function () {
         expected = sortByAll(expected, ['key']);
         dlog('expected:', expected);
         expect(actual).to.deep.equal(expected);
+    });
+    it('converts Java Map$Entry to JS key/value map', function () {
+        var LinkedHashMap = TP.autoImport('LinkedHashMap');
+        var javaMap = new LinkedHashMap();
+        javaMap.put('one', 1);
+        javaMap.put('two', 'deux');
+        javaMap.put('long', L(123));
+        var nestedMap = new LinkedHashMap();
+        nestedMap.put('nested', 'NIDO');
+        nestedMap.put('map', 'CARTA');
+        // Create a List containing Map$Entry's
+        var ArrayList = TP.autoImport('ArrayList');
+        var nestedList = new ArrayList();
+        var it = nestedMap.entrySet().iterator();
+        while (it.hasNext()) {
+            nestedList.add(it.next());
+        }
+        javaMap.put('nested', nestedList);
+        var js = TP.jsify(javaMap.entrySet().toArray());
+        expect(_.isObject(js)).to.be.true;
+        expect(js).to.deep.equal([
+            { key: 'one', value: 1 },
+            { key: 'two', value: 'deux' },
+            { key: 'long', value: '123' },
+            { key: 'nested', value: [
+                { key: 'nested', value: 'NIDO' },
+                { key: 'map', value: 'CARTA' }
+            ] }
+        ]);
     });
 });
 //# sourceMappingURL=tinkerpop-test.js.map

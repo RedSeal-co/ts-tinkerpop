@@ -187,11 +187,23 @@ module Tinkerpop {
     return JSON.parse(edgeStringify(edge));
   };
 
+  // ### `function L(n: number)`
+  // Produce a longValue_t literal.
+  export function L(n: number): Java.longValue_t {
+    return java.newLong(n).longValue();
+  }
+
+  // ### `function isLongValue(e: any)`
+  // Checks whether an object is a longValue_t, which is the representation of Java long primitives.
+  export function isLongValue(obj: any): boolean {
+    return _.isObject(obj) && obj instanceof Number && 'longValue' in obj && _.keys(obj).length == 1;
+  }
+
   // #### `function isJavaObject(e: any)`
   // Returns true if the obj is a Java object.
   // Useful for determining the runtime type of object_t returned by many java methods.
   export function isJavaObject(e: any): boolean {
-    return java.instanceOf(e, 'java.lang.Object');
+    return _.isObject(e) && !isLongValue(e) && java.instanceOf(e, 'java.lang.Object');
   }
 
   // #### `function asJavaObject(obj: Java.object_t)`
@@ -416,16 +428,22 @@ module Tinkerpop {
   // Convert certain Java containers into JavaScript equivalents:
   // - List: any[]
   // - Map: any
+  // - Map$Entry: MapEntry
   // - BulkSet: BulkSetElement[]
   export function jsify(arg: any): any {
-    if (!_.isObject(arg)) {
+    if (_.isArray(arg)) {
+      return _.map(arg, jsify);
+    } else if (!_.isObject(arg)) {
       return arg;
-    }
-
-    if (isType(arg, 'java.util.List')) {
+    } else if (isLongValue(arg)) {
+      // Represent longValue_t as string
+      return arg.longValue;
+    } else if (isType(arg, 'java.util.List')) {
       return _jsifyList(<Java.List> arg);
     } else if (isType(arg, 'java.util.Map')) {
       return _jsifyMap(<Java.Map> arg);
+    } else if (isType(arg, 'java.util.Map$Entry')) {
+      return _jsifyMapEntry(<Java.Map$Entry> arg);
     } else if (isType(arg, 'com.tinkerpop.gremlin.process.util.BulkSet')) {
       return _jsifyBulkSet(<Java.BulkSet> arg);
     } else {
@@ -433,9 +451,15 @@ module Tinkerpop {
     }
   }
 
+  // ### `interface MapEntry`
+  export interface MapEntry {
+    key: any;
+    value: any;
+  }
+
   // ### `interface BulkSetElement`
   // Element of a jsify-ed BulkSet.
-  interface BulkSetElement {
+  export interface BulkSetElement {
     key: string;
     count: Java.longValue_t;
   }
@@ -552,6 +576,16 @@ module Tinkerpop {
       map[key] = jsify(pair.getValue());
     }
     return map;
+  }
+
+  // ### `_jsifyMap(javaMapEntry: Java.Map$Entry)`
+  // Turn a Java Map$Entry into a MapEntry object, recursively calling jsify.
+  function _jsifyMapEntry(javaMapEntry: Java.Map$Entry): MapEntry {
+    var mapEntry: MapEntry = {
+      key: jsify(javaMapEntry.getKey()),
+      value: jsify(javaMapEntry.getValue())
+    };
+    return mapEntry;
   }
 
   // ### `_jsifyBulkSet(bulkSet: Java.BulkSet)`

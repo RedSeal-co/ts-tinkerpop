@@ -74,6 +74,7 @@ function autoImport(shortName: "Array"): Java.java.lang.reflect.Array.Static;
 function autoImport(shortName: "StrategyGraph"): Java.com.tinkerpop.gremlin.structure.strategy.StrategyGraph.Static;
 function autoImport(shortName: "Enum"): Java.java.lang.Enum.Static;
 function autoImport(shortName: "StrategyContext"): Java.com.tinkerpop.gremlin.structure.strategy.StrategyContext.Static;
+function autoImport(shortName: "LinkedHashMap"): Java.java.util.LinkedHashMap.Static;
 function autoImport(shortName: "BiFunction"): Java.java.util.function_.BiFunction.Static;
 function autoImport(shortName: "ByteArrayOutputStream"): Java.java.io.ByteArrayOutputStream.Static;
 function autoImport(shortName: "GroovyCodeSource"): Java.groovy.lang.GroovyCodeSource.Static;
@@ -189,6 +190,7 @@ function autoImport(shortName: string): any {
     "StrategyGraph": "com.tinkerpop.gremlin.structure.strategy.StrategyGraph",
     "Enum": "java.lang.Enum",
     "StrategyContext": "com.tinkerpop.gremlin.structure.strategy.StrategyContext",
+    "LinkedHashMap": "java.util.LinkedHashMap",
     "BiFunction": "java.util.function.BiFunction",
     "ByteArrayOutputStream": "java.io.ByteArrayOutputStream",
     "GroovyCodeSource": "groovy.lang.GroovyCodeSource",
