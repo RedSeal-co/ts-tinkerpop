@@ -220,7 +220,7 @@ module Tinkerpop {
   // #### `function isVertex(v: any)`
   // Returns true if v is a Tinkerpop Vertex.
   export function isVertex(v: any): boolean {
-    return java.instanceOf(v, 'com.tinkerpop.gremlin.structure.Vertex');
+    return java.instanceOf(v, 'org.apache.tinkerpop.gremlin.structure.Vertex');
   }
 
   // #### `function asVertex(v: Java.object_t)`
@@ -237,7 +237,7 @@ module Tinkerpop {
   // #### `function isEdge(e: any)`
   // Returns true if e is a Tinkerpop Edge.
   export function isEdge(e: any): boolean {
-    return java.instanceOf(e, 'com.tinkerpop.gremlin.structure.Edge');
+    return java.instanceOf(e, 'org.apache.tinkerpop.gremlin.structure.Edge');
   }
 
   // #### `function asEdge(e: Java.object_t)`
@@ -444,7 +444,7 @@ module Tinkerpop {
       return _jsifyMap(<Java.Map> arg);
     } else if (isType(arg, 'java.util.Map$Entry')) {
       return _jsifyMapEntry(<Java.Map$Entry> arg);
-    } else if (isType(arg, 'com.tinkerpop.gremlin.process.util.BulkSet')) {
+    } else if (isType(arg, 'org.apache.tinkerpop.gremlin.process.traversal.step.util.BulkSet')) {
       return _jsifyBulkSet(<Java.BulkSet> arg);
     } else {
       return arg;
@@ -608,7 +608,7 @@ module Tinkerpop {
   // ### Non-exported variables
   var _groovyScriptEngineName: string = 'Groovy';
   var _javaScriptEngineName: string = 'JavaScript';
-  var _groovyScriptEngine: Java.com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
+  var _groovyScriptEngine: Java.GremlinGroovyScriptEngine;
 
 }
 

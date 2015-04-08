@@ -1,8 +1,8 @@
 package co.redseal.gremlinnode.function;
 
 import co.redseal.gremlinnode.testing.TestClass;
-import com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
-import com.tinkerpop.gremlin.util.function.TriConsumer;
+import org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
+import org.apache.tinkerpop.gremlin.util.function.TriConsumer;
 import groovy.lang.Closure;
 import java.util.HashSet;
 import java.util.Map;
@@ -51,9 +51,9 @@ public class GroovyLambdaTest {
         // Gremlin adds some imports of its own.  Check a couple of things.
         final Map<String, Set<String>> engineImports = newEngine().imports();
         final Set<String> imports = engineImports.get("imports");
-        assertTrue(imports.contains("com.tinkerpop.gremlin.process.*"));
+        assertTrue(imports.contains("org.apache.tinkerpop.gremlin.process.traversal.*"));
         final Set<String> staticImports = engineImports.get("staticImports");
-        assertTrue(staticImports.contains("com.tinkerpop.gremlin.structure.Compare.*"));
+        assertTrue(staticImports.contains("org.apache.tinkerpop.gremlin.structure.Compare.*"));
     }
 
     @Test
@@ -163,16 +163,16 @@ public class GroovyLambdaTest {
         try {
             // Use our own engine so we can consume into a container.
             final ScriptEngine engine = newEngine();
-            final Set<Long> set = new HashSet<Long>();
-            engine.put("set", set);
+            final Set<Long> hash = new HashSet<Long>();
+            engine.put("hash", hash);
 
-            final GroovyLambda lambda = new GroovyLambda("{ it -> set.add(it) }", engine);
+            final GroovyLambda lambda = new GroovyLambda("{ it -> hash.add(it) }", engine);
 
             lambda.accept(1);
             lambda.accept(2);
             lambda.accept(3);
 
-            assertEquals(set.size(), 3);
+            assertEquals(hash.size(), 3);
         }
         catch (ScriptException se) {
             assertTrue(se.toString(), false);
@@ -214,16 +214,16 @@ public class GroovyLambdaTest {
         try {
             // Use our own engine so we can consume into a container.
             final ScriptEngine engine = newEngine();
-            final Set<Long[]> set = new HashSet<Long[]>();
-            engine.put("set", set);
+            final Set<Long[]> hash = new HashSet<Long[]>();
+            engine.put("hash", hash);
 
-            final GroovyLambda lambda = new GroovyLambda("{ a, b -> set.add([a, b]) }", engine);
+            final GroovyLambda lambda = new GroovyLambda("{ a, b -> hash.add([a, b]) }", engine);
 
             lambda.accept(1, 2);
             lambda.accept(2, 3);
             lambda.accept(3, 4);
 
-            assertEquals(set.size(), 3);
+            assertEquals(hash.size(), 3);
         }
         catch (ScriptException se) {
             assertTrue(se.toString(), false);
@@ -265,16 +265,16 @@ public class GroovyLambdaTest {
         try {
             // Use our own engine so we can consume into a container.
             final ScriptEngine engine = newEngine();
-            final Set<Long[]> set = new HashSet<Long[]>();
-            engine.put("set", set);
+            final Set<Long[]> hash = new HashSet<Long[]>();
+            engine.put("hash", hash);
 
-            final GroovyLambda lambda = new GroovyLambda("{ a, b, c -> set.add([a, b, c]) }", engine);
+            final GroovyLambda lambda = new GroovyLambda("{ a, b, c -> hash.add([a, b, c]) }", engine);
 
             lambda.accept(1, 2, 3);
             lambda.accept(2, 3, 4);
             lambda.accept(3, 4, 5);
 
-            assertEquals(set.size(), 3);
+            assertEquals(hash.size(), 3);
         }
         catch (ScriptException se) {
             assertTrue(se.toString(), false);
