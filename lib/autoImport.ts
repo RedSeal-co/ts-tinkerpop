@@ -90,8 +90,12 @@ function autoImport(shortName: "__"): Java.org.apache.tinkerpop.gremlin.process.
 function autoImport(shortName: "GraphTraversal"): Java.org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal.Static;
 function autoImport(shortName: "GraphTraversal$Admin"): Java.org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal$Admin.Static;
 function autoImport(shortName: "GraphTraversalSource"): Java.org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource.Static;
+function autoImport(shortName: "Path"): Java.org.apache.tinkerpop.gremlin.process.traversal.Path.Static;
 function autoImport(shortName: "Scope"): Java.org.apache.tinkerpop.gremlin.process.traversal.Scope.Static;
 function autoImport(shortName: "BulkSet"): Java.org.apache.tinkerpop.gremlin.process.traversal.step.util.BulkSet.Static;
+function autoImport(shortName: "EmptyPath"): Java.org.apache.tinkerpop.gremlin.process.traversal.step.util.EmptyPath.Static;
+function autoImport(shortName: "MutablePath"): Java.org.apache.tinkerpop.gremlin.process.traversal.step.util.MutablePath.Static;
+function autoImport(shortName: "SparsePath"): Java.org.apache.tinkerpop.gremlin.process.traversal.step.util.SparsePath.Static;
 function autoImport(shortName: "T"): Java.org.apache.tinkerpop.gremlin.process.traversal.T.Static;
 function autoImport(shortName: "Traversal"): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal.Static;
 function autoImport(shortName: "Traversal$Admin"): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin.Static;
@@ -209,8 +213,12 @@ function autoImport(shortName: string): any {
     "GraphTraversal": "org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal",
     "GraphTraversal$Admin": "org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal$Admin",
     "GraphTraversalSource": "org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource",
+    "Path": "org.apache.tinkerpop.gremlin.process.traversal.Path",
     "Scope": "org.apache.tinkerpop.gremlin.process.traversal.Scope",
     "BulkSet": "org.apache.tinkerpop.gremlin.process.traversal.step.util.BulkSet",
+    "EmptyPath": "org.apache.tinkerpop.gremlin.process.traversal.step.util.EmptyPath",
+    "MutablePath": "org.apache.tinkerpop.gremlin.process.traversal.step.util.MutablePath",
+    "SparsePath": "org.apache.tinkerpop.gremlin.process.traversal.step.util.SparsePath",
     "T": "org.apache.tinkerpop.gremlin.process.traversal.T",
     "Traversal": "org.apache.tinkerpop.gremlin.process.traversal.Traversal",
     "Traversal$Admin": "org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin",
