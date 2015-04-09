@@ -203,7 +203,7 @@ module Tinkerpop {
   // Returns true if the obj is a Java object.
   // Useful for determining the runtime type of object_t returned by many java methods.
   export function isJavaObject(e: any): boolean {
-    return _.isObject(e) && !isLongValue(e) && java.instanceOf(e, 'java.lang.Object');
+    return _.isObject(e) && !_.isArray(e) && !isLongValue(e) && java.instanceOf(e, 'java.lang.Object');
   }
 
   // #### `function asJavaObject(obj: Java.object_t)`

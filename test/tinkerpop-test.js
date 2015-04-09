@@ -462,6 +462,9 @@ describe('isJavaObject', function () {
     it('returns true on Java.Long', function () {
         expect(TP.isJavaObject(TP.java.newLong(123))).to.be.true;
     });
+    it('returns false on JS array', function () {
+        expect(TP.isJavaObject([1, 2, 3])).to.be.false;
+    });
     it('returns false on non-Java JS object', function () {
         expect(TP.isJavaObject(new Foo('foo'))).to.be.false;
     });
