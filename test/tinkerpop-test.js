@@ -332,6 +332,16 @@ describe('Gremlin', function () {
             ];
             expect(sortByAll(json, ['key'])).to.deep.equal(expected);
         });
+        it('TP.asJSON(path labels)', function () {
+            var traversal = graph.traversal().V().as('a').out().as('b').out().as('c').map(TP.newGroovyClosure('{ it -> it.path.labels() }'));
+            dlog(TP.jsify(traversal.asAdmin().clone().toList()));
+            var json = TP.asJSON(traversal);
+            var expected = [
+                [['a'], ['b'], ['c']],
+                [['a'], ['b'], ['c']],
+            ];
+            expect(json).to.deep.equal(expected);
+        });
     });
 });
 describe('Groovy support', function () {
@@ -670,6 +680,30 @@ describe('jsify', function () {
         var js = TP.jsify(javaMap);
         expect(_.isObject(js)).to.be.true;
         expect(js).to.deep.equal({ 'one': 1, 'two': 'deux', 'three': { 'nested': 'NIDO', 'map': 'CARTA' } });
+    });
+    it('converts Java Set to JS array', function () {
+        var HashSet = TP.autoImport('HashSet');
+        var hashSet = new HashSet();
+        hashSet.add('one');
+        hashSet.add('two');
+        hashSet.add('three');
+        var nestedSet = new HashSet();
+        nestedSet.add('nested');
+        nestedSet.add('set');
+        hashSet.add(nestedSet);
+        var actual = TP.jsify(hashSet);
+        expect(_.isArray(actual)).to.be.true;
+        actual.sort();
+        dlog('actual:', actual);
+        // Divide the results into arrays and not-arrays.
+        var grouped = _.groupBy(actual, _.isArray);
+        // Check the scalar members.
+        var scalars = grouped.false;
+        expect(scalars).to.have.members(['one', 'two', 'three']);
+        // Check the nested array.
+        var arrays = grouped.true;
+        expect(arrays).to.have.length(1);
+        expect(arrays[0]).to.have.members(['nested', 'set']);
     });
     it('converts Java BulkSet to JS array of key/count objects', function () {
         var BulkSet = TP.autoImport('BulkSet');

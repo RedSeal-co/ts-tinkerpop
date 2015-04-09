@@ -88,11 +88,13 @@ function autoImport(shortName: "ScriptEngineLambda"): Java.org.apache.tinkerpop.
 function autoImport(shortName: "VertexProgram"): Java.org.apache.tinkerpop.gremlin.process.computer.VertexProgram.Static;
 function autoImport(shortName: "__"): Java.org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.Static;
 function autoImport(shortName: "GraphTraversal"): Java.org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal.Static;
+function autoImport(shortName: "GraphTraversal$Admin"): Java.org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal$Admin.Static;
 function autoImport(shortName: "GraphTraversalSource"): Java.org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource.Static;
 function autoImport(shortName: "Scope"): Java.org.apache.tinkerpop.gremlin.process.traversal.Scope.Static;
 function autoImport(shortName: "BulkSet"): Java.org.apache.tinkerpop.gremlin.process.traversal.step.util.BulkSet.Static;
 function autoImport(shortName: "T"): Java.org.apache.tinkerpop.gremlin.process.traversal.T.Static;
 function autoImport(shortName: "Traversal"): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal.Static;
+function autoImport(shortName: "Traversal$Admin"): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin.Static;
 function autoImport(shortName: "TraversalEngine"): Java.org.apache.tinkerpop.gremlin.process.traversal.TraversalEngine.Static;
 function autoImport(shortName: "TraversalStrategies"): Java.org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategies.Static;
 function autoImport(shortName: "TraversalStrategy"): Java.org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy.Static;
@@ -205,11 +207,13 @@ function autoImport(shortName: string): any {
     "VertexProgram": "org.apache.tinkerpop.gremlin.process.computer.VertexProgram",
     "__": "org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__",
     "GraphTraversal": "org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal",
+    "GraphTraversal$Admin": "org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal$Admin",
     "GraphTraversalSource": "org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource",
     "Scope": "org.apache.tinkerpop.gremlin.process.traversal.Scope",
     "BulkSet": "org.apache.tinkerpop.gremlin.process.traversal.step.util.BulkSet",
     "T": "org.apache.tinkerpop.gremlin.process.traversal.T",
     "Traversal": "org.apache.tinkerpop.gremlin.process.traversal.Traversal",
+    "Traversal$Admin": "org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin",
     "TraversalEngine": "org.apache.tinkerpop.gremlin.process.traversal.TraversalEngine",
     "TraversalStrategies": "org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategies",
     "TraversalStrategy": "org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy",
