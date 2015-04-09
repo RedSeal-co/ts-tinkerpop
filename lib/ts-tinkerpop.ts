@@ -427,6 +427,7 @@ module Tinkerpop {
   // ### `jsify(arg: any)`
   // Convert certain Java containers into JavaScript equivalents:
   // - List: any[]
+  // - Set: any[]
   // - Map: any
   // - Map$Entry: MapEntry
   // - BulkSet: BulkSetElement[]
@@ -439,13 +440,16 @@ module Tinkerpop {
       // Represent longValue_t as string
       return arg.longValue;
     } else if (isType(arg, 'java.util.List')) {
-      return _jsifyList(<Java.List> arg);
+      return _jsifyCollection(<Java.List> arg);
     } else if (isType(arg, 'java.util.Map')) {
       return _jsifyMap(<Java.Map> arg);
     } else if (isType(arg, 'java.util.Map$Entry')) {
       return _jsifyMapEntry(<Java.Map$Entry> arg);
     } else if (isType(arg, 'org.apache.tinkerpop.gremlin.process.traversal.step.util.BulkSet')) {
+      // BulkSet is used to hold groupCount result, so it is given special treatment.
       return _jsifyBulkSet(<Java.BulkSet> arg);
+    } else if (isType(arg, 'java.util.Set')) {
+      return _jsifyCollection(<Java.Set> arg);
     } else {
       return arg;
     }
@@ -550,11 +554,11 @@ module Tinkerpop {
     return prettyString;
   }
 
-  // ### `_jsifyList(javaList: Java.List)`
-  // Turn a Java List into a JavaScript array, recursively calling jsify.
-  function _jsifyList(javaList: Java.List): any[] {
+  // ### `_jsifyCollection(javaCollection: Java.Collection)`
+  // Turn a Java Collection into a JavaScript array, recursively calling jsify.
+  function _jsifyCollection(javaCollection: Java.Collection): any[] {
     var arr: any[] = [];
-    var it = javaList.iterator();
+    var it = javaCollection.iterator();
     while (it.hasNext()) {
       var elem: any = it.next();
       var obj: any = jsify(elem);

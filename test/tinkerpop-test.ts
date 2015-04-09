@@ -402,13 +402,13 @@ describe('Gremlin', (): void => {
     });
 
     it('TP.asJSON(map entries)', (): void => {
-      var traversal = graph.traversal().V().as('v')
+      var traversal: Java.GraphTraversal = graph.traversal().V().as('v')
         .values('name').as('name')
         .back('v').out().groupCount('c').by(TP.__.back('name'))
         .cap('c')
         .unfold();
 
-      dlog(TP.jsify((<any>traversal.asAdmin()).clone().toList()));
+      dlog(TP.jsify(traversal.asAdmin().clone().toList()));
 
       var json: any[] = TP.asJSON(traversal);
       var expected: any[] = [
@@ -417,6 +417,20 @@ describe('Gremlin', (): void => {
         { key: 'peter', value: '1' },
       ];
       expect(sortByAll(json, ['key'])).to.deep.equal(expected);
+    });
+
+    it('TP.asJSON(path labels)', (): void => {
+      var traversal: Java.GraphTraversal = graph.traversal().V().as('a').out().as('b').out().as('c')
+        .map(TP.newGroovyClosure('{ it -> it.path.labels() }'));
+
+      dlog(TP.jsify(traversal.asAdmin().clone().toList()));
+
+      var json: any[] = TP.asJSON(traversal);
+      var expected: any[] = [
+        [ ['a'], ['b'], ['c'] ],
+        [ ['a'], ['b'], ['c'] ],
+      ];
+      expect(json).to.deep.equal(expected);
     });
 
   });
@@ -829,6 +843,34 @@ describe('jsify', (): void => {
     var js: any = TP.jsify(javaMap);
     expect(_.isObject(js)).to.be.true;
     expect(js).to.deep.equal({'one': 1, 'two': 'deux', 'three': {'nested': 'NIDO', 'map': 'CARTA'}});
+  });
+
+  it('converts Java Set to JS array', (): void => {
+    var HashSet: Java.HashSet.Static = TP.autoImport('HashSet');
+    var hashSet: Java.HashSet = new HashSet();
+    hashSet.add('one');
+    hashSet.add('two');
+    hashSet.add('three');
+
+    var nestedSet: Java.HashSet = new HashSet();
+    nestedSet.add('nested');
+    nestedSet.add('set');
+    hashSet.add(nestedSet)
+
+    var actual: any = TP.jsify(hashSet);
+    expect(_.isArray(actual)).to.be.true;
+    actual.sort();
+    dlog('actual:', actual);
+
+    // Divide the results into arrays and not-arrays.
+    var grouped: any = _.groupBy(actual, _.isArray);
+    // Check the scalar members.
+    var scalars: string[] = grouped.false;
+    expect(scalars).to.have.members(['one', 'two', 'three']);
+    // Check the nested array.
+    var arrays: string[] = grouped.true;
+    expect(arrays).to.have.length(1);
+    expect(arrays[0]).to.have.members(['nested', 'set']);
   });
 
   it('converts Java BulkSet to JS array of key/count objects', (): void => {
