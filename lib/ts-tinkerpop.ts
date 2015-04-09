@@ -431,6 +431,7 @@ module Tinkerpop {
   // - Map: any
   // - Map$Entry: MapEntry
   // - BulkSet: BulkSetElement[]
+  // - Path: PathElement[]
   export function jsify(arg: any): any {
     if (_.isArray(arg)) {
       return _.map(arg, jsify);
@@ -450,6 +451,8 @@ module Tinkerpop {
       return _jsifyBulkSet(<Java.BulkSet> arg);
     } else if (isType(arg, 'java.util.Set')) {
       return _jsifyCollection(<Java.Set> arg);
+    } else if (isType(arg, 'org.apache.tinkerpop.gremlin.process.traversal.Path')) {
+      return _jsifyPath(<Java.Path> arg);
     } else {
       return arg;
     }
@@ -466,6 +469,15 @@ module Tinkerpop {
   export interface BulkSetElement {
     key: string;
     count: Java.longValue_t;
+  }
+
+  // ### `interface PathElement`
+  // Element of a jsify-ed Path.
+  // - *object* is recursively jsify-ed.
+  // - *labels* will be sorted.
+  export interface PathElement {
+    object: any;
+    labels: string[];
   }
 
   // ### Non-exported Functions
@@ -606,6 +618,23 @@ module Tinkerpop {
       };
       arr.push(elem);
     }
+    return arr;
+  }
+
+  // ### `_jsifyPath(path: Java.Path)`
+  // Turn a TinkerPop Path into an array of objects with object/labels fields.
+  function _jsifyPath(path: Java.Path): PathElement[] {
+    // Iterate in parallel over objects and labels.
+    var objects: any[] = _jsifyCollection(path.objects());
+    var labelSets: string[][] = _jsifyCollection(path.labels());  // TODO: Java.List<Set<String>>
+    var zipped: any[][] = _.zip(objects, labelSets);
+    var arr: PathElement[] =
+      _.map(zipped, (pair: any[]): PathElement => {
+        var object: any = pair[0];
+        var labels: string[] = pair[1];
+        labels.sort();
+        return { object: jsify(object), labels: labels };
+      });
     return arr;
   }
 

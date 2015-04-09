@@ -756,5 +756,48 @@ describe('jsify', function () {
             ] }
         ]);
     });
+    it('converts Path to JS array of labels and objects', function () {
+        var MutablePath = TP.autoImport('MutablePath');
+        var path = MutablePath.make();
+        // Add some simple items to the path.
+        path.extend(123, 'one');
+        path.extend(456, 'two');
+        // They don't have to have labels.
+        path.extend('foo');
+        // They can have multiple labels.
+        path.extend('bar', 'a', 'b', 'c');
+        // Complex objects can appear in the path, and those should be recursively jsify-ed.
+        var ArrayList = TP.autoImport('ArrayList');
+        var javaList = new ArrayList();
+        javaList.add('un');
+        javaList.add('deux');
+        javaList.add('trois');
+        path.extend(javaList, 'complex');
+        // Paths can even contain other Paths.
+        var nestedPath = MutablePath.make();
+        nestedPath.extend(1, 'uno');
+        nestedPath.extend(2, 'dos');
+        nestedPath.extend(3, 'tres');
+        path.extend(nestedPath, 'nested');
+        var js = TP.jsify(path);
+        expect(TP.isJavaObject(js), 'jsify should not return Java Path').to.be.false;
+        expect(_.isArray(js), 'jsify should turn Path into JS array').to.be.true;
+        var expected = [
+            { object: 123, labels: ['one'] },
+            { object: 456, labels: ['two'] },
+            { object: 'foo', labels: [] },
+            { object: 'bar', labels: ['a', 'b', 'c'] },
+            { object: ['un', 'deux', 'trois'], labels: ['complex'] },
+            {
+                object: [
+                    { object: 1, labels: ['uno'] },
+                    { object: 2, labels: ['dos'] },
+                    { object: 3, labels: ['tres'] },
+                ],
+                labels: ['nested']
+            },
+        ];
+        expect(js).to.deep.equal(expected);
+    });
 });
 //# sourceMappingURL=tinkerpop-test.js.map
