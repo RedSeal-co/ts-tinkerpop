@@ -9,7 +9,7 @@
 
 import _ = require('lodash');
 import _autoImport = require('./autoImport');
-import _java = require('redseal-java');
+import _java = require('java');
 import assert = require('power-assert');
 import BluePromise = require('bluebird');
 import debug = require('debug');
