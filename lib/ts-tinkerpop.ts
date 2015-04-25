@@ -664,9 +664,7 @@ function afterJvm(): BluePromise<void> {
 _java.asyncOptions = {
   syncSuffix: '',
   promiseSuffix: 'P',
-  // Should be able to use BluePromise.promisify here, but TSC gives a type error.
-  // TODO: Fix this after changing ts-java's declaration of the promisify type.
-  promisify: require('bluebird').promisify
+  promisify: BluePromise.promisify
 };
 _java.registerClientP(beforeJvm, afterJvm);
 
