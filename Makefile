@@ -131,7 +131,7 @@ test/bundle-test.js: $(BUNDLE_DTS)
 # generate this declaration file in our own typings directory.
 LOCAL_DTS=typings/ts-tinkerpop/index.d.ts
 
-TSPI=ts-pkg-installer
+TSPI=node_modules/.bin/ts-pkg-installer
 
 $(LOCAL_DTS): lib/index.d.ts lib/java.d.ts tspi-local.json
 	$(TSPI) --config-file tspi-local.json
