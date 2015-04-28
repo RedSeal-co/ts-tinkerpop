@@ -178,8 +178,5 @@
   "bugs": {
     "url": "https://github.com/RedSeal-co/ts-tinkerpop/issues"
   },
-  "homepage": "https://github.com/RedSeal-co/ts-tinkerpop",
-  "bin": {
-    "ts-tinkerpop": "bundle-dts.js"
-  }
+  "homepage": "https://github.com/RedSeal-co/ts-tinkerpop"
 }
