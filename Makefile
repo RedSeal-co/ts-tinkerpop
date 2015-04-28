@@ -115,8 +115,8 @@ BUNDLE_DTS=lib/index.d.ts
 
 O_BUNDLE_DTS=o/bundle.d.ts
 
-$(O_BUNDLE_DTS): lib/ts-tinkerpop.d.ts lib/autoImport.d.ts lib/java.d.ts bin/bundle-dts.js
-	bin/bundle-dts.sh
+$(O_BUNDLE_DTS): lib/ts-tinkerpop.d.ts lib/autoImport.d.ts lib/java.d.ts devbin/bundle-dts.js
+	devbin/bundle-dts.sh
 
 $(BUNDLE_DTS): $(O_BUNDLE_DTS)
 	echo '/// <reference path="java.d.ts"/>' > $@
