@@ -45,7 +45,7 @@
       "target/*.jar",
       "target/**/*.jar"
     ],
-    "seedClasses": [
+    "classes": [
       "co.redseal.gremlinnode.function.GroovyLambda",
       "org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine",
       "org.apache.tinkerpop.gremlin.process.computer.GraphComputer",
@@ -158,7 +158,7 @@
       "org.codehaus.groovy.util.ManagedReference",
       "org.codehaus.groovy.util.ReferenceBundle"
     ],
-    "whiteList": [
+    "packages": [
       "co.redseal."
     ],
     "asyncOptions": {
