@@ -1,7 +1,7 @@
 {
   "name": "ts-tinkerpop",
   "version": "1.1.2",
-  "description": "Unit tests for gremlin (TinkerPop3) written directly to the node-java API in Typescript",
+  "description": "Utilities for using Tinkerpop3 via the node-java API in Typescript",
   "main": "lib/ts-tinkerpop.js",
   "scripts": {
     "test": "make test",
@@ -15,14 +15,15 @@
     "node-java"
   ],
   "author": "Jim Lloyd <jim.lloyd@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "chai": "^2.0.0",
     "dts-bundle": "^0.2.0",
     "groc": "^0.8.0",
     "mocha": "^2.1.0",
     "tmp": "0.0.25",
-    "ts-java": "git://github.lab.redseal.net/redseal/ts-java.git#v1.0.3",
+    "ts-java": "^1.0.6",
+    "ts-pkg-installer": "^1.0.13",
     "tsd": ">=0.6.0-beta.5",
     "tslint": "^2.1.1",
     "typescript": "^1.4.1"
@@ -45,7 +46,7 @@
       "target/*.jar",
       "target/**/*.jar"
     ],
-    "seedClasses": [
+    "classes": [
       "co.redseal.gremlinnode.function.GroovyLambda",
       "org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine",
       "org.apache.tinkerpop.gremlin.process.computer.GraphComputer",
@@ -158,7 +159,7 @@
       "org.codehaus.groovy.util.ManagedReference",
       "org.codehaus.groovy.util.ReferenceBundle"
     ],
-    "whiteList": [
+    "packages": [
       "co.redseal."
     ],
     "asyncOptions": {
@@ -172,6 +173,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.lab.redseal.net:redseal/ts-tinkerpop.git"
-  }
+    "url": "git@github.com:RedSeal-co/ts-tinkerpop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RedSeal-co/ts-tinkerpop/issues"
+  },
+  "homepage": "https://github.com/RedSeal-co/ts-tinkerpop"
 }
