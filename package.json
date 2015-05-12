@@ -5,7 +5,8 @@
   "main": "lib/ts-tinkerpop.js",
   "scripts": {
     "test": "make test",
-    "install": "make install-maven"
+    "install": "make install-maven",
+    "postpublish": "./devbin/update-definitely-typed.sh"
   },
   "keywords": [
     "typescript",
