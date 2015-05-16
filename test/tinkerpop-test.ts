@@ -170,7 +170,7 @@ describe('Gremlin', (): void => {
         });
     });
 
-    it('g.V().value("name")', (): BluePromise<void> => {
+    it('g.V().values("name")', (): BluePromise<void> => {
       return graph.traversal().V().values('name').toListP()
         .then((list: Java.List) => list.toArrayP())
         .then((data: Java.object_t[] ) => {
@@ -264,6 +264,16 @@ describe('Gremlin', (): void => {
         expect(json).to.include.keys(['id', 'label', 'type', 'properties', 'inV', 'outV', 'inVLabel', 'outVLabel']);
         expect(json.type).to.equal('edge');
         return BluePromise.resolve();
+      });
+    });
+
+    it('TP.forEach(g.V().values("name")) (i.e. forEach consumer works with strings)', (): BluePromise<void> => {
+      var expectedNames: string[] = [ 'marko', 'vadas', 'lop', 'josh', 'ripple', 'peter' ];
+      var traversal = graph.traversal().V().values('name');
+      return TP.forEach(traversal, (obj: string): void => {
+        expect(_.isString(obj)).to.be.ok;
+        expect(expectedNames).to.include(obj);
+        return;
       });
     });
 
