@@ -255,7 +255,7 @@ module Tinkerpop {
   // A function interface for Java Object consumer.
   // See `forEach` below.
   export interface ConsumeObject {
-    (item: Java.Object): BluePromise<void>;
+    (item: Java.object_t): any | BluePromise<any>;
   }
 
   // #### `forEach(javaIterator: Java.Iterator, consumer: ConsumeObject)`
@@ -272,8 +272,8 @@ module Tinkerpop {
             return BluePromise.resolve();
           } else {
             return javaIterator.nextP()
-              .then((obj: Java.Object) => { dlog('forEach: consuming'); return consumer(obj); })
-              .then(() => { dlog('forEach: recursing'); return _eachIterator(javaIterator, consumer); });
+              .then((obj: Java.object_t) => consumer(obj))
+              .then(() => _eachIterator(javaIterator, consumer));
           }
         });
     }
