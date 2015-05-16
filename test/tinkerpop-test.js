@@ -128,7 +128,7 @@ describe('Gremlin', function () {
                 expect(name).to.be.equal('marko');
             });
         });
-        it('g.V().value("name")', function () {
+        it('g.V().values("name")', function () {
             return graph.traversal().V().values('name').toListP().then(function (list) { return list.toArrayP(); }).then(function (data) {
                 expect(data).to.be.ok;
                 var expected = ['marko', 'vadas', 'lop', 'josh', 'ripple', 'peter'];
@@ -195,6 +195,15 @@ describe('Gremlin', function () {
                 expect(json).to.include.keys(['id', 'label', 'type', 'properties', 'inV', 'outV', 'inVLabel', 'outVLabel']);
                 expect(json.type).to.equal('edge');
                 return BluePromise.resolve();
+            });
+        });
+        it('TP.forEach(g.V().values("name")) (i.e. forEach consumer works with strings)', function () {
+            var expectedNames = ['marko', 'vadas', 'lop', 'josh', 'ripple', 'peter'];
+            var traversal = graph.traversal().V().values('name');
+            return TP.forEach(traversal, function (obj) {
+                expect(_.isString(obj)).to.be.ok;
+                expect(expectedNames).to.include(obj);
+                return;
             });
         });
         it('TP.asJSON(long)', function () {
