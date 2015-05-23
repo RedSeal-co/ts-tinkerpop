@@ -146,10 +146,9 @@ describe('Gremlin', function () {
                 var expected = {
                     id: 3,
                     label: 'vertex',
-                    type: 'vertex',
                     properties: {
-                        name: [{ id: 4, value: 'lop', properties: {} }],
-                        lang: [{ id: 5, value: 'java', properties: {} }]
+                        name: [{ id: 5, value: 'lop' }],
+                        lang: [{ id: 6, value: 'java' }]
                     }
                 };
                 expect(vertexObj).to.deep.equal(expected);
@@ -182,8 +181,8 @@ describe('Gremlin', function () {
             return TP.forEach(traversal, function (obj) {
                 var v = TP.asVertex(obj);
                 var json = TP.vertexToJson(v);
-                expect(json).to.include.keys(['id', 'label', 'type', 'properties']);
-                expect(json.type).to.equal('vertex');
+                expect(json).to.include.keys(['id', 'label', 'properties']);
+                expect(json.label).to.equal('vertex');
                 return BluePromise.resolve();
             });
         });
@@ -192,7 +191,7 @@ describe('Gremlin', function () {
             return TP.forEach(traversal, function (obj) {
                 var e = TP.asEdge(obj);
                 var json = TP.edgeToJson(e);
-                expect(json).to.include.keys(['id', 'label', 'type', 'properties', 'inV', 'outV', 'inVLabel', 'outVLabel']);
+                expect(json).to.include.keys(['id', 'type', 'label', 'properties', 'inV', 'outV', 'inVLabel', 'outVLabel']);
                 expect(json.type).to.equal('edge');
                 return BluePromise.resolve();
             });
@@ -213,38 +212,41 @@ describe('Gremlin', function () {
             expect(json).to.deep.equal(expected);
         });
         it('TP.asJSON(vertices)', function () {
-            var traversal = graph.traversal().V().has('lang', TP.Compare.eq, 'java');
+            // TODO: M9 removed `Compare`, so can't use TP.Compare.eq here.
+            // The replacement probably uses new predicate class `P`.
+            // For now, we take advantage of the fact that eq is default.
+            var traversal = graph.traversal().V().has('lang', 'java');
             var json = TP.asJSON(traversal);
             var expected = [
                 {
                     id: 3,
                     label: 'vertex',
-                    type: 'vertex',
                     properties: {
-                        name: [{ id: 4, value: 'lop', properties: {} }],
-                        lang: [{ id: 5, value: 'java', properties: {} }]
+                        name: [{ id: 5, value: 'lop' }],
+                        lang: [{ id: 6, value: 'java' }]
                     }
                 },
                 {
                     id: 5,
                     label: 'vertex',
-                    type: 'vertex',
                     properties: {
-                        name: [{ id: 8, value: 'ripple', properties: {} }],
-                        lang: [{ id: 9, value: 'java', properties: {} }]
+                        name: [{ id: 9, value: 'ripple' }],
+                        lang: [{ id: 10, value: 'java' }]
                     }
                 }
             ];
             expect(json).to.deep.equal(expected);
         });
         it('TP.asJSON(vertices) with simplifyVertex', function () {
-            var traversal = graph.traversal().V().has('lang', TP.Compare.eq, 'java');
+            // TODO: M9 removed `Compare`, so can't use TP.Compare.eq here.
+            // The replacement probably uses new predicate class `P`.
+            // For now, we take advantage of the fact that eq is default.
+            var traversal = graph.traversal().V().has('lang', 'java');
             var json = TP.simplifyVertexProperties(TP.asJSON(traversal));
             var expected = [
                 {
                     id: 3,
                     label: 'vertex',
-                    type: 'vertex',
                     properties: {
                         name: 'lop',
                         lang: 'java'
@@ -253,7 +255,6 @@ describe('Gremlin', function () {
                 {
                     id: 5,
                     label: 'vertex',
-                    type: 'vertex',
                     properties: {
                         name: 'ripple',
                         lang: 'java'
@@ -263,7 +264,10 @@ describe('Gremlin', function () {
             expect(json).to.deep.equal(expected);
         });
         it('TP.asJSON(edges)', function () {
-            var traversal = graph.traversal().E().has('weight', TP.Compare.eq, TP.java.newFloat(1.0));
+            // TODO: M9 removed `Compare`, so can't use TP.Compare.eq here.
+            // The replacement probably uses new predicate class `P`.
+            // For now, we take advantage of the fact that eq is default.
+            var traversal = graph.traversal().E().has('weight', TP.java.newFloat(1.0));
             var json = TP.asJSON(traversal);
             var expected = [
                 {
@@ -311,7 +315,6 @@ describe('Gremlin', function () {
                     a: {
                         id: 1,
                         label: 'vertex',
-                        type: 'vertex',
                         properties: {
                             name: 'marko',
                             age: 29
@@ -320,7 +323,6 @@ describe('Gremlin', function () {
                     b: {
                         id: 2,
                         label: 'vertex',
-                        type: 'vertex',
                         properties: {
                             name: 'vadas',
                             age: 27
@@ -331,7 +333,7 @@ describe('Gremlin', function () {
             expect(json).to.deep.equal(expected);
         });
         it('TP.asJSON(map entries)', function () {
-            var traversal = graph.traversal().V().as('v').values('name').as('name').back('v').out().groupCount('c').by(TP.__.back('name')).cap('c').unfold();
+            var traversal = graph.traversal().V().as('v').values('name').as('name').select('v').out().groupCount('c').by(TP.__.select('name')).cap('c').unfold();
             dlog(TP.jsify(traversal.asAdmin().clone().toList()));
             var json = TP.asJSON(traversal);
             var expected = [
@@ -341,8 +343,9 @@ describe('Gremlin', function () {
             ];
             expect(sortByAll(json, ['key'])).to.deep.equal(expected);
         });
-        it('TP.asJSON(path labels)', function () {
-            var traversal = graph.traversal().V().as('a').out().as('b').out().as('c').map(TP.newGroovyClosure('{ it -> it.path.labels() }'));
+        // TODO: Determine equivalent test after changes between M8 & M9.
+        it.skip('TP.asJSON(path labels)', function () {
+            var traversal = graph.traversal().V().as('a').out().as('b').out().as('c').map(TP.newGroovyClosure('{ it -> it.path().labels() }'));
             dlog(TP.jsify(traversal.asAdmin().clone().toList()));
             var json = TP.asJSON(traversal);
             var expected = [
@@ -532,7 +535,7 @@ describe('GraphSON support', function () {
             }
             expect(TP.savePrettyGraphSONSync(g, path), 'savePrettyGraphSONSync did not return graph').to.deep.equal(g);
             var g2 = makeEmptyTinker();
-            expect(TP.loadGraphSONSync(g2, path), 'loadGraphSONSync did not return graph').to.deep.equal(g2);
+            expect(TP.loadPrettyGraphSONSync(g2, path), 'loadPrettyGraphSONSync did not return graph').to.deep.equal(g2);
             var str = g2.toString();
             var expected = 'tinkergraph[vertices:6 edges:6]';
             expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
@@ -568,7 +571,7 @@ describe('GraphSON support', function () {
                 expect(err).to.not.exist;
                 expect(g, 'saveGraphSON did not return graph').to.deep.equal(graph);
                 var g2 = makeEmptyTinker();
-                TP.loadGraphSON(g2, path, function (err, graph) {
+                TP.loadPrettyGraphSON(g2, path, function (err, graph) {
                     expect(err).to.not.exist;
                     expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
                     var str = g2.toString();
@@ -609,7 +612,7 @@ describe('GraphSON support', function () {
         }).then(function (graph) {
             expect(g, 'savePrettyGraphSON did not return graph').to.deep.equal(graph);
             g2 = makeEmptyTinker();
-            return TP.loadGraphSON(g2, path);
+            return TP.loadPrettyGraphSON(g2, path);
         }).then(function (graph) {
             expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
             var str = g2.toString();
