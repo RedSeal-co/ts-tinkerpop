@@ -297,8 +297,8 @@ module Tinkerpop {
     if (_.isArray(obj)) {
       return _.map(obj, simplifyVertexProperties);
     }
-    assert('type' in obj);
-    assert.strictEqual(obj.type, 'vertex');
+    assert('label' in obj);
+    assert.strictEqual(obj.label, 'vertex');
     obj.properties = _.mapValues(obj.properties, (propValue: any) => {
       var values = _.pluck(propValue, 'value');
       return (values.length === 1) ? values[0] : values;
@@ -333,6 +333,66 @@ module Tinkerpop {
   export function loadGraphSONSync(graph: Java.Graph, filename: string): Java.Graph {
     var FileInputStream: Java.FileInputStream.Static = autoImport('FileInputStream');
     var stream: Java.FileInputStream = new FileInputStream(filename);
+    var builder: Java.GraphSONReader$Builder = GraphSONReader.build();
+    var mapper: Java.GraphSONMapper = _newGraphSONMapperSync();
+    builder.mapper(mapper);
+    var reader: Java.GraphSONReader = builder.create();
+    reader.readGraph(stream, graph);
+    return graph;
+  }
+
+  // ### `loadPrettyGraphSON(graph: Java.Graph, filename: string)`
+  // Loads the graph as GraphSON, and returns promise to the graph (for fluent API).
+  export function loadPrettyGraphSON(graph: Java.Graph, filename: string, callback?: GraphCallback): BluePromise<Java.Graph> {
+
+    // We need to create an input stream and a reader, both of which are created asyncrously in parallel.
+    // It would be nice to use Bluebird.join() perform those two operations, but the declaration for join()
+    // in bluebird.d.ts isn't correct. We instead use .all(), and furthermore we use these two local variables
+    // to commuicate the results of the two async operations to the final join operation.
+    var theStream: Java.InputStream;
+    var theReader: Java.GraphSONReader;
+
+    function getStream(): BluePromise<Java.InputStream> {
+      var readFileP = BluePromise.promisify(fs.readFile);
+      return readFileP(filename, { encoding: 'utf8' })
+        .then((jsonText: string) => {
+          var jsonObjArray: any[] = JSON.parse(jsonText);
+          var jsonTextArray: string[] = _.map(jsonObjArray, JSON.stringify);
+          return jsonTextArray.join('\n');
+        })
+        .then((uglyText: string) => {
+          var StringInputStream: Java.StringInputStream.Static = autoImport('StringInputStream');
+          theStream = StringInputStream.from(uglyText);
+          return theStream;
+        });
+    }
+
+    function getGraphReader(): BluePromise<Java.GraphSONReader> {
+      return GraphSONReader.buildP()
+        .then((builder: Java.GraphSONReader$Builder): BluePromise<Java.GraphSONReader$Builder> => {
+          return _newGraphSONMapper()
+            .then((mapper: Java.GraphSONMapper): BluePromise<Java.GraphSONReader$Builder> => builder.mapperP(mapper));
+        })
+        .then((builder: Java.GraphSONReader$Builder): BluePromise<Java.GraphSONReader> => builder.createP())
+        .then((reader: Java.GraphSONReader) => { theReader = reader; return theReader; });
+    }
+
+    return BluePromise.all([getStream(), getGraphReader()])
+      .then(() => theReader.readGraphP(theStream, graph))
+      .then((): Java.Graph => graph)
+      .nodeify(callback);
+  }
+
+  // ### `loadPrettyGraphSONSync(graph: Java.Graph, filename: string)`
+  // Loads the 'pretty' graph as GraphSON, and returns the graph (for fluent API).
+  export function loadPrettyGraphSONSync(graph: Java.Graph, filename: string): Java.Graph {
+    var jsonText: string = fs.readFileSync(filename, { encoding: 'utf8' });
+    var jsonObjArray: any[] = JSON.parse(jsonText);
+    var jsonTextArray: string[] = _.map(jsonObjArray, JSON.stringify);
+    var uglyText = jsonTextArray.join('\n');
+
+    var StringInputStream: Java.StringInputStream.Static = autoImport('StringInputStream');
+    var stream: Java.InputStream = StringInputStream.from(uglyText);
     var builder: Java.GraphSONReader$Builder = GraphSONReader.build();
     var mapper: Java.GraphSONMapper = _newGraphSONMapperSync();
     builder.mapper(mapper);
@@ -547,7 +607,9 @@ module Tinkerpop {
   // ### `prettyGraphSONString(ugly: string)`
   // Make a GraphSON string pretty, adding indentation and deterministic format.
   function _prettyGraphSONString(ugly: string): string {
-    var json: any = JSON.parse(ugly);
+    var lines: string[] = ugly.trim().split(require('os').EOL);
+    var jsonText: any = '[\n' + lines.join(',\n') + '\n]';
+    var json: any = JSON.parse(jsonText);
 
     // Compute the stable JSON.
     var stringifyOpts: jsonStableStringify.Options = {
