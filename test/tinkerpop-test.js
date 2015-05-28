@@ -343,14 +343,13 @@ describe('Gremlin', function () {
             ];
             expect(sortByAll(json, ['key'])).to.deep.equal(expected);
         });
-        // TODO: Determine equivalent test after changes between M8 & M9.
-        it.skip('TP.asJSON(path labels)', function () {
-            var traversal = graph.traversal().V().as('a').out().as('b').out().as('c').map(TP.newGroovyClosure('{ it -> it.path().labels() }'));
+        it('TP.asJSON(path labels)', function () {
+            var traversal = graph.traversal().V().as('a').out().as('b').out().as('c').select().map(TP.newGroovyClosure('{ it -> it.path().labels() }'));
             dlog(TP.jsify(traversal.asAdmin().clone().toList()));
             var json = TP.asJSON(traversal);
             var expected = [
-                [['a'], ['b'], ['c']],
-                [['a'], ['b'], ['c']],
+                [['a'], ['b'], ['c'], []],
+                [['a'], ['b'], ['c'], []],
             ];
             expect(json).to.deep.equal(expected);
         });
