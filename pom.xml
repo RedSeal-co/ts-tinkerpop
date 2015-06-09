@@ -6,38 +6,31 @@
   <groupId>co.redseal</groupId>
   <artifactId>ts-tinkerpop</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.0-SNAPSHOT</version>
+  <version>3.0.0.M9.0</version>
   <name>ts-tinkerpop</name>
 
   <properties>
     <junit.version>4.11</junit.version>
-    <gremlin.version>3.0.0.M9-incubating-rc3</gremlin.version>
+    <gremlin.version>3.0.0.M9-incubating</gremlin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-
-  <repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-  </repositories>
 
   <dependencies>
 
     <dependency>
-      <groupId>com.github.apache.incubator-tinkerpop</groupId>
+      <groupId>org.apache.tinkerpop</groupId>
       <artifactId>gremlin-core</artifactId>
       <version>${gremlin.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>com.github.apache.incubator-tinkerpop</groupId>
+      <groupId>org.apache.tinkerpop</groupId>
       <artifactId>gremlin-groovy</artifactId>
       <version>${gremlin.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>com.github.apache.incubator-tinkerpop</groupId>
+      <groupId>org.apache.tinkerpop</groupId>
       <artifactId>tinkergraph-gremlin</artifactId>
       <version>${gremlin.version}</version>
     </dependency>
@@ -48,7 +41,7 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
-    
+
   </dependencies>
 
   <build>
