@@ -95,7 +95,6 @@ function autoImport(shortName: 'ComputerResult'): Java.org.apache.tinkerpop.grem
 function autoImport(shortName: 'GraphComputer'): Java.org.apache.tinkerpop.gremlin.process.computer.GraphComputer.Static;
 function autoImport(shortName: 'GraphComputer$Exceptions'): Java.org.apache.tinkerpop.gremlin.process.computer.GraphComputer$Exceptions.Static;
 function autoImport(shortName: 'GraphComputer$Features'): Java.org.apache.tinkerpop.gremlin.process.computer.GraphComputer$Features.Static;
-function autoImport(shortName: 'GraphComputer$Isolation'): Java.org.apache.tinkerpop.gremlin.process.computer.GraphComputer$Isolation.Static;
 function autoImport(shortName: 'GraphComputer$Persist'): Java.org.apache.tinkerpop.gremlin.process.computer.GraphComputer$Persist.Static;
 function autoImport(shortName: 'GraphComputer$ResultGraph'): Java.org.apache.tinkerpop.gremlin.process.computer.GraphComputer$ResultGraph.Static;
 function autoImport(shortName: 'KeyValue'): Java.org.apache.tinkerpop.gremlin.process.computer.KeyValue.Static;
@@ -119,7 +118,6 @@ function autoImport(shortName: 'PageRankMessageCombiner'): Java.org.apache.tinke
 function autoImport(shortName: 'PageRankVertexProgram'): Java.org.apache.tinkerpop.gremlin.process.computer.ranking.pagerank.PageRankVertexProgram.Static;
 function autoImport(shortName: 'PageRankVertexProgram$Builder'): Java.org.apache.tinkerpop.gremlin.process.computer.ranking.pagerank.PageRankVertexProgram$Builder.Static;
 function autoImport(shortName: 'SingleMessenger'): Java.org.apache.tinkerpop.gremlin.process.computer.traversal.SingleMessenger.Static;
-function autoImport(shortName: 'TraversalClassSupplier'): Java.org.apache.tinkerpop.gremlin.process.computer.traversal.TraversalClassSupplier.Static;
 function autoImport(shortName: 'TraversalVertexProgram'): Java.org.apache.tinkerpop.gremlin.process.computer.traversal.TraversalVertexProgram.Static;
 function autoImport(shortName: 'TraversalVertexProgram$Builder'): Java.org.apache.tinkerpop.gremlin.process.computer.traversal.TraversalVertexProgram$Builder.Static;
 function autoImport(shortName: 'TraversalVertexProgramMessageCombiner'): Java.org.apache.tinkerpop.gremlin.process.computer.traversal.TraversalVertexProgramMessageCombiner.Static;
@@ -224,6 +222,7 @@ function autoImport(shortName: 'OrP'): Java.org.apache.tinkerpop.gremlin.process
 function autoImport(shortName: 'SideEffectHelper'): Java.org.apache.tinkerpop.gremlin.process.traversal.util.SideEffectHelper.Static;
 function autoImport(shortName: 'StandardTraversalMetrics'): Java.org.apache.tinkerpop.gremlin.process.traversal.util.StandardTraversalMetrics.Static;
 function autoImport(shortName: 'StepPosition'): Java.org.apache.tinkerpop.gremlin.process.traversal.util.StepPosition.Static;
+function autoImport(shortName: 'TraversalClassFunction'): Java.org.apache.tinkerpop.gremlin.process.traversal.util.TraversalClassFunction.Static;
 function autoImport(shortName: 'TraversalHelper'): Java.org.apache.tinkerpop.gremlin.process.traversal.util.TraversalHelper.Static;
 function autoImport(shortName: 'TraversalMatrix'): Java.org.apache.tinkerpop.gremlin.process.traversal.util.TraversalMatrix.Static;
 function autoImport(shortName: 'TraversalMetrics'): Java.org.apache.tinkerpop.gremlin.process.traversal.util.TraversalMetrics.Static;
@@ -276,11 +275,11 @@ function autoImport(shortName: 'GraphSONIo'): Java.org.apache.tinkerpop.gremlin.
 function autoImport(shortName: 'GraphSONIo$Builder'): Java.org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONIo$Builder.Static;
 function autoImport(shortName: 'GraphSONMapper'): Java.org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper.Static;
 function autoImport(shortName: 'GraphSONMapper$Builder'): Java.org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder.Static;
-function autoImport(shortName: 'GraphSONModule'): Java.org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONModule.Static;
 function autoImport(shortName: 'GraphSONReader'): Java.org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONReader.Static;
 function autoImport(shortName: 'GraphSONReader$Builder'): Java.org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder.Static;
 function autoImport(shortName: 'GraphSONTokens'): Java.org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONTokens.Static;
 function autoImport(shortName: 'GraphSONUtil'): Java.org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONUtil.Static;
+function autoImport(shortName: 'GraphSONVersion'): Java.org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONVersion.Static;
 function autoImport(shortName: 'GraphSONWriter'): Java.org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter.Static;
 function autoImport(shortName: 'GraphSONWriter$Builder'): Java.org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter$Builder.Static;
 function autoImport(shortName: 'LegacyGraphSONReader'): Java.org.apache.tinkerpop.gremlin.structure.io.graphson.LegacyGraphSONReader.Static;
@@ -367,7 +366,6 @@ function autoImport(shortName: 'TinkerVertexProperty'): Java.org.apache.tinkerpo
 function autoImport(shortName: 'ArrayListSupplier'): Java.org.apache.tinkerpop.gremlin.util.function_.ArrayListSupplier.Static;
 function autoImport(shortName: 'BulkSetSupplier'): Java.org.apache.tinkerpop.gremlin.util.function_.BulkSetSupplier.Static;
 function autoImport(shortName: 'ChainedComparator'): Java.org.apache.tinkerpop.gremlin.util.function_.ChainedComparator.Static;
-function autoImport(shortName: 'CloningUnaryOperator'): Java.org.apache.tinkerpop.gremlin.util.function_.CloningUnaryOperator.Static;
 function autoImport(shortName: 'ConstantSupplier'): Java.org.apache.tinkerpop.gremlin.util.function_.ConstantSupplier.Static;
 function autoImport(shortName: 'FunctionUtils'): Java.org.apache.tinkerpop.gremlin.util.function_.FunctionUtils.Static;
 function autoImport(shortName: 'HashMapSupplier'): Java.org.apache.tinkerpop.gremlin.util.function_.HashMapSupplier.Static;
@@ -383,10 +381,8 @@ function autoImport(shortName: 'TreeSupplier'): Java.org.apache.tinkerpop.gremli
 function autoImport(shortName: 'TriConsumer'): Java.org.apache.tinkerpop.gremlin.util.function_.TriConsumer.Static;
 function autoImport(shortName: 'TriFunction'): Java.org.apache.tinkerpop.gremlin.util.function_.TriFunction.Static;
 function autoImport(shortName: 'Gremlin'): Java.org.apache.tinkerpop.gremlin.util.Gremlin.Static;
-function autoImport(shortName: 'InterruptedRuntimeException'): Java.org.apache.tinkerpop.gremlin.util.InterruptedRuntimeException.Static;
 function autoImport(shortName: 'ScriptEngineCache'): Java.org.apache.tinkerpop.gremlin.util.ScriptEngineCache.Static;
 function autoImport(shortName: 'Serializer'): Java.org.apache.tinkerpop.gremlin.util.Serializer.Static;
-function autoImport(shortName: 'StreamFactory'): Java.org.apache.tinkerpop.gremlin.util.StreamFactory.Static;
 function autoImport(shortName: 'TimeUtil'): Java.org.apache.tinkerpop.gremlin.util.TimeUtil.Static;
 function autoImport(shortName: 'ClassNode'): Java.org.codehaus.groovy.ast.ClassNode.Static;
 function autoImport(shortName: 'CompilerConfiguration'): Java.org.codehaus.groovy.control.CompilerConfiguration.Static;
@@ -485,7 +481,6 @@ function autoImport(shortName: string): any {
     'GraphComputer': 'org.apache.tinkerpop.gremlin.process.computer.GraphComputer',
     'GraphComputer$Exceptions': 'org.apache.tinkerpop.gremlin.process.computer.GraphComputer$Exceptions',
     'GraphComputer$Features': 'org.apache.tinkerpop.gremlin.process.computer.GraphComputer$Features',
-    'GraphComputer$Isolation': 'org.apache.tinkerpop.gremlin.process.computer.GraphComputer$Isolation',
     'GraphComputer$Persist': 'org.apache.tinkerpop.gremlin.process.computer.GraphComputer$Persist',
     'GraphComputer$ResultGraph': 'org.apache.tinkerpop.gremlin.process.computer.GraphComputer$ResultGraph',
     'KeyValue': 'org.apache.tinkerpop.gremlin.process.computer.KeyValue',
@@ -509,7 +504,6 @@ function autoImport(shortName: string): any {
     'PageRankVertexProgram': 'org.apache.tinkerpop.gremlin.process.computer.ranking.pagerank.PageRankVertexProgram',
     'PageRankVertexProgram$Builder': 'org.apache.tinkerpop.gremlin.process.computer.ranking.pagerank.PageRankVertexProgram$Builder',
     'SingleMessenger': 'org.apache.tinkerpop.gremlin.process.computer.traversal.SingleMessenger',
-    'TraversalClassSupplier': 'org.apache.tinkerpop.gremlin.process.computer.traversal.TraversalClassSupplier',
     'TraversalVertexProgram': 'org.apache.tinkerpop.gremlin.process.computer.traversal.TraversalVertexProgram',
     'TraversalVertexProgram$Builder': 'org.apache.tinkerpop.gremlin.process.computer.traversal.TraversalVertexProgram$Builder',
     'TraversalVertexProgramMessageCombiner': 'org.apache.tinkerpop.gremlin.process.computer.traversal.TraversalVertexProgramMessageCombiner',
@@ -614,6 +608,7 @@ function autoImport(shortName: string): any {
     'SideEffectHelper': 'org.apache.tinkerpop.gremlin.process.traversal.util.SideEffectHelper',
     'StandardTraversalMetrics': 'org.apache.tinkerpop.gremlin.process.traversal.util.StandardTraversalMetrics',
     'StepPosition': 'org.apache.tinkerpop.gremlin.process.traversal.util.StepPosition',
+    'TraversalClassFunction': 'org.apache.tinkerpop.gremlin.process.traversal.util.TraversalClassFunction',
     'TraversalHelper': 'org.apache.tinkerpop.gremlin.process.traversal.util.TraversalHelper',
     'TraversalMatrix': 'org.apache.tinkerpop.gremlin.process.traversal.util.TraversalMatrix',
     'TraversalMetrics': 'org.apache.tinkerpop.gremlin.process.traversal.util.TraversalMetrics',
@@ -666,11 +661,11 @@ function autoImport(shortName: string): any {
     'GraphSONIo$Builder': 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONIo$Builder',
     'GraphSONMapper': 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper',
     'GraphSONMapper$Builder': 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper$Builder',
-    'GraphSONModule': 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONModule',
     'GraphSONReader': 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONReader',
     'GraphSONReader$Builder': 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder',
     'GraphSONTokens': 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONTokens',
     'GraphSONUtil': 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONUtil',
+    'GraphSONVersion': 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONVersion',
     'GraphSONWriter': 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter',
     'GraphSONWriter$Builder': 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter$Builder',
     'LegacyGraphSONReader': 'org.apache.tinkerpop.gremlin.structure.io.graphson.LegacyGraphSONReader',
@@ -757,7 +752,6 @@ function autoImport(shortName: string): any {
     'ArrayListSupplier': 'org.apache.tinkerpop.gremlin.util.function.ArrayListSupplier',
     'BulkSetSupplier': 'org.apache.tinkerpop.gremlin.util.function.BulkSetSupplier',
     'ChainedComparator': 'org.apache.tinkerpop.gremlin.util.function.ChainedComparator',
-    'CloningUnaryOperator': 'org.apache.tinkerpop.gremlin.util.function.CloningUnaryOperator',
     'ConstantSupplier': 'org.apache.tinkerpop.gremlin.util.function.ConstantSupplier',
     'FunctionUtils': 'org.apache.tinkerpop.gremlin.util.function.FunctionUtils',
     'HashMapSupplier': 'org.apache.tinkerpop.gremlin.util.function.HashMapSupplier',
@@ -773,10 +767,8 @@ function autoImport(shortName: string): any {
     'TriConsumer': 'org.apache.tinkerpop.gremlin.util.function.TriConsumer',
     'TriFunction': 'org.apache.tinkerpop.gremlin.util.function.TriFunction',
     'Gremlin': 'org.apache.tinkerpop.gremlin.util.Gremlin',
-    'InterruptedRuntimeException': 'org.apache.tinkerpop.gremlin.util.InterruptedRuntimeException',
     'ScriptEngineCache': 'org.apache.tinkerpop.gremlin.util.ScriptEngineCache',
     'Serializer': 'org.apache.tinkerpop.gremlin.util.Serializer',
-    'StreamFactory': 'org.apache.tinkerpop.gremlin.util.StreamFactory',
     'TimeUtil': 'org.apache.tinkerpop.gremlin.util.TimeUtil',
     'ClassNode': 'org.codehaus.groovy.ast.ClassNode',
     'CompilerConfiguration': 'org.codehaus.groovy.control.CompilerConfiguration',
