@@ -613,15 +613,7 @@ module Tinkerpop {
 
     // Compute the stable JSON.
     var stringifyOpts: jsonStableStringify.Options = {
-      // GraphSON requires its top level properties to be in the order mode, vertices, edges.
-      space: 2,
-      cmp: (a: jsonStableStringify.Element, b: jsonStableStringify.Element): number => {
-        if (a.key === 'edges')
-          return 1;
-        else if (b.key === 'edges')
-          return -1;
-        return a.key < b.key ? -1 : 1;
-      }
+      space: 2
     };
 
     var prettyString: string = jsonStableStringify(json, stringifyOpts);
