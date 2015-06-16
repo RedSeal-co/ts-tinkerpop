@@ -212,9 +212,6 @@ describe('Gremlin', function () {
             expect(json).to.deep.equal(expected);
         });
         it('TP.asJSON(vertices)', function () {
-            // TODO: M9 removed `Compare`, so can't use TP.Compare.eq here.
-            // The replacement probably uses new predicate class `P`.
-            // For now, we take advantage of the fact that eq is default.
             var traversal = graph.traversal().V().has('lang', 'java');
             var json = TP.asJSON(traversal);
             var expected = [
@@ -238,9 +235,6 @@ describe('Gremlin', function () {
             expect(json).to.deep.equal(expected);
         });
         it('TP.asJSON(vertices) with simplifyVertex', function () {
-            // TODO: M9 removed `Compare`, so can't use TP.Compare.eq here.
-            // The replacement probably uses new predicate class `P`.
-            // For now, we take advantage of the fact that eq is default.
             var traversal = graph.traversal().V().has('lang', 'java');
             var json = TP.simplifyVertexProperties(TP.asJSON(traversal));
             var expected = [
@@ -264,9 +258,6 @@ describe('Gremlin', function () {
             expect(json).to.deep.equal(expected);
         });
         it('TP.asJSON(edges)', function () {
-            // TODO: M9 removed `Compare`, so can't use TP.Compare.eq here.
-            // The replacement probably uses new predicate class `P`.
-            // For now, we take advantage of the fact that eq is default.
             var traversal = graph.traversal().E().has('weight', TP.java.newFloat(1.0));
             var json = TP.asJSON(traversal);
             var expected = [
