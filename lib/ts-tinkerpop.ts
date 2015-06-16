@@ -604,19 +604,62 @@ module Tinkerpop {
     return mapper;
   }
 
+  // ### `_smellsLikeAnElement()`
+  function _smellsLikeAnElement(elem: any): void {
+    assert.strictEqual(elem['@class'], 'java.util.HashMap');
+    assert.ok(!_.isUndefined(elem.id));
+  }
+
+  // ### `_compareIds()`
+  // Compares two Tinkerpop elements (vertex or edge) by their ID.
+  // Tinkerpop allows different datatypes to be used for ID. This method requires that both IDs be of the same
+  // type, and tries to do something reasonable for the various representations we might see from Tinkerpop.
+  function _compareIds(a: any, b: any): number {
+      assert.strictEqual(typeof a.id, typeof b.id);
+      if (_.isNumber(a.id)) {
+        return b.id - a.id;
+      } else if (_.isString(a.id)) {
+        // Even if we have strings, we prefer numeric sort semantics
+        // We assume a shorter string is always less than a longer string.
+        if (a.id.length === b.id.length) {
+          return a.id.localeCompare(b.id);
+        } else {
+          return b.id.length - a.id.length;
+        }
+      } else if (_.isArray(a.id)) {
+        assert.strictEqual(a.id[0], b.id[0]);
+        return _compareIds(a.id[1], b.id[1]);
+      } else {
+        dlog('Unexpected:', a.id);
+        assert(false, 'Unexpected vertex id type:' + typeof(a.id));
+      }
+  }
+
+  // ### `_parseVertex()`
+  // Parse one line of text from a Tinkerpop graphson stream, yielding one vertex.
+  function _parseVertex(line: string): any {
+    var vertex: any = JSON.parse(line);
+    _smellsLikeAnElement(vertex);
+
+    // TODO: sort elements of the vertex
+
+    return vertex;
+  }
+
   // ### `prettyGraphSONString(ugly: string)`
   // Make a GraphSON string pretty, adding indentation and deterministic format.
   function _prettyGraphSONString(ugly: string): string {
     var lines: string[] = ugly.trim().split(require('os').EOL);
-    var jsonText: any = '[\n' + lines.join(',\n') + '\n]';
-    var json: any = JSON.parse(jsonText);
+
+    var vertices: any[] = _.map(lines, (line: string) =>_parseVertex(line));
+    vertices.sort(_compareIds);
 
     // Compute the stable JSON.
     var stringifyOpts: jsonStableStringify.Options = {
       space: 2
     };
 
-    var prettyString: string = jsonStableStringify(json, stringifyOpts);
+    var prettyString: string = jsonStableStringify(vertices, stringifyOpts);
     return prettyString;
   }
 
