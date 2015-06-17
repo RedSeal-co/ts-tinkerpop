@@ -1,0 +1,656 @@
+[
+  {
+    "@class": "java.util.HashMap",
+    "id": 1,
+    "label": "person",
+    "outE": {
+      "@class": "java.util.HashMap",
+      "develops": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 13,
+            "inV": 10,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "since": 2009
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 14,
+            "inV": 11,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "since": 2010
+            }
+          }
+        ]
+      ],
+      "uses": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 15,
+            "inV": 10,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 4
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 16,
+            "inV": 11,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 5
+            }
+          }
+        ]
+      ]
+    },
+    "properties": {
+      "@class": "java.util.HashMap",
+      "location": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              6
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "endTime": 2001,
+              "startTime": 1997
+            },
+            "value": "san diego"
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              7
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "endTime": 2004,
+              "startTime": 2001
+            },
+            "value": "santa cruz"
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              8
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "endTime": 2005,
+              "startTime": 2004
+            },
+            "value": "brussels"
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              9
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "startTime": 2005
+            },
+            "value": "santa fe"
+          }
+        ]
+      ],
+      "name": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              0
+            ],
+            "value": "marko"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "@class": "java.util.HashMap",
+    "id": 7,
+    "label": "person",
+    "outE": {
+      "@class": "java.util.HashMap",
+      "develops": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 17,
+            "inV": 10,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "since": 2010
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 18,
+            "inV": 11,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "since": 2011
+            }
+          }
+        ]
+      ],
+      "uses": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 19,
+            "inV": 10,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 5
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 20,
+            "inV": 11,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 4
+            }
+          }
+        ]
+      ]
+    },
+    "properties": {
+      "@class": "java.util.HashMap",
+      "location": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              10
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "endTime": 2000,
+              "startTime": 1990
+            },
+            "value": "centreville"
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              11
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "endTime": 2006,
+              "startTime": 2000
+            },
+            "value": "dulles"
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              12
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "startTime": 2006
+            },
+            "value": "purcellville"
+          }
+        ]
+      ],
+      "name": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              1
+            ],
+            "value": "stephen"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "@class": "java.util.HashMap",
+    "id": 8,
+    "label": "person",
+    "outE": {
+      "@class": "java.util.HashMap",
+      "develops": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 21,
+            "inV": 10,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "since": 2012
+            }
+          }
+        ]
+      ],
+      "uses": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 22,
+            "inV": 10,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 3
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 23,
+            "inV": 11,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 3
+            }
+          }
+        ]
+      ]
+    },
+    "properties": {
+      "@class": "java.util.HashMap",
+      "location": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              13
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "endTime": 2007,
+              "startTime": 2004
+            },
+            "value": "bremen"
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              14
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "endTime": 2011,
+              "startTime": 2007
+            },
+            "value": "baltimore"
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              15
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "endTime": 2014,
+              "startTime": 2011
+            },
+            "value": "oakland"
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              16
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "startTime": 2014
+            },
+            "value": "seattle"
+          }
+        ]
+      ],
+      "name": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              2
+            ],
+            "value": "matthias"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "@class": "java.util.HashMap",
+    "id": 9,
+    "label": "person",
+    "outE": {
+      "@class": "java.util.HashMap",
+      "uses": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 24,
+            "inV": 10,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 5
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 25,
+            "inV": 11,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 3
+            }
+          }
+        ]
+      ]
+    },
+    "properties": {
+      "@class": "java.util.HashMap",
+      "location": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              17
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "endTime": 2005,
+              "startTime": 1982
+            },
+            "value": "spremberg"
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              18
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "endTime": 2009,
+              "startTime": 2005
+            },
+            "value": "kaiserslautern"
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              19
+            ],
+            "properties": {
+              "@class": "java.util.HashMap",
+              "startTime": 2009
+            },
+            "value": "aachen"
+          }
+        ]
+      ],
+      "name": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              3
+            ],
+            "value": "daniel"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "@class": "java.util.HashMap",
+    "id": 10,
+    "inE": {
+      "@class": "java.util.HashMap",
+      "develops": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 13,
+            "outV": 1,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "since": 2009
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 17,
+            "outV": 7,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "since": 2010
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 21,
+            "outV": 8,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "since": 2012
+            }
+          }
+        ]
+      ],
+      "uses": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 15,
+            "outV": 1,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 4
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 19,
+            "outV": 7,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 5
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 22,
+            "outV": 8,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 3
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 24,
+            "outV": 9,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 5
+            }
+          }
+        ]
+      ]
+    },
+    "label": "software",
+    "outE": {
+      "@class": "java.util.HashMap",
+      "traverses": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 26,
+            "inV": 11
+          }
+        ]
+      ]
+    },
+    "properties": {
+      "@class": "java.util.HashMap",
+      "name": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              4
+            ],
+            "value": "gremlin"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "@class": "java.util.HashMap",
+    "id": 11,
+    "inE": {
+      "@class": "java.util.HashMap",
+      "develops": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 14,
+            "outV": 1,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "since": 2010
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 18,
+            "outV": 7,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "since": 2011
+            }
+          }
+        ]
+      ],
+      "traverses": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 26,
+            "outV": 10
+          }
+        ]
+      ],
+      "uses": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": 16,
+            "outV": 1,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 5
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 20,
+            "outV": 7,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 4
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 23,
+            "outV": 8,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 3
+            }
+          },
+          {
+            "@class": "java.util.HashMap",
+            "id": 25,
+            "outV": 9,
+            "properties": {
+              "@class": "java.util.HashMap",
+              "skill": 3
+            }
+          }
+        ]
+      ]
+    },
+    "label": "software",
+    "properties": {
+      "@class": "java.util.HashMap",
+      "name": [
+        "java.util.ArrayList",
+        [
+          {
+            "@class": "java.util.HashMap",
+            "id": [
+              "java.lang.Long",
+              5
+            ],
+            "value": "tinkergraph"
+          }
+        ]
+      ]
+    }
+  }
+]
