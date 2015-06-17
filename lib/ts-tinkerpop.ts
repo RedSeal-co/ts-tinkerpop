@@ -697,7 +697,7 @@ module Tinkerpop {
     var stringifyOpts: jsonStableStringify.Options = {
       space: 2
     };
-    var prettyString: string = jsonStableStringify(vertices, stringifyOpts);
+    var prettyString: string = jsonStableStringify(vertices, stringifyOpts) + '\n';
     return prettyString;
   }
 
