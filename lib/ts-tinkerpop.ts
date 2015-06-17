@@ -268,7 +268,6 @@ module Tinkerpop {
       return javaIterator.hasNextP()
         .then((hasNext: boolean): BluePromise<void> => {
           if (!hasNext) {
-            dlog('forEach: done');
             return BluePromise.resolve();
           } else {
             return javaIterator.nextP()
@@ -604,10 +603,18 @@ module Tinkerpop {
     return mapper;
   }
 
+  // ### `_smellsLikeAPropertyContainer()`
+  function _smellsLikeAPropertyContainer(elem: any): boolean {
+    return _.isObject(elem) && elem['@class'] === 'java.util.HashMap';
+  }
+
   // ### `_smellsLikeAnElement()`
-  function _smellsLikeAnElement(elem: any): void {
-    assert.strictEqual(elem['@class'], 'java.util.HashMap');
-    assert.ok(!_.isUndefined(elem.id));
+  function _smellsLikeAnElement(elem: any): boolean {
+    return _smellsLikeAPropertyContainer(elem) &&  !_.isUndefined(elem.id);
+  }
+
+  function _smellsLikeArrayOfElements(obj: any): boolean {
+    return _.isArray(obj) && obj[0] === 'java.util.ArrayList' && _.isArray(obj[1]) && _smellsLikeAnElement(obj[1][0]);
   }
 
   // ### `_compareIds()`
@@ -615,35 +622,67 @@ module Tinkerpop {
   // Tinkerpop allows different datatypes to be used for ID. This method requires that both IDs be of the same
   // type, and tries to do something reasonable for the various representations we might see from Tinkerpop.
   function _compareIds(a: any, b: any): number {
-      assert.strictEqual(typeof a.id, typeof b.id);
-      if (_.isNumber(a.id)) {
-        return b.id - a.id;
-      } else if (_.isString(a.id)) {
-        // Even if we have strings, we prefer numeric sort semantics
-        // We assume a shorter string is always less than a longer string.
-        if (a.id.length === b.id.length) {
-          return a.id.localeCompare(b.id);
-        } else {
-          return b.id.length - a.id.length;
-        }
-      } else if (_.isArray(a.id)) {
-        assert.strictEqual(a.id[0], b.id[0]);
-        return _compareIds(a.id[1], b.id[1]);
+    assert.strictEqual(typeof a, typeof b);
+    if (_.isNumber(a)) {
+      return a - b;
+    } else if (_.isString(a)) {
+      // Even with strings, we prefer numeric sort semantics,
+      // i.e. a shorter string is always less than a longer string.
+      if (a.length === b.length) {
+        return a.localeCompare(b);
       } else {
-        dlog('Unexpected:', a.id);
-        assert(false, 'Unexpected vertex id type:' + typeof(a.id));
+        return a.length - b.length;
       }
+    } else if (_.isArray(a)) {
+      // handles cases like this: "id": [ "java.lang.Long", 16],
+      assert.strictEqual(a[0], b[0]);
+      assert.strictEqual(a.length, 2);
+      assert.strictEqual(b.length, 2);
+      return _compareIds(a[1], b[1]);
+    } else {
+      dlog('Whatup?', a, b);
+      assert(false, 'Unexpected element id type:' + typeof(a));
+    }
+  }
+
+  // ### `_compareById()`
+  // Compares two elements by their id
+  function _compareById(a: any, b: any): number {
+    assert.strictEqual(typeof a.id, typeof b.id);
+    assert.ok(!_.isUndefined(a.id));
+    return _compareIds(a.id, b.id);
+  }
+
+  // ### `_sortElements()`
+  // Called for each key,obj in a property container, this processes each object that smells like an array of elements
+  function _sortElements(obj: any, key: string): any {
+    if (_smellsLikeArrayOfElements(obj)) {
+      obj[1] = obj[1].sort(_compareById);
+    }
+    return obj;
+  }
+
+  // ### `_sortPropertyContainers()`
+  // Called for each key,obj in an Element, this processes each object that smells like a 'property container',
+  // which includes vertex `properties` hashmaps, and `inE` and `outE` edges.
+  function _sortPropertyContainers(obj: any, key: string): any {
+    if (_smellsLikeAPropertyContainer(obj)) {
+      return _.mapValues(obj, _sortElements);
+    } else {
+      return obj;
+    }
   }
 
   // ### `_parseVertex()`
   // Parse one line of text from a Tinkerpop graphson stream, yielding one vertex.
   function _parseVertex(line: string): any {
     var vertex: any = JSON.parse(line);
-    _smellsLikeAnElement(vertex);
+    assert.ok(_smellsLikeAnElement(vertex));
 
-    // TODO: sort elements of the vertex
-
-    return vertex;
+    // A vertex is an object, i.e. a key,value map.
+    // We don't sort the keys of the object, leaving that to jsonStableStringify below.
+    // But a vertex values contain `property containers`, each of which may contain embedded arrays of elements.
+    return _.mapValues(vertex, _sortPropertyContainers)
   }
 
   // ### `prettyGraphSONString(ugly: string)`
@@ -652,13 +691,12 @@ module Tinkerpop {
     var lines: string[] = ugly.trim().split(require('os').EOL);
 
     var vertices: any[] = _.map(lines, (line: string) =>_parseVertex(line));
-    vertices.sort(_compareIds);
+    vertices.sort(_compareById);
 
     // Compute the stable JSON.
     var stringifyOpts: jsonStableStringify.Options = {
       space: 2
     };
-
     var prettyString: string = jsonStableStringify(vertices, stringifyOpts);
     return prettyString;
   }
