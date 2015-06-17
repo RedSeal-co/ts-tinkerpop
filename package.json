@@ -1,6 +1,6 @@
 {
   "name": "ts-tinkerpop",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Utilities for using Tinkerpop3 via the node-java API in Typescript",
   "main": "lib/ts-tinkerpop.js",
   "scripts": {
