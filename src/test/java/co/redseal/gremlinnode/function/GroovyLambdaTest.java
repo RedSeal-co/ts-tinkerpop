@@ -53,7 +53,7 @@ public class GroovyLambdaTest {
         final Set<String> imports = engineImports.get("imports");
         assertTrue(imports.contains("org.apache.tinkerpop.gremlin.process.traversal.*"));
         final Set<String> staticImports = engineImports.get("staticImports");
-        assertTrue(staticImports.contains("org.apache.tinkerpop.gremlin.structure.Compare.*"));
+        assertTrue(staticImports.contains("org.apache.tinkerpop.gremlin.process.traversal.P.*"));
     }
 
     @Test

@@ -268,7 +268,6 @@ module Tinkerpop {
       return javaIterator.hasNextP()
         .then((hasNext: boolean): BluePromise<void> => {
           if (!hasNext) {
-            dlog('forEach: done');
             return BluePromise.resolve();
           } else {
             return javaIterator.nextP()
@@ -297,8 +296,8 @@ module Tinkerpop {
     if (_.isArray(obj)) {
       return _.map(obj, simplifyVertexProperties);
     }
-    assert('type' in obj);
-    assert.strictEqual(obj.type, 'vertex');
+    assert('label' in obj);
+    assert.strictEqual(obj.label, 'vertex');
     obj.properties = _.mapValues(obj.properties, (propValue: any) => {
       var values = _.pluck(propValue, 'value');
       return (values.length === 1) ? values[0] : values;
@@ -333,6 +332,66 @@ module Tinkerpop {
   export function loadGraphSONSync(graph: Java.Graph, filename: string): Java.Graph {
     var FileInputStream: Java.FileInputStream.Static = autoImport('FileInputStream');
     var stream: Java.FileInputStream = new FileInputStream(filename);
+    var builder: Java.GraphSONReader$Builder = GraphSONReader.build();
+    var mapper: Java.GraphSONMapper = _newGraphSONMapperSync();
+    builder.mapper(mapper);
+    var reader: Java.GraphSONReader = builder.create();
+    reader.readGraph(stream, graph);
+    return graph;
+  }
+
+  // ### `loadPrettyGraphSON(graph: Java.Graph, filename: string)`
+  // Loads the graph as GraphSON, and returns promise to the graph (for fluent API).
+  export function loadPrettyGraphSON(graph: Java.Graph, filename: string, callback?: GraphCallback): BluePromise<Java.Graph> {
+
+    // We need to create an input stream and a reader, both of which are created asyncrously in parallel.
+    // It would be nice to use Bluebird.join() perform those two operations, but the declaration for join()
+    // in bluebird.d.ts isn't correct. We instead use .all(), and furthermore we use these two local variables
+    // to commuicate the results of the two async operations to the final join operation.
+    var theStream: Java.InputStream;
+    var theReader: Java.GraphSONReader;
+
+    function getStream(): BluePromise<Java.InputStream> {
+      var readFileP = BluePromise.promisify(fs.readFile);
+      return readFileP(filename, { encoding: 'utf8' })
+        .then((jsonText: string) => {
+          var jsonObjArray: any[] = JSON.parse(jsonText);
+          var jsonTextArray: string[] = _.map(jsonObjArray, JSON.stringify);
+          return jsonTextArray.join('\n');
+        })
+        .then((uglyText: string) => {
+          var StringInputStream: Java.StringInputStream.Static = autoImport('StringInputStream');
+          theStream = StringInputStream.from(uglyText);
+          return theStream;
+        });
+    }
+
+    function getGraphReader(): BluePromise<Java.GraphSONReader> {
+      return GraphSONReader.buildP()
+        .then((builder: Java.GraphSONReader$Builder): BluePromise<Java.GraphSONReader$Builder> => {
+          return _newGraphSONMapper()
+            .then((mapper: Java.GraphSONMapper): BluePromise<Java.GraphSONReader$Builder> => builder.mapperP(mapper));
+        })
+        .then((builder: Java.GraphSONReader$Builder): BluePromise<Java.GraphSONReader> => builder.createP())
+        .then((reader: Java.GraphSONReader) => { theReader = reader; return theReader; });
+    }
+
+    return BluePromise.all([getStream(), getGraphReader()])
+      .then(() => theReader.readGraphP(theStream, graph))
+      .then((): Java.Graph => graph)
+      .nodeify(callback);
+  }
+
+  // ### `loadPrettyGraphSONSync(graph: Java.Graph, filename: string)`
+  // Loads the 'pretty' graph as GraphSON, and returns the graph (for fluent API).
+  export function loadPrettyGraphSONSync(graph: Java.Graph, filename: string): Java.Graph {
+    var jsonText: string = fs.readFileSync(filename, { encoding: 'utf8' });
+    var jsonObjArray: any[] = JSON.parse(jsonText);
+    var jsonTextArray: string[] = _.map(jsonObjArray, JSON.stringify);
+    var uglyText = jsonTextArray.join('\n');
+
+    var StringInputStream: Java.StringInputStream.Static = autoImport('StringInputStream');
+    var stream: Java.InputStream = StringInputStream.from(uglyText);
     var builder: Java.GraphSONReader$Builder = GraphSONReader.build();
     var mapper: Java.GraphSONMapper = _newGraphSONMapperSync();
     builder.mapper(mapper);
@@ -544,25 +603,101 @@ module Tinkerpop {
     return mapper;
   }
 
+  // ### `_smellsLikeAPropertyContainer()`
+  function _smellsLikeAPropertyContainer(elem: any): boolean {
+    return _.isObject(elem) && elem['@class'] === 'java.util.HashMap';
+  }
+
+  // ### `_smellsLikeAnElement()`
+  function _smellsLikeAnElement(elem: any): boolean {
+    return _smellsLikeAPropertyContainer(elem) &&  !_.isUndefined(elem.id);
+  }
+
+  function _smellsLikeArrayOfElements(obj: any): boolean {
+    return _.isArray(obj) && obj[0] === 'java.util.ArrayList' && _.isArray(obj[1]) && _smellsLikeAnElement(obj[1][0]);
+  }
+
+  // ### `_compareIds()`
+  // Compares two Tinkerpop elements (vertex or edge) by their ID.
+  // Tinkerpop allows different datatypes to be used for ID. This method requires that both IDs be of the same
+  // type, and tries to do something reasonable for the various representations we might see from Tinkerpop.
+  function _compareIds(a: any, b: any): number {
+    assert.strictEqual(typeof a, typeof b);
+    if (_.isNumber(a)) {
+      return a - b;
+    } else if (_.isString(a)) {
+      // Even with strings, we prefer numeric sort semantics,
+      // i.e. a shorter string is always less than a longer string.
+      if (a.length === b.length) {
+        return a.localeCompare(b);
+      } else {
+        return a.length - b.length;
+      }
+    } else if (_.isArray(a)) {
+      // handles cases like this: "id": [ "java.lang.Long", 16],
+      assert.strictEqual(a[0], b[0]);
+      assert.strictEqual(a.length, 2);
+      assert.strictEqual(b.length, 2);
+      return _compareIds(a[1], b[1]);
+    } else {
+      dlog('Whatup?', a, b);
+      assert(false, 'Unexpected element id type:' + typeof(a));
+    }
+  }
+
+  // ### `_compareById()`
+  // Compares two elements by their id
+  function _compareById(a: any, b: any): number {
+    assert.strictEqual(typeof a.id, typeof b.id);
+    assert.ok(!_.isUndefined(a.id));
+    return _compareIds(a.id, b.id);
+  }
+
+  // ### `_sortElements()`
+  // Called for each key,obj in a property container, this processes each object that smells like an array of elements
+  function _sortElements(obj: any, key: string): any {
+    if (_smellsLikeArrayOfElements(obj)) {
+      obj[1] = obj[1].sort(_compareById);
+    }
+    return obj;
+  }
+
+  // ### `_sortPropertyContainers()`
+  // Called for each key,obj in an Element, this processes each object that smells like a 'property container',
+  // which includes vertex `properties` hashmaps, and `inE` and `outE` edges.
+  function _sortPropertyContainers(obj: any, key: string): any {
+    if (_smellsLikeAPropertyContainer(obj)) {
+      return _.mapValues(obj, _sortElements);
+    } else {
+      return obj;
+    }
+  }
+
+  // ### `_parseVertex()`
+  // Parse one line of text from a Tinkerpop graphson stream, yielding one vertex.
+  function _parseVertex(line: string): any {
+    var vertex: any = JSON.parse(line);
+    assert.ok(_smellsLikeAnElement(vertex));
+
+    // A vertex is an object, i.e. a key,value map.
+    // We don't sort the keys of the object, leaving that to jsonStableStringify below.
+    // But a vertex values contain `property containers`, each of which may contain embedded arrays of elements.
+    return _.mapValues(vertex, _sortPropertyContainers)
+  }
+
   // ### `prettyGraphSONString(ugly: string)`
   // Make a GraphSON string pretty, adding indentation and deterministic format.
   function _prettyGraphSONString(ugly: string): string {
-    var json: any = JSON.parse(ugly);
+    var lines: string[] = ugly.trim().split(require('os').EOL);
+
+    var vertices: any[] = _.map(lines, (line: string) =>_parseVertex(line));
+    vertices.sort(_compareById);
 
     // Compute the stable JSON.
     var stringifyOpts: jsonStableStringify.Options = {
-      // GraphSON requires its top level properties to be in the order mode, vertices, edges.
-      space: 2,
-      cmp: (a: jsonStableStringify.Element, b: jsonStableStringify.Element): number => {
-        if (a.key === 'edges')
-          return 1;
-        else if (b.key === 'edges')
-          return -1;
-        return a.key < b.key ? -1 : 1;
-      }
+      space: 2
     };
-
-    var prettyString: string = jsonStableStringify(json, stringifyOpts);
+    var prettyString: string = jsonStableStringify(vertices, stringifyOpts) + '\n';
     return prettyString;
   }
 
