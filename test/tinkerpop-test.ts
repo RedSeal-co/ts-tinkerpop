@@ -18,6 +18,7 @@ import BluePromise = require('bluebird');
 import chai = require('chai');
 import debug = require('debug');
 import fs = require('fs');
+import path = require('path');
 import tmp = require('tmp');
 import TP = require('../lib/ts-tinkerpop');
 import util = require('util');
@@ -26,6 +27,8 @@ import expect = chai.expect;
 import L = TP.L;
 
 var dlog = debug('ts-tinkerpop:test');
+
+var readFileP = BluePromise.promisify(fs.readFile);
 
 // TODO: Add sortByAll to lodash.d.ts
 interface SortByAll {
@@ -846,6 +849,34 @@ describe('Pretty GraphSON support using TheCrew', () => {
 
         var unlinkP = BluePromise.promisify(fs.unlink);
         return unlinkP(path);
+      });
+  });
+
+  it('yields a file identical to a golden reference file', (): BluePromise<void> => {
+    var tmpNameP = BluePromise.promisify(tmp.tmpName);
+    var liveContents: string;
+    var tmpPath: string;
+    return tmpNameP()
+      .then((_path: string): BluePromise<Java.Graph> => {
+        tmpPath = _path;
+        return TP.savePrettyGraphSON(g, tmpPath);
+      })
+      .then((graph: Java.Graph): BluePromise<Java.Graph> => {
+        expect(g, 'savePrettyGraphSON did not return graph').to.deep.equal(graph);
+        return readFileP(tmpPath, { encoding: 'utf8' })
+      })
+      .then((_liveContents: string): BluePromise<void> => {
+        liveContents = _liveContents;
+        var unlinkP = BluePromise.promisify(fs.unlink);
+        return unlinkP(tmpPath);
+      })
+      .then((): BluePromise<string> => {
+        var goldenPath = path.join(__dirname, 'data', 'thecrew.json');
+        return readFileP(goldenPath, { encoding: 'utf8' })
+      })
+      .then((goldenContents: string): BluePromise<void> => {
+        expect(liveContents.split('\n')).to.deep.equal(goldenContents.split('\n'));
+        return;
       });
   });
 

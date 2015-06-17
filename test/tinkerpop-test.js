@@ -14,11 +14,13 @@ var BluePromise = require('bluebird');
 var chai = require('chai');
 var debug = require('debug');
 var fs = require('fs');
+var path = require('path');
 var tmp = require('tmp');
 var TP = require('../lib/ts-tinkerpop');
 var expect = chai.expect;
 var L = TP.L;
 var dlog = debug('ts-tinkerpop:test');
+var readFileP = BluePromise.promisify(fs.readFile);
 var sortByAll = _.sortByAll;
 before(function (done) {
     TP.getTinkerpop().then(function (t) {
@@ -680,6 +682,28 @@ describe('Pretty GraphSON support using TheCrew', function () {
             expect(str, 'GraphSON was not read correctly').to.deep.equal(expected);
             var unlinkP = BluePromise.promisify(fs.unlink);
             return unlinkP(path);
+        });
+    });
+    it('yields a file identical to a golden reference file', function () {
+        var tmpNameP = BluePromise.promisify(tmp.tmpName);
+        var liveContents;
+        var tmpPath;
+        return tmpNameP().then(function (_path) {
+            tmpPath = _path;
+            return TP.savePrettyGraphSON(g, tmpPath);
+        }).then(function (graph) {
+            expect(g, 'savePrettyGraphSON did not return graph').to.deep.equal(graph);
+            return readFileP(tmpPath, { encoding: 'utf8' });
+        }).then(function (_liveContents) {
+            liveContents = _liveContents;
+            var unlinkP = BluePromise.promisify(fs.unlink);
+            return unlinkP(tmpPath);
+        }).then(function () {
+            var goldenPath = path.join(__dirname, 'data', 'thecrew.json');
+            return readFileP(goldenPath, { encoding: 'utf8' });
+        }).then(function (goldenContents) {
+            expect(liveContents.split('\n')).to.deep.equal(goldenContents.split('\n'));
+            return;
         });
     });
 });
