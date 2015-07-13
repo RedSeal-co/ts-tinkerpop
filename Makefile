@@ -12,7 +12,7 @@ clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java
 
 .PHONY: default install clean test
 
-JAVA_D_TS=lib/java.d.ts
+JAVA_D_TS=lib/tsJavaModule.ts
 
 ### Maven
 
@@ -95,7 +95,7 @@ clean-typescript:
 
 .PHONY: clean-typescript
 
-lib/ts-tinkerpop.js: $(JAVA_D_TS) lib/autoImport.js
+lib/ts-tinkerpop.js: $(JAVA_D_TS)
 
 ### ts-java
 

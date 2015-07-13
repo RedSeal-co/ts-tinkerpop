@@ -41,9 +41,8 @@
     "source-map-support": "^0.2.9"
   },
   "tsjava": {
-    "outputPath": "lib/java.d.ts",
-    "promisesPath": "../typings/bluebird/bluebird.d.ts",
-    "autoImportPath": "lib/autoImport.ts",
+    "tsJavaModulePath": "lib/tsJavaModule.ts",
+    "javaTypingsPath": "../typings/java/java.d.ts",
     "classpath": [
       "target/*.jar",
       "target/**/*.jar"
