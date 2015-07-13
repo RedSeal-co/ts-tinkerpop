@@ -1,15 +1,11 @@
-/// <reference path='./java.d.ts' />
-/// <reference path='../typings/bluebird/bluebird.d.ts' />
 /// <reference path='../typings/debug/debug.d.ts' />
 /// <reference path='../typings/glob/glob.d.ts' />
 /// <reference path='../typings/json-stable-stringify/json-stable-stringify.d.ts' />
 /// <reference path='../typings/lodash/lodash.d.ts' />
-/// <reference path='../typings/node/node.d.ts' />
 /// <reference path='../typings/power-assert/power-assert.d.ts' />
 
 import _ = require('lodash');
-import _autoImport = require('./autoImport');
-import _java = require('java');
+import _java = require('./tsJavaModule');
 import assert = require('power-assert');
 import BluePromise = require('bluebird');
 import debug = require('debug');
@@ -19,6 +15,8 @@ import jsonStableStringify = require('json-stable-stringify');
 import path = require('path');
 
 var dlog = debug('ts-tinkerpop');
+
+import Java = _java.Java;
 
 // # ts-tinkerpop
 // Helper functions for Typescript applications using [TinkerPop 3]() via [node-java](https://github.com/joeferner/node-java).
@@ -32,11 +30,7 @@ module Tinkerpop {
   export type Static = typeof Tinkerpop;
 
   // ### autoImport
-  export var autoImport = _autoImport;
-
-  // ### Exported variables
-
-  export var java: Java.NodeAPI = _java;
+  export var autoImport = Java.importClass;
 
   // #### TinkerPop Classes
   export var __: Java.__.Static;
@@ -80,7 +74,7 @@ module Tinkerpop {
     GraphSONMapper = autoImport('GraphSONMapper');
     GremlinGroovyScriptEngine = autoImport('GremlinGroovyScriptEngine');
     GroovyLambda =
-      java.import('co.redseal.gremlinnode.function.GroovyLambda');  // TODO: Use autoImport when #91309036 fixed
+      autoImport('co.redseal.gremlinnode.function.GroovyLambda');  // TODO: Use autoImport when #91309036 fixed
     NULL = autoImport('NullObject').getNullObject();
     ScriptEngineLambda = autoImport('ScriptEngineLambda');
     T = autoImport('T');
@@ -95,7 +89,7 @@ module Tinkerpop {
   }
 
   export function getTinkerpop(): BluePromise<Static> {
-    return _java.ensureJvm().then(() => Tinkerpop);
+    return Java.ensureJvm().then(() => Tinkerpop);
   }
 
   // #### `id(n: number)`
@@ -103,13 +97,13 @@ module Tinkerpop {
   // There are use cases where leaving the type of an ID unspecified can result in ambiguities between
   // the Java types Integer and Long. To disambigute, use this function.
   export function id(n: number): Java.Object {
-    return java.newLong(n);
+    return Java.newLong(n);
   }
 
   // #### `ids(a: number[])`
   // As above, but for creating an array of IDs.
   export function ids(a: number[]) : Java.array_t<Java.Object> {
-    return java.newArray('java.lang.Object', _.map(a, (n: number) => id(n)));
+    return Java.newArray('java.lang.Object', _.map(a, (n: number) => id(n)));
   }
 
   // #### `newJavaScriptLambda(javascript: string)`
@@ -190,7 +184,7 @@ module Tinkerpop {
   // ### `function L(n: number)`
   // Produce a longValue_t literal.
   export function L(n: number): Java.longValue_t {
-    return java.newLong(n).longValue();
+    return Java.newLong(n).longValue();
   }
 
   // ### `function isLongValue(e: any)`
@@ -203,7 +197,7 @@ module Tinkerpop {
   // Returns true if the obj is a Java object.
   // Useful for determining the runtime type of object_t returned by many java methods.
   export function isJavaObject(e: any): boolean {
-    return _.isObject(e) && !_.isArray(e) && !isLongValue(e) && java.instanceOf(e, 'java.lang.Object');
+    return _.isObject(e) && !_.isArray(e) && !isLongValue(e) && Java.instanceOf(e, 'java.lang.Object');
   }
 
   // #### `function asJavaObject(obj: Java.object_t)`
@@ -220,7 +214,7 @@ module Tinkerpop {
   // #### `function isVertex(v: any)`
   // Returns true if v is a Tinkerpop Vertex.
   export function isVertex(v: any): boolean {
-    return java.instanceOf(v, 'org.apache.tinkerpop.gremlin.structure.Vertex');
+    return Java.instanceOf(v, 'org.apache.tinkerpop.gremlin.structure.Vertex');
   }
 
   // #### `function asVertex(v: Java.object_t)`
@@ -237,7 +231,7 @@ module Tinkerpop {
   // #### `function isEdge(e: any)`
   // Returns true if e is a Tinkerpop Edge.
   export function isEdge(e: any): boolean {
-    return java.instanceOf(e, 'org.apache.tinkerpop.gremlin.structure.Edge');
+    return Java.instanceOf(e, 'org.apache.tinkerpop.gremlin.structure.Edge');
   }
 
   // #### `function asEdge(e: Java.object_t)`
@@ -477,7 +471,7 @@ module Tinkerpop {
   export function isType(o: any, typeName: string): boolean {
     if (!o || !_.isObject(o)) return false;
     try {
-      return java.instanceOf(o, typeName);
+      return Java.instanceOf(o, typeName);
     } catch (err) {
       return false;
     }
@@ -780,28 +774,11 @@ module Tinkerpop {
 
 }
 
-function beforeJvm(): BluePromise<void> {
-  var globP = BluePromise.promisify(glob);
-  return globP(path.join(__dirname, '..', 'target', '**', '*.jar')).then((filenames: string[]) => {
-    filenames.forEach((name: string): void => {
-      dlog('classpath:', name);
-      _java.classpath.push(name);
-    });
-  });
-}
-
 function afterJvm(): BluePromise<void> {
   Tinkerpop.initialize();
   return BluePromise.resolve();
 }
 
-// This code is executed just once at module import time
-_java.asyncOptions = {
-  syncSuffix: '',
-  promiseSuffix: 'P',
-  promisify: BluePromise.promisify
-};
-_java.registerClientP(beforeJvm, afterJvm);
-
+Java.getJava().registerClientP(undefined, afterJvm);
 
 export = Tinkerpop;
