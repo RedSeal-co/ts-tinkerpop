@@ -7,7 +7,7 @@ install: o/all-installed.lastran
 o/all-installed.lastran: o/maven-installed.lastran o/npm-installed.lastran o/tsd-installed.lastran
 	touch $@
 
-clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java clean-doc
+clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java clean-doc clean-bundle
 	rm -rf o
 
 .PHONY: default install clean test
@@ -44,7 +44,7 @@ test: $(UNIT_TEST_RAN)
 test/tinkerpop-test.js : lib/ts-tinkerpop.js $(JAVA_D_TS)
 
 clean-test:
-	rm -f test/*.js test/*.js.map
+	rm -f test/*.js test/*.js.map test/*.d.ts
 
 .PHONY: test clean-test
 
@@ -91,7 +91,7 @@ LINT_OPTS=--config tslint.json --file
 	($(TSC) $(TSC_OPTS) $<) || (rm -f $*.js* && false)
 
 clean-typescript:
-	rm -f *.js *.js.map
+	rm -f lib/*.js lib/*.js.map lib/*.d.ts
 
 .PHONY: clean-typescript
 
@@ -121,6 +121,9 @@ $(BUNDLE_DTS): $(O_BUNDLE_DTS)
 	cat $(O_BUNDLE_DTS) >> $@
 
 test/bundle-test.js: $(BUNDLE_DTS)
+
+clean-bundle:
+	rm -f devbin/bundle-dts.d.ts
 
 ### Local d.ts file
 
