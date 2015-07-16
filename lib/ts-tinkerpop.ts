@@ -1,5 +1,4 @@
 /// <reference path='../typings/debug/debug.d.ts' />
-/// <reference path='../typings/glob/glob.d.ts' />
 /// <reference path='../typings/json-stable-stringify/json-stable-stringify.d.ts' />
 /// <reference path='../typings/lodash/lodash.d.ts' />
 /// <reference path='../typings/power-assert/power-assert.d.ts' />
@@ -10,9 +9,7 @@ import assert = require('power-assert');
 import BluePromise = require('bluebird');
 import debug = require('debug');
 import fs = require('fs');
-import glob = require('glob');
 import jsonStableStringify = require('json-stable-stringify');
-import path = require('path');
 
 var dlog = debug('ts-tinkerpop');
 
