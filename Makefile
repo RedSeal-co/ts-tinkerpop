@@ -95,8 +95,6 @@ clean-typescript:
 
 .PHONY: clean-typescript
 
-lib/ts-tinkerpop.js: $(JAVA_D_TS)
-
 ### ts-java
 
 ts-java: $(JAVA_D_TS)
@@ -115,12 +113,11 @@ BUNDLE_DTS=lib/index.d.ts
 
 O_BUNDLE_DTS=o/bundle.d.ts
 
-$(O_BUNDLE_DTS): lib/ts-tinkerpop.d.ts lib/autoImport.d.ts lib/java.d.ts devbin/bundle-dts.js
+$(O_BUNDLE_DTS): lib/ts-tinkerpop.d.ts devbin/bundle-dts.js
 	devbin/bundle-dts.sh
 
 $(BUNDLE_DTS): $(O_BUNDLE_DTS)
-	echo '/// <reference path="java.d.ts"/>' > $@
-	echo '/// <reference path="../typings/bluebird/bluebird.d.ts"/>' >> $@
+	echo '/// <reference path="../typings/java/java.d.ts"/>' >> $@
 	cat $(O_BUNDLE_DTS) >> $@
 
 test/bundle-test.js: $(BUNDLE_DTS)
@@ -133,7 +130,7 @@ LOCAL_DTS=typings/ts-tinkerpop/index.d.ts
 
 TSPI=node_modules/.bin/ts-pkg-installer
 
-$(LOCAL_DTS): lib/index.d.ts lib/java.d.ts tspi-local.json
+$(LOCAL_DTS): lib/index.d.ts tspi-local.json
 	$(TSPI) --config-file tspi-local.json
 
 test/header-test.js: $(LOCAL_DTS)
