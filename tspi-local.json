@@ -5,6 +5,6 @@
   "exportedTypingsDir": "typings",
   "exportedTsdConfig": "tsd.json",
   "mainDeclaration": "lib/index.d.ts",
-  "secondaryDeclarations": ["lib/java.d.ts"],
+  "secondaryDeclarations": [],
   "noWrap": true
 }
