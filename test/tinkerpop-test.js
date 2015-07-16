@@ -2,7 +2,6 @@
 /// <reference path='../typings/bluebird/bluebird.d.ts' />
 /// <reference path='../typings/chai/chai.d.ts'/>
 /// <reference path='../typings/debug/debug.d.ts' />
-/// <reference path='../typings/glob/glob.d.ts' />
 /// <reference path='../typings/lodash/lodash.d.ts'/>
 /// <reference path='../typings/mocha/mocha.d.ts'/>
 /// <reference path='../typings/node/node.d.ts'/>
@@ -260,7 +259,7 @@ describe('Gremlin', function () {
             expect(json).to.deep.equal(expected);
         });
         it('TP.asJSON(edges)', function () {
-            var traversal = graph.traversal().E().has('weight', TP.java.newFloat(1.0));
+            var traversal = graph.traversal().E().has('weight', TP.Java.newFloat(1.0));
             var json = TP.asJSON(traversal);
             var expected = [
                 {
@@ -378,7 +377,7 @@ describe('Groovy support', function () {
         var testClassName = 'co.redseal.gremlinnode.testing.TestClass';
         expect(engine.imports().toString()).to.not.contain(testClassName);
         // Make sure it IS in the classpath.
-        var TestClass = TP.java.import(testClassName);
+        var TestClass = TP.Java.importClass(testClassName);
         expect(TestClass).to.exist;
         // First check that TestClass is not defined.
         expect(function () { return TP.newGroovyClosure(groovy); }).to.throw(/unable to resolve class TestClass/);
@@ -431,7 +430,7 @@ describe('isLongValue', function () {
         expect(TP.isLongValue(fake)).to.be.true;
     });
     it('returns false on Java Long', function () {
-        expect(TP.isLongValue(TP.java.newLong(123))).to.be.false;
+        expect(TP.isLongValue(TP.Java.newLong(123))).to.be.false;
     });
 });
 // Used in testing isJavaObject.
@@ -474,7 +473,7 @@ describe('isJavaObject', function () {
         expect(TP.isJavaObject(longValue)).to.be.false;
     });
     it('returns true on Java.Long', function () {
-        expect(TP.isJavaObject(TP.java.newLong(123))).to.be.true;
+        expect(TP.isJavaObject(TP.Java.newLong(123))).to.be.true;
     });
     it('returns false on JS array', function () {
         expect(TP.isJavaObject([1, 2, 3])).to.be.false;
@@ -714,17 +713,17 @@ describe('isType', function () {
         _.forEach(objects, function (o) { return expect(TP.isType(o, type), o).to.be.false; });
     });
     it('returns true on exact match', function () {
-        expect(TP.isType(TP.java.newLong(123), 'java.lang.Long')).to.be.true;
+        expect(TP.isType(TP.Java.newLong(123), 'java.lang.Long')).to.be.true;
         var ArrayList = TP.autoImport('ArrayList');
         expect(TP.isType(new ArrayList(), 'java.util.ArrayList')).to.be.true;
     });
     it('returns true for supertypes', function () {
-        expect(TP.isType(TP.java.newLong(123), 'java.lang.Number')).to.be.true;
+        expect(TP.isType(TP.Java.newLong(123), 'java.lang.Number')).to.be.true;
         var ArrayList = TP.autoImport('ArrayList');
         expect(TP.isType(new ArrayList(), 'java.util.List')).to.be.true;
     });
     it('returns false for unrelated types', function () {
-        expect(TP.isType(TP.java.newLong(123), 'java.lang.Integer')).to.be.false;
+        expect(TP.isType(TP.Java.newLong(123), 'java.lang.Integer')).to.be.false;
         var ArrayList = TP.autoImport('ArrayList');
         expect(TP.isType(new ArrayList(), 'java.util.HashMap')).to.be.false;
     });

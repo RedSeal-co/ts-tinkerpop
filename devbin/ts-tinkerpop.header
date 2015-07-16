@@ -3,5 +3,3 @@
 // Definitions by: {{author.name}} <{{author.url}}>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
-/// <reference path="java.d.ts"/>
-/// <reference path="../bluebird/bluebird.d.ts"/>

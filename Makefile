@@ -7,12 +7,12 @@ install: o/all-installed.lastran
 o/all-installed.lastran: o/maven-installed.lastran o/npm-installed.lastran o/tsd-installed.lastran
 	touch $@
 
-clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java clean-doc
+clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java clean-doc clean-bundle
 	rm -rf o
 
 .PHONY: default install clean test
 
-JAVA_D_TS=lib/java.d.ts
+JAVAPKGS_MODULE_TS=lib/tsJavaModule.ts
 
 ### Maven
 
@@ -41,10 +41,10 @@ $(UNIT_TEST_RAN): o/%.lastran: %.js o/all-installed.lastran
 
 test: $(UNIT_TEST_RAN)
 
-test/tinkerpop-test.js : lib/ts-tinkerpop.js $(JAVA_D_TS)
+test/tinkerpop-test.js test/tinkerpop-test.js.map : lib/ts-tinkerpop.js $(JAVAPKGS_MODULE_TS)
 
 clean-test:
-	rm -f test/*.js test/*.js.map
+	rm -f test/*.js test/*.js.map test/*.d.ts
 
 .PHONY: test clean-test
 
@@ -87,27 +87,25 @@ TSC_OPTS=--module commonjs --target ES5 --sourceMap --declaration --noEmitOnErro
 LINT=./node_modules/.bin/tslint
 LINT_OPTS=--config tslint.json --file
 
-%.js %.js.map %.d.ts: %.ts o/all-installed.lastran $(JAVA_D_TS)
+%.js %.js.map %.d.ts: %.ts o/all-installed.lastran $(JAVAPKGS_MODULE_TS)
 	($(TSC) $(TSC_OPTS) $<) || (rm -f $*.js* && false)
 
 clean-typescript:
-	rm -f *.js *.js.map
+	rm -f lib/*.js lib/*.js.map lib/*.d.ts
 
 .PHONY: clean-typescript
 
-lib/ts-tinkerpop.js: $(JAVA_D_TS) lib/autoImport.js
-
 ### ts-java
 
-ts-java: $(JAVA_D_TS)
+ts-java: $(JAVAPKGS_MODULE_TS)
 
-$(JAVA_D_TS) : o/all-installed.lastran package.json
+$(JAVAPKGS_MODULE_TS) : o/all-installed.lastran package.json
 	node_modules/.bin/ts-java
 
 clean-ts-java:
-	rm -f $(JAVA_D_TS)
+	rm -f $(JAVAPKGS_MODULE_TS)
 
-.PHONY: ts-java
+.PHONY: ts-java clean-ts-java
 
 ### d.ts bundle
 
@@ -115,15 +113,19 @@ BUNDLE_DTS=lib/index.d.ts
 
 O_BUNDLE_DTS=o/bundle.d.ts
 
-$(O_BUNDLE_DTS): lib/ts-tinkerpop.d.ts lib/autoImport.d.ts lib/java.d.ts devbin/bundle-dts.js
+$(O_BUNDLE_DTS): lib/ts-tinkerpop.d.ts devbin/bundle-dts.js
 	devbin/bundle-dts.sh
 
 $(BUNDLE_DTS): $(O_BUNDLE_DTS)
-	echo '/// <reference path="java.d.ts"/>' > $@
-	echo '/// <reference path="../typings/bluebird/bluebird.d.ts"/>' >> $@
+	echo '/// <reference path="../typings/java/java.d.ts"/>' > $@
 	cat $(O_BUNDLE_DTS) >> $@
 
 test/bundle-test.js: $(BUNDLE_DTS)
+
+clean-bundle:
+	rm -f devbin/bundle-dts.d.ts
+
+.PHONY: clean-bundle
 
 ### Local d.ts file
 
@@ -133,7 +135,7 @@ LOCAL_DTS=typings/ts-tinkerpop/index.d.ts
 
 TSPI=node_modules/.bin/ts-pkg-installer
 
-$(LOCAL_DTS): lib/index.d.ts lib/java.d.ts tspi-local.json
+$(LOCAL_DTS): lib/index.d.ts tspi-local.json
 	$(TSPI) --config-file tspi-local.json
 
 test/header-test.js: $(LOCAL_DTS)

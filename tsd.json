@@ -26,9 +26,6 @@
     "debug/debug.d.ts": {
       "commit": "16603733c8080bd05e556acb8b47ca5ce902c081"
     },
-    "glob/glob.d.ts": {
-      "commit": "16603733c8080bd05e556acb8b47ca5ce902c081"
-    },
     "minimatch/minimatch.d.ts": {
       "commit": "16603733c8080bd05e556acb8b47ca5ce902c081"
     },
@@ -55,6 +52,9 @@
     },
     "json-stable-stringify/json-stable-stringify.d.ts": {
       "commit": "16603733c8080bd05e556acb8b47ca5ce902c081"
+    },
+    "java/java.d.ts": {
+      "commit": "a691b92b6194edc7598d186d6d53ae9011a47c22"
     }
   }
 }
