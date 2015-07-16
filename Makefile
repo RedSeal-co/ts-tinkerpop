@@ -41,7 +41,7 @@ $(UNIT_TEST_RAN): o/%.lastran: %.js o/all-installed.lastran
 
 test: $(UNIT_TEST_RAN)
 
-test/tinkerpop-test.js : lib/ts-tinkerpop.js $(JAVAPKGS_MODULE_TS)
+test/tinkerpop-test.js test/tinkerpop-test.js.map : lib/ts-tinkerpop.js $(JAVAPKGS_MODULE_TS)
 
 clean-test:
 	rm -f test/*.js test/*.js.map test/*.d.ts
@@ -105,7 +105,7 @@ $(JAVAPKGS_MODULE_TS) : o/all-installed.lastran package.json
 clean-ts-java:
 	rm -f $(JAVAPKGS_MODULE_TS)
 
-.PHONY: ts-java
+.PHONY: ts-java clean-ts-java
 
 ### d.ts bundle
 
