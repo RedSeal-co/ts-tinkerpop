@@ -16,8 +16,6 @@ import path = require('path');
 
 var dlog = debug('ts-tinkerpop');
 
-import Java = _java.Java;
-
 // # ts-tinkerpop
 // Helper functions for Typescript applications using [TinkerPop 3]() via [node-java](https://github.com/joeferner/node-java).
 //
@@ -26,6 +24,8 @@ import Java = _java.Java;
 module Tinkerpop {
 
   'use strict';
+
+  export import Java = _java.Java;
 
   export type Static = typeof Tinkerpop;
 
@@ -779,6 +779,6 @@ function afterJvm(): BluePromise<void> {
   return BluePromise.resolve();
 }
 
-Java.getJava().registerClientP(undefined, afterJvm);
+Tinkerpop.Java.getJava().registerClientP(undefined, afterJvm);
 
 export = Tinkerpop;
