@@ -117,7 +117,7 @@ $(O_BUNDLE_DTS): lib/ts-tinkerpop.d.ts devbin/bundle-dts.js
 	devbin/bundle-dts.sh
 
 $(BUNDLE_DTS): $(O_BUNDLE_DTS)
-	echo '/// <reference path="../typings/java/java.d.ts"/>' >> $@
+	echo '/// <reference path="../typings/java/java.d.ts"/>' > $@
 	cat $(O_BUNDLE_DTS) >> $@
 
 test/bundle-test.js: $(BUNDLE_DTS)
