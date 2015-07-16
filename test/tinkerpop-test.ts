@@ -25,6 +25,7 @@ import util = require('util');
 
 import expect = chai.expect;
 import L = TP.L;
+import Java = TP.Java;
 
 var dlog = debug('ts-tinkerpop:test');
 
@@ -339,7 +340,7 @@ describe('Gremlin', (): void => {
     });
 
     it('TP.asJSON(edges)', (): void => {
-      var traversal = graph.traversal().E().has('weight', TP.java.newFloat(1.0));
+      var traversal = graph.traversal().E().has('weight', TP.Java.newFloat(1.0));
       var json: any[] = TP.asJSON(traversal);
       var expected = [
         {
@@ -482,7 +483,7 @@ describe('Groovy support', (): void => {
     expect(engine.imports().toString()).to.not.contain(testClassName);
 
     // Make sure it IS in the classpath.
-    var TestClass: Java.TestClass.Static = TP.java.import(testClassName);
+    var TestClass: Java.TestClass.Static = TP.Java.importClass(testClassName);
     expect(TestClass).to.exist;
 
     // First check that TestClass is not defined.
@@ -541,7 +542,7 @@ describe('isLongValue', () => {
   });
 
   it('returns false on Java Long', () => {
-    expect(TP.isLongValue(TP.java.newLong(123))).to.be.false;
+    expect(TP.isLongValue(TP.Java.newLong(123))).to.be.false;
   });
 
 });
@@ -585,7 +586,7 @@ describe('isJavaObject', () => {
   });
 
   it('returns true on Java.Long', () => {
-    expect(TP.isJavaObject(TP.java.newLong(123))).to.be.true;
+    expect(TP.isJavaObject(TP.Java.newLong(123))).to.be.true;
   });
 
   it('returns false on JS array', () => {
@@ -891,19 +892,19 @@ describe('isType', (): void => {
   });
 
   it('returns true on exact match', (): void => {
-    expect(TP.isType(TP.java.newLong(123), 'java.lang.Long')).to.be.true;
+    expect(TP.isType(TP.Java.newLong(123), 'java.lang.Long')).to.be.true;
     var ArrayList: Java.ArrayList.Static = TP.autoImport('ArrayList');
     expect(TP.isType(new ArrayList(), 'java.util.ArrayList')).to.be.true;
   });
 
   it('returns true for supertypes', (): void => {
-    expect(TP.isType(TP.java.newLong(123), 'java.lang.Number')).to.be.true;
+    expect(TP.isType(TP.Java.newLong(123), 'java.lang.Number')).to.be.true;
     var ArrayList: Java.ArrayList.Static = TP.autoImport('ArrayList');
     expect(TP.isType(new ArrayList(), 'java.util.List')).to.be.true;
   });
 
   it('returns false for unrelated types', (): void => {
-    expect(TP.isType(TP.java.newLong(123), 'java.lang.Integer')).to.be.false;
+    expect(TP.isType(TP.Java.newLong(123), 'java.lang.Integer')).to.be.false;
     var ArrayList: Java.ArrayList.Static = TP.autoImport('ArrayList');
     expect(TP.isType(new ArrayList(), 'java.util.HashMap')).to.be.false;
   });
