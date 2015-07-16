@@ -33,7 +33,6 @@
   "dependencies": {
     "bluebird": "^2.9.33",
     "debug": "^2.1.2",
-    "glob": "^5.0.13",
     "java": "^0.5.4",
     "json-stable-stringify": "^1.0.0",
     "lodash": "^3.10.0",

@@ -26,9 +26,6 @@
     "debug/debug.d.ts": {
       "commit": "16603733c8080bd05e556acb8b47ca5ce902c081"
     },
-    "glob/glob.d.ts": {
-      "commit": "16603733c8080bd05e556acb8b47ca5ce902c081"
-    },
     "minimatch/minimatch.d.ts": {
       "commit": "16603733c8080bd05e556acb8b47ca5ce902c081"
     },
