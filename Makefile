@@ -12,7 +12,7 @@ clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java
 
 .PHONY: default install clean test
 
-JAVA_D_TS=lib/tsJavaModule.ts
+JAVAPKGS_MODULE_TS=lib/tsJavaModule.ts
 
 ### Maven
 
@@ -41,7 +41,7 @@ $(UNIT_TEST_RAN): o/%.lastran: %.js o/all-installed.lastran
 
 test: $(UNIT_TEST_RAN)
 
-test/tinkerpop-test.js : lib/ts-tinkerpop.js $(JAVA_D_TS)
+test/tinkerpop-test.js : lib/ts-tinkerpop.js $(JAVAPKGS_MODULE_TS)
 
 clean-test:
 	rm -f test/*.js test/*.js.map test/*.d.ts
@@ -87,7 +87,7 @@ TSC_OPTS=--module commonjs --target ES5 --sourceMap --declaration --noEmitOnErro
 LINT=./node_modules/.bin/tslint
 LINT_OPTS=--config tslint.json --file
 
-%.js %.js.map %.d.ts: %.ts o/all-installed.lastran $(JAVA_D_TS)
+%.js %.js.map %.d.ts: %.ts o/all-installed.lastran $(JAVAPKGS_MODULE_TS)
 	($(TSC) $(TSC_OPTS) $<) || (rm -f $*.js* && false)
 
 clean-typescript:
@@ -97,13 +97,13 @@ clean-typescript:
 
 ### ts-java
 
-ts-java: $(JAVA_D_TS)
+ts-java: $(JAVAPKGS_MODULE_TS)
 
-$(JAVA_D_TS) : o/all-installed.lastran package.json
+$(JAVAPKGS_MODULE_TS) : o/all-installed.lastran package.json
 	node_modules/.bin/ts-java
 
 clean-ts-java:
-	rm -f $(JAVA_D_TS)
+	rm -f $(JAVAPKGS_MODULE_TS)
 
 .PHONY: ts-java
 
