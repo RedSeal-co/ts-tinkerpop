@@ -286,7 +286,7 @@ describe('Gremlin', function () {
             expect(json).to.deep.equal(expected);
         });
         it('TP.asJSON(maps)', function () {
-            var traversal = graph.traversal().V().as('a').out().as('b').select().by(TP.T.id);
+            var traversal = graph.traversal().V().as('a').out().as('b').select('a', 'b').by(TP.T.id);
             var json = TP.asJSON(traversal);
             var expected = [
                 { a: 1, b: 2 },
@@ -299,7 +299,7 @@ describe('Gremlin', function () {
             expect(sortByAll(json, ['a', 'b'])).to.deep.equal(expected);
         });
         it('TP.asJSON(map of vertices)', function () {
-            var traversal = graph.traversal().V(1).as('a').out().has(TP.T.id, 2).as('b').select();
+            var traversal = graph.traversal().V(1).as('a').out().has(TP.T.id, 2).as('b').select('a', 'b');
             var json = TP.asJSON(traversal);
             var simplified = _.map(json, function (map) { return _.mapValues(map, TP.simplifyVertexProperties); });
             var expected = [
@@ -336,7 +336,7 @@ describe('Gremlin', function () {
             expect(sortByAll(json, ['key'])).to.deep.equal(expected);
         });
         it('TP.asJSON(path labels)', function () {
-            var traversal = graph.traversal().V().as('a').out().as('b').out().as('c').select().map(TP.newGroovyClosure('{ it -> it.path().labels() }'));
+            var traversal = graph.traversal().V().as('a').out().as('b').out().as('c').select('a', 'b', 'c').map(TP.newGroovyClosure('{ it -> it.path().labels() }'));
             dlog(TP.jsify(traversal.asAdmin().clone().toList()));
             var json = TP.asJSON(traversal);
             var expected = [

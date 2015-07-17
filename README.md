@@ -53,23 +53,20 @@ All of the `ts-tinkerpop` helper functions are in the one source file `lib/ts-ti
 
 In addition to the helper functions, `ts-tinkerpop` exposes much of the Tinkerpop 3 Java API.
 
-`ts-tinkerpop` is currently up to date with the latest release `3.0.0.M8-incubating`. Our intent is to track Tinkerpop releases closely.
+`ts-tinkerpop` is currently up to date with the latest release `3.0.0-incubating`. Our intent is to track Tinkerpop releases closely.
 
-`ts-tinkerpop` currently exposes a significant subset of the Tinkerpop 3 `gremlin-core`, `gremlin-groovy` and `tinkergraph-gremlin` packages. The set of classes exposed largely aligns with the classes automatically imported by the Gremlin Groovy Console, with the notable exception that `ts-tinkerpop` currently does not expose any classes from the `gremlin-driver` package.
+`ts-tinkerpop` currently exposes a significant subset of the Tinkerpop 3 `gremlin-core`, `gremlin-groovy` and `tinkergraph-gremlin` packages. The set of classes exposed largely aligns with the classes automatically imported by the Gremlin Groovy Console (listed by groovy console command `:show imports`), with the notable exception that `ts-tinkerpop` currently does not expose any classes from the `gremlin-driver` package.
 
 See the `tsjava` section of `package.json` to see which packages and classes are included in the configuration, or for the full details, run the tsjava tool as follows:
 
 ```
 $ ./node_modules/.bin/ts-java --details
-ts-java version 1.0.8
+ts-java version 1.2.1
 Generated classes:
-   co.redseal.gremlinnode.function.AbstractGlobFunction
-   co.redseal.gremlinnode.function.AndThenGlobFunction
    co.redseal.gremlinnode.function.GlobFunction
    co.redseal.gremlinnode.function.GroovyLambda
-   co.redseal.gremlinnode.function.IdentityGlobFunction
-   co.redseal.gremlinnode.function.NegateGlobFunction
    co.redseal.gremlinnode.testing.TestClass
+   co.redseal.util.StringInputStream
    groovy.lang.Binding
    groovy.lang.Closure
    groovy.lang.DelegatingMetaClass
