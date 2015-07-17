@@ -367,7 +367,7 @@ describe('Gremlin', (): void => {
     });
 
     it('TP.asJSON(maps)', (): void => {
-      var traversal = graph.traversal().V().as('a').out().as('b').select().by(TP.T.id);
+      var traversal = graph.traversal().V().as('a').out().as('b').select('a', 'b').by(TP.T.id);
       var json: any[] = TP.asJSON(traversal);
       var expected: any[] = [
         { a: 1, b: 2 },
@@ -381,7 +381,7 @@ describe('Gremlin', (): void => {
     });
 
     it('TP.asJSON(map of vertices)', (): void => {
-      var traversal = graph.traversal().V(1).as('a').out().has(TP.T.id, 2).as('b').select();
+      var traversal = graph.traversal().V(1).as('a').out().has(TP.T.id, 2).as('b').select('a', 'b');
       var json: any[] = TP.asJSON(traversal);
       var simplified: any[] = _.map(json, (map: any): any => _.mapValues(map, TP.simplifyVertexProperties));
       var expected: any[] = [
@@ -426,7 +426,7 @@ describe('Gremlin', (): void => {
     });
 
     it('TP.asJSON(path labels)', (): void => {
-      var traversal: Java.GraphTraversal = graph.traversal().V().as('a').out().as('b').out().as('c').select()
+      var traversal: Java.GraphTraversal = graph.traversal().V().as('a').out().as('b').out().as('c').select('a', 'b', 'c')
         .map(TP.newGroovyClosure('{ it -> it.path().labels() }'));
 
       dlog(TP.jsify(traversal.asAdmin().clone().toList()));
