@@ -478,7 +478,7 @@ describe('Groovy support', (): void => {
     var groovy: string = '{ -> new TestClass() }';
 
     // Check that the TestClass is NOT in the Groovy imports already.
-    var testClassName: string = 'co.redseal.gremlinnode.testing.TestClass'
+    var testClassName: string = 'co.redseal.gremlinnode.testing.TestClass';
     expect(engine.imports().toString()).to.not.contain(testClassName);
 
     // Make sure it IS in the classpath.
@@ -518,6 +518,9 @@ describe('isLongValue', () => {
 
     _.forEach(scalars, (scalar: any) => expect(TP.isLongValue(scalar), scalar).to.be.false);
   });
+
+// Disable tslint errors for use of `new Number(n)`
+/* tslint:disable:no-construct */
 
   it('returns false on Number', () => {
     expect(TP.isLongValue(new Number(123))).to.be.false;
@@ -863,7 +866,7 @@ describe('Pretty GraphSON support using TheCrew', () => {
       })
       .then((graph: Java.Graph): BluePromise<Java.Graph> => {
         expect(g, 'savePrettyGraphSON did not return graph').to.deep.equal(graph);
-        return readFileP(tmpPath, { encoding: 'utf8' })
+        return readFileP(tmpPath, { encoding: 'utf8' });
       })
       .then((_liveContents: string): BluePromise<void> => {
         liveContents = _liveContents;
@@ -872,7 +875,7 @@ describe('Pretty GraphSON support using TheCrew', () => {
       })
       .then((): BluePromise<string> => {
         var goldenPath = path.join(__dirname, 'data', 'thecrew.json');
-        return readFileP(goldenPath, { encoding: 'utf8' })
+        return readFileP(goldenPath, { encoding: 'utf8' });
       })
       .then((goldenContents: string): BluePromise<void> => {
         expect(liveContents.split('\n')).to.deep.equal(goldenContents.split('\n'));
@@ -929,7 +932,7 @@ describe('jsify', (): void => {
     var nestedList: Java.List = new ArrayList();
     nestedList.add('nested');
     nestedList.add('list');
-    javaList.add(nestedList)
+    javaList.add(nestedList);
 
     var jsArray: string[] = TP.jsify(javaList);
     expect(_.isArray(jsArray)).to.be.true;
@@ -946,7 +949,7 @@ describe('jsify', (): void => {
     var nestedList: Java.List = new ArrayList();
     nestedList.add('nested');
     nestedList.add('list');
-    javaList.add(nestedList)
+    javaList.add(nestedList);
 
     var jsArray: string[] = TP.jsify(javaList.toArray());
     expect(_.isArray(jsArray)).to.be.true;
@@ -979,7 +982,7 @@ describe('jsify', (): void => {
     var nestedSet: Java.HashSet = new HashSet();
     nestedSet.add('nested');
     nestedSet.add('set');
-    hashSet.add(nestedSet)
+    hashSet.add(nestedSet);
 
     var actual: any = TP.jsify(hashSet);
     expect(_.isArray(actual)).to.be.true;

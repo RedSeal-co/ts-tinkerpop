@@ -187,7 +187,7 @@ module Tinkerpop {
   // ### `function isLongValue(e: any)`
   // Checks whether an object is a longValue_t, which is the representation of Java long primitives.
   export function isLongValue(obj: any): boolean {
-    return _.isObject(obj) && obj instanceof Number && 'longValue' in obj && _.keys(obj).length == 1;
+    return _.isObject(obj) && obj instanceof Number && 'longValue' in obj && _.keys(obj).length === 1;
   }
 
   // #### `function isJavaObject(e: any)`
@@ -466,7 +466,7 @@ module Tinkerpop {
 
   // ### `isType(o: any, typeName: string)`
   export function isType(o: any, typeName: string): boolean {
-    if (!o || !_.isObject(o)) return false;
+    if (!o || !_.isObject(o)) { return false; }
     try {
       return Java.instanceOf(o, typeName);
     } catch (err) {
@@ -673,7 +673,7 @@ module Tinkerpop {
     // A vertex is an object, i.e. a key,value map.
     // We don't sort the keys of the object, leaving that to jsonStableStringify below.
     // But a vertex values contain `property containers`, each of which may contain embedded arrays of elements.
-    return _.mapValues(vertex, _sortPropertyContainers)
+    return _.mapValues(vertex, _sortPropertyContainers);
   }
 
   // ### `prettyGraphSONString(ugly: string)`
@@ -681,7 +681,7 @@ module Tinkerpop {
   function _prettyGraphSONString(ugly: string): string {
     var lines: string[] = ugly.trim().split(require('os').EOL);
 
-    var vertices: any[] = _.map(lines, (line: string) =>_parseVertex(line));
+    var vertices: any[] = _.map(lines, (line: string) => _parseVertex(line));
     vertices.sort(_compareById);
 
     // Compute the stable JSON.

@@ -412,6 +412,8 @@ describe('isLongValue', function () {
         ];
         _.forEach(scalars, function (scalar) { return expect(TP.isLongValue(scalar), scalar).to.be.false; });
     });
+    // Disable tslint errors for use of `new Number(n)`
+    /* tslint:disable:no-construct */
     it('returns false on Number', function () {
         expect(TP.isLongValue(new Number(123))).to.be.false;
     });
