@@ -145,6 +145,8 @@
 //   org.apache.tinkerpop.gremlin.util.*
 //   org.apache.tinkerpop.gremlin.util.function.*
 
+/* tslint:disable:max-line-length class-name */
+
 declare function require(name: string): any;
 require('source-map-support').install();
 
