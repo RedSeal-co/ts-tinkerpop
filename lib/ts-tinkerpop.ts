@@ -36,6 +36,7 @@ module Tinkerpop {
   export var GraphSONWriter: Java.GraphSONWriter.Static;
   export var GraphSONMapper: Java.GraphSONMapper.Static;
   export var GremlinGroovyScriptEngine: Java.GremlinGroovyScriptEngine.Static;
+  export var P: Java.P.Static;
   export var ScriptEngineLambda: Java.ScriptEngineLambda.Static;
   export var T: Java.T.Static;
   export var TinkerFactory: Java.TinkerFactory.Static;
@@ -70,9 +71,9 @@ module Tinkerpop {
     GraphSONWriter = autoImport('GraphSONWriter');
     GraphSONMapper = autoImport('GraphSONMapper');
     GremlinGroovyScriptEngine = autoImport('GremlinGroovyScriptEngine');
-    GroovyLambda =
-      autoImport('co.redseal.gremlinnode.function.GroovyLambda');  // TODO: Use autoImport when #91309036 fixed
+    GroovyLambda = autoImport('GroovyLambda');
     NULL = autoImport('NullObject').getNullObject();
+    P = autoImport('P');
     ScriptEngineLambda = autoImport('ScriptEngineLambda');
     T = autoImport('T');
     TinkerFactory = autoImport('TinkerFactory');
