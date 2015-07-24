@@ -897,7 +897,7 @@ describe('jsify', function () {
         expect(js).to.deep.equal(expected);
     });
 });
-describe.only('export classes with useful static fields', function () {
+describe('export classes with useful static fields', function () {
     it('Cardinality', function () {
         expect(TP.Cardinality).to.exist;
         var expectedFields = ['single', 'list', 'set'];

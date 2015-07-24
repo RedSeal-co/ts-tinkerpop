@@ -1109,7 +1109,7 @@ describe('jsify', (): void => {
   });
 });
 
-describe.only('export classes with useful static fields', (): void => {
+describe('export classes with useful static fields', (): void => {
   it('Cardinality', (): void => {
     expect(TP.Cardinality).to.exist;
     var expectedFields: string[] = [ 'single', 'list', 'set' ];
