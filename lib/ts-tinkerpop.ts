@@ -32,6 +32,7 @@ module Tinkerpop {
   // #### TinkerPop Classes
   export var __: Java.__.Static;
   export var Compare: Java.Compare.Static;
+  export var Direction: Java.Direction.Static;
   export var GraphSONReader: Java.GraphSONReader.Static;
   export var GraphSONWriter: Java.GraphSONWriter.Static;
   export var GraphSONMapper: Java.GraphSONMapper.Static;
@@ -68,6 +69,7 @@ module Tinkerpop {
     __ = autoImport('__');
     ByteArrayOutputStream = autoImport('ByteArrayOutputStream');
     Compare = autoImport('Compare');
+    Direction = autoImport('Direction');
     GraphSONReader = autoImport('GraphSONReader');
     GraphSONWriter = autoImport('GraphSONWriter');
     GraphSONMapper = autoImport('GraphSONMapper');

@@ -914,5 +914,10 @@ describe.only('export classes with useful static fields', function () {
         var expectedFields = ['first', 'last', 'all'];
         expect(TP.Pop).to.include.keys(expectedFields);
     });
+    it('Direction', function () {
+        expect(TP.Direction).to.exist;
+        var expectedFields = ['OUT', 'IN', 'BOTH'];
+        expect(TP.Direction).to.include.keys(expectedFields);
+    });
 });
 //# sourceMappingURL=tinkerpop-test.js.map
