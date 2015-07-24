@@ -31,11 +31,16 @@ module Tinkerpop {
 
   // #### TinkerPop Classes
   export var __: Java.__.Static;
+  export var Cardinality: Java.VertexProperty$Cardinality.Static;
   export var Compare: Java.Compare.Static;
+  export var Direction: Java.Direction.Static;
   export var GraphSONReader: Java.GraphSONReader.Static;
   export var GraphSONWriter: Java.GraphSONWriter.Static;
   export var GraphSONMapper: Java.GraphSONMapper.Static;
   export var GremlinGroovyScriptEngine: Java.GremlinGroovyScriptEngine.Static;
+  export var P: Java.P.Static;
+  export var Pop: Java.Pop.Static;
+  export var Scope: Java.Scope.Static;
   export var ScriptEngineLambda: Java.ScriptEngineLambda.Static;
   export var T: Java.T.Static;
   export var TinkerFactory: Java.TinkerFactory.Static;
@@ -65,14 +70,18 @@ module Tinkerpop {
   export function initialize() {
     __ = autoImport('__');
     ByteArrayOutputStream = autoImport('ByteArrayOutputStream');
+    Cardinality = autoImport('VertexProperty$Cardinality');
     Compare = autoImport('Compare');
+    Direction = autoImport('Direction');
     GraphSONReader = autoImport('GraphSONReader');
     GraphSONWriter = autoImport('GraphSONWriter');
     GraphSONMapper = autoImport('GraphSONMapper');
     GremlinGroovyScriptEngine = autoImport('GremlinGroovyScriptEngine');
-    GroovyLambda =
-      autoImport('co.redseal.gremlinnode.function.GroovyLambda');  // TODO: Use autoImport when #91309036 fixed
+    GroovyLambda = autoImport('GroovyLambda');
     NULL = autoImport('NullObject').getNullObject();
+    P = autoImport('P');
+    Pop = autoImport('Pop');
+    Scope = autoImport('Scope');
     ScriptEngineLambda = autoImport('ScriptEngineLambda');
     T = autoImport('T');
     TinkerFactory = autoImport('TinkerFactory');
@@ -187,7 +196,7 @@ module Tinkerpop {
   // ### `function isLongValue(e: any)`
   // Checks whether an object is a longValue_t, which is the representation of Java long primitives.
   export function isLongValue(obj: any): boolean {
-    return _.isObject(obj) && obj instanceof Number && 'longValue' in obj && _.keys(obj).length == 1;
+    return _.isObject(obj) && obj instanceof Number && 'longValue' in obj && _.keys(obj).length === 1;
   }
 
   // #### `function isJavaObject(e: any)`
@@ -242,6 +251,23 @@ module Tinkerpop {
     }
   }
 
+  // #### `function isTraversal(e: any)`
+  // Returns true if e is a Tinkerpop Traversal.
+  export function isTraversal(e: any): boolean {
+    return Java.instanceOf(e, 'org.apache.tinkerpop.gremlin.process.traversal.Traversal');
+  }
+
+  // #### `function asTraversal(e: Java.object_t)`
+  // Useful for when in a given context an application expects that an object_t really is a Java.Traversal,
+  // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
+  export function asTraversal(e: Java.object_t): Java.Traversal {
+    if (isTraversal(e)) {
+      return <Java.Traversal> e;
+    } else {
+      throw new Error('asTraversal given an object that is not an Traversal');
+    }
+  }
+
   // #### `interface ConsumeObject`
   // A function interface for Java Object consumer.
   // See `forEach` below.
@@ -269,13 +295,6 @@ module Tinkerpop {
     }
     return _eachIterator(javaIterator, consumer);
   }
-
-  // #### `function asJSON(traversal: Java.Traversal)`
-  // Executes a traversal (synchronously!), returning a json object for all of the returned objects.
-  export function asJSON(traversal: Java.Traversal): any[] {
-    var array: any[] = traversal.toList().toArray().map((elem: any) => _asJSON(elem));
-    return JSON.parse(JSON.stringify(array));
-  };
 
   // #### `function simplifyVertexProperties(obj: any)`
   // Given *obj* which is a javascript object created by asJSON(),
@@ -466,7 +485,7 @@ module Tinkerpop {
 
   // ### `isType(o: any, typeName: string)`
   export function isType(o: any, typeName: string): boolean {
-    if (!o || !_.isObject(o)) return false;
+    if (!o || !_.isObject(o)) { return false; }
     try {
       return Java.instanceOf(o, typeName);
     } catch (err) {
@@ -539,9 +558,16 @@ module Tinkerpop {
     return _.isString(val) && val.search(closureRegex) > -1;
   };
 
-  // #### `function _asJSON(elem: any)`
-  // A utility function used by `asJSON`.
-  function _asJSON(rawElem: any): any {
+  // #### `function asJSON(traversal: Java.Traversal)`
+  // Executes a traversal (synchronously!), returning a json object for all of the returned objects.
+  export function traversalToJson(traversal: Java.Traversal): any[] {
+    var array: any[] = traversal.toList().toArray().map((elem: any) => asJSON(elem));
+    return JSON.parse(JSON.stringify(array));
+  };
+
+  // #### `function asJSON(elem: any)`
+  // Converts an 'elem' to its json representation, using dynamic dispatch to handle essentially any type of elem.
+  export function asJSON(rawElem: any): any {
     var elem: any = jsify(rawElem);
 
     if (!_.isObject(elem)) {
@@ -550,7 +576,7 @@ module Tinkerpop {
 
     } else if (_.isArray(elem)) {
       // Arrays must be recursively converted.
-      return elem.map((e: any) => _asJSON(e));
+      return elem.map((e: any) => asJSON(e));
 
     } else if (isVertex(elem)) {
       // Handle Vertex
@@ -559,6 +585,10 @@ module Tinkerpop {
     } else if (isEdge(elem)) {
       // Handle Edge
       return edgeToJson(asEdge(elem));
+
+    } else if (isTraversal(elem)) {
+      // Handle Traversal
+      return traversalToJson(asTraversal(elem));
 
     } else if (isJavaObject(elem)) {
       // If we still have an unrecognized Java object, convert it to a string.
@@ -571,7 +601,7 @@ module Tinkerpop {
 
     } else {
       // Recursively convert any other kind of object.
-      return _.mapValues(elem, (value: any) => _asJSON(value));
+      return _.mapValues(elem, (value: any) => asJSON(value));
     }
   }
 
@@ -673,7 +703,7 @@ module Tinkerpop {
     // A vertex is an object, i.e. a key,value map.
     // We don't sort the keys of the object, leaving that to jsonStableStringify below.
     // But a vertex values contain `property containers`, each of which may contain embedded arrays of elements.
-    return _.mapValues(vertex, _sortPropertyContainers)
+    return _.mapValues(vertex, _sortPropertyContainers);
   }
 
   // ### `prettyGraphSONString(ugly: string)`
@@ -681,7 +711,7 @@ module Tinkerpop {
   function _prettyGraphSONString(ugly: string): string {
     var lines: string[] = ugly.trim().split(require('os').EOL);
 
-    var vertices: any[] = _.map(lines, (line: string) =>_parseVertex(line));
+    var vertices: any[] = _.map(lines, (line: string) => _parseVertex(line));
     vertices.sort(_compareById);
 
     // Compute the stable JSON.

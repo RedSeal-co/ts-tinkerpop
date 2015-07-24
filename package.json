@@ -24,11 +24,11 @@
     "hb-interpolate": "^1.0.0",
     "mocha": "^2.1.0",
     "tmp": "0.0.25",
-    "ts-java": "=1.2.1",
-    "ts-pkg-installer": "^1.0.13",
-    "tsd": "^0.6.3",
-    "tslint": "^2.1.1",
-    "typescript": "^1.4.1"
+    "ts-java": "=1.2.4",
+    "ts-pkg-installer": "=1.0.13",
+    "tsd": "=0.6.3",
+    "tslint": "=2.1.1",
+    "typescript": "=1.4.1"
   },
   "dependencies": {
     "bluebird": "^2.9.33",

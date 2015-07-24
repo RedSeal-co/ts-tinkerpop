@@ -1,18 +1,19 @@
 # ts-gremlin-test/Makefile
 
-default: test o/documentation.lastran
+default: test o/documentation.lastran lint
 
 install: o/all-installed.lastran
 
 o/all-installed.lastran: o/maven-installed.lastran o/npm-installed.lastran o/tsd-installed.lastran
 	touch $@
 
-clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java clean-doc clean-bundle
+clean: clean-maven clean-npm clean-tsd clean-test clean-typescript clean-ts-java clean-doc clean-bundle clean-lint
 	rm -rf o
 
-.PHONY: default install clean test
+.PHONY: default install clean test lint
 
 JAVAPKGS_MODULE_TS=lib/tsJavaModule.ts
+JAVAPKGS_MODULE_JS=$(patsubst %.ts,%.js,$(JAVAPKGS_MODULE_TS))
 
 ### Maven
 
@@ -41,7 +42,7 @@ $(UNIT_TEST_RAN): o/%.lastran: %.js o/all-installed.lastran
 
 test: $(UNIT_TEST_RAN)
 
-test/tinkerpop-test.js test/tinkerpop-test.js.map : lib/ts-tinkerpop.js $(JAVAPKGS_MODULE_TS)
+test/tinkerpop-test.js test/tinkerpop-test.js.map : lib/ts-tinkerpop.js $(JAVAPKGS_MODULE_JS)
 
 clean-test:
 	rm -f test/*.js test/*.js.map test/*.d.ts
@@ -84,16 +85,31 @@ clean-tsd:
 TSC=./node_modules/.bin/tsc
 TSC_OPTS=--module commonjs --target ES5 --sourceMap --declaration --noEmitOnError --noImplicitAny
 
-LINT=./node_modules/.bin/tslint
-LINT_OPTS=--config tslint.json --file
-
 %.js %.js.map %.d.ts: %.ts o/all-installed.lastran $(JAVAPKGS_MODULE_TS)
-	($(TSC) $(TSC_OPTS) $<) || (rm -f $*.js* && false)
+	($(TSC) $(TSC_OPTS) $<) || (rm -f $@ && false)
 
 clean-typescript:
 	rm -f lib/*.js lib/*.js.map lib/*.d.ts
 
 .PHONY: clean-typescript
+
+### tslint
+
+LINT=./node_modules/.bin/tslint --config tslint.json --file
+
+TS_SOURCES=$(filter-out %.d.ts, $(wildcard lib/*.ts test/*.ts)) $(JAVAPKGS_MODULE_TS)
+TS_LINTED=$(patsubst %.ts,o/%.linted,$(TS_SOURCES))
+
+lint : $(TS_LINTED)
+
+o/%.linted : %.ts
+	$(LINT) $<
+	mkdir -p $(@D) && touch $@
+
+clean-lint:
+	rm -f $(TS_LINTED)
+
+.PHONY: clean-lint
 
 ### ts-java
 
