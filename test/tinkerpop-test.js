@@ -909,5 +909,10 @@ describe.only('export classes with useful static fields', function () {
         var expectedFunctions = ['between', 'eq', 'gt', 'gte', 'inside', 'lt', 'lte', 'neq', 'not', 'outside', 'test', 'within', 'without'];
         expect(functions).to.include.members(expectedFunctions);
     });
+    it('Pop', function () {
+        expect(TP.Pop).to.exist;
+        var expectedFields = ['first', 'last', 'all'];
+        expect(TP.Pop).to.include.keys(expectedFields);
+    });
 });
 //# sourceMappingURL=tinkerpop-test.js.map

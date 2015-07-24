@@ -1123,6 +1123,12 @@ describe.only('export classes with useful static fields', (): void => {
       [ 'between', 'eq', 'gt', 'gte', 'inside', 'lt', 'lte', 'neq', 'not', 'outside', 'test', 'within', 'without' ];
     expect(functions).to.include.members(expectedFunctions);
   });
+
+  it('Pop', (): void => {
+    expect(TP.Pop).to.exist;
+    var expectedFields: string[] = [ 'first', 'last', 'all' ];
+    expect(TP.Pop).to.include.keys(expectedFields);
+  });
 });
 
 
