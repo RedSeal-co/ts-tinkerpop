@@ -1107,5 +1107,22 @@ describe('jsify', (): void => {
     ];
     expect(js).to.deep.equal(expected);
   });
-
 });
+
+describe.only('export classes with useful static fields', (): void => {
+  it('T', (): void => {
+    expect(TP.T).to.exist;
+    var expectedFields: string[] = [ 'label', 'id', 'key', 'value' ];
+    expect(TP.T).to.include.keys(expectedFields);
+  });
+
+  it('P', (): void => {
+    expect(TP.P).to.exist;
+    var functions: string[] = _.functions(TP.P);
+    var expectedFunctions: string[] =
+      [ 'between', 'eq', 'gt', 'gte', 'inside', 'lt', 'lte', 'neq', 'not', 'outside', 'test', 'within', 'without' ];
+    expect(functions).to.include.members(expectedFunctions);
+  });
+});
+
+

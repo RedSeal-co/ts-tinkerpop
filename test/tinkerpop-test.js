@@ -897,4 +897,17 @@ describe('jsify', function () {
         expect(js).to.deep.equal(expected);
     });
 });
+describe.only('export classes with useful static fields', function () {
+    it('T', function () {
+        expect(TP.T).to.exist;
+        var expectedFields = ['label', 'id', 'key', 'value'];
+        expect(TP.T).to.include.keys(expectedFields);
+    });
+    it('P', function () {
+        expect(TP.P).to.exist;
+        var functions = _.functions(TP.P);
+        var expectedFunctions = ['between', 'eq', 'gt', 'gte', 'inside', 'lt', 'lte', 'neq', 'not', 'outside', 'test', 'within', 'without'];
+        expect(functions).to.include.members(expectedFunctions);
+    });
+});
 //# sourceMappingURL=tinkerpop-test.js.map
