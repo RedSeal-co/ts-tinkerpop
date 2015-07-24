@@ -1141,6 +1141,12 @@ describe.only('export classes with useful static fields', (): void => {
     var expectedFields: string[] = [ 'single', 'list', 'set' ];
     expect(TP.Cardinality).to.include.keys(expectedFields);
   });
+
+  it('Compare', (): void => {
+    expect(TP.Compare).to.exist;
+    var expectedFields: string[] = [ 'eq', 'neq', 'gt', 'gte', 'lt', 'lte' ];
+    expect(TP.Compare).to.include.keys(expectedFields);
+  });
 });
 
 
