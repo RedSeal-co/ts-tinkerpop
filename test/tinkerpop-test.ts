@@ -1147,6 +1147,12 @@ describe.only('export classes with useful static fields', (): void => {
     var expectedFields: string[] = [ 'eq', 'neq', 'gt', 'gte', 'lt', 'lte' ];
     expect(TP.Compare).to.include.keys(expectedFields);
   });
+
+  it('Scope', (): void => {
+    expect(TP.Scope).to.exist;
+    var expectedFields: string[] = [ 'global', 'local' ];
+    expect(TP.Scope).to.include.keys(expectedFields);
+  });
 });
 
 

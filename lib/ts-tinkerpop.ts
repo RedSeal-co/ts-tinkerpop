@@ -40,6 +40,7 @@ module Tinkerpop {
   export var GremlinGroovyScriptEngine: Java.GremlinGroovyScriptEngine.Static;
   export var P: Java.P.Static;
   export var Pop: Java.Pop.Static;
+  export var Scope: Java.Scope.Static;
   export var ScriptEngineLambda: Java.ScriptEngineLambda.Static;
   export var T: Java.T.Static;
   export var TinkerFactory: Java.TinkerFactory.Static;
@@ -80,6 +81,7 @@ module Tinkerpop {
     NULL = autoImport('NullObject').getNullObject();
     P = autoImport('P');
     Pop = autoImport('Pop');
+    Scope = autoImport('Scope');
     ScriptEngineLambda = autoImport('ScriptEngineLambda');
     T = autoImport('T');
     TinkerFactory = autoImport('TinkerFactory');

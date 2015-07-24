@@ -929,5 +929,10 @@ describe.only('export classes with useful static fields', function () {
         var expectedFields = ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'];
         expect(TP.Compare).to.include.keys(expectedFields);
     });
+    it('Scope', function () {
+        expect(TP.Scope).to.exist;
+        var expectedFields = ['global', 'local'];
+        expect(TP.Scope).to.include.keys(expectedFields);
+    });
 });
 //# sourceMappingURL=tinkerpop-test.js.map
