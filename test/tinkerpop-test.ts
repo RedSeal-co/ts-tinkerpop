@@ -1110,10 +1110,22 @@ describe('jsify', (): void => {
 });
 
 describe.only('export classes with useful static fields', (): void => {
-  it('T', (): void => {
-    expect(TP.T).to.exist;
-    var expectedFields: string[] = [ 'label', 'id', 'key', 'value' ];
-    expect(TP.T).to.include.keys(expectedFields);
+  it('Cardinality', (): void => {
+    expect(TP.Cardinality).to.exist;
+    var expectedFields: string[] = [ 'single', 'list', 'set' ];
+    expect(TP.Cardinality).to.include.keys(expectedFields);
+  });
+
+  it('Compare', (): void => {
+    expect(TP.Compare).to.exist;
+    var expectedFields: string[] = [ 'eq', 'neq', 'gt', 'gte', 'lt', 'lte' ];
+    expect(TP.Compare).to.include.keys(expectedFields);
+  });
+
+  it('Direction', (): void => {
+    expect(TP.Direction).to.exist;
+    var expectedFields: string[] = [ 'OUT', 'IN', 'BOTH' ];
+    expect(TP.Direction).to.include.keys(expectedFields);
   });
 
   it('P', (): void => {
@@ -1130,28 +1142,16 @@ describe.only('export classes with useful static fields', (): void => {
     expect(TP.Pop).to.include.keys(expectedFields);
   });
 
-  it('Direction', (): void => {
-    expect(TP.Direction).to.exist;
-    var expectedFields: string[] = [ 'OUT', 'IN', 'BOTH' ];
-    expect(TP.Direction).to.include.keys(expectedFields);
-  });
-
-  it('Cardinality', (): void => {
-    expect(TP.Cardinality).to.exist;
-    var expectedFields: string[] = [ 'single', 'list', 'set' ];
-    expect(TP.Cardinality).to.include.keys(expectedFields);
-  });
-
-  it('Compare', (): void => {
-    expect(TP.Compare).to.exist;
-    var expectedFields: string[] = [ 'eq', 'neq', 'gt', 'gte', 'lt', 'lte' ];
-    expect(TP.Compare).to.include.keys(expectedFields);
-  });
-
   it('Scope', (): void => {
     expect(TP.Scope).to.exist;
     var expectedFields: string[] = [ 'global', 'local' ];
     expect(TP.Scope).to.include.keys(expectedFields);
+  });
+
+  it('T', (): void => {
+    expect(TP.T).to.exist;
+    var expectedFields: string[] = [ 'label', 'id', 'key', 'value' ];
+    expect(TP.T).to.include.keys(expectedFields);
   });
 });
 

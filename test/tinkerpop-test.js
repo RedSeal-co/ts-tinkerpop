@@ -898,10 +898,20 @@ describe('jsify', function () {
     });
 });
 describe.only('export classes with useful static fields', function () {
-    it('T', function () {
-        expect(TP.T).to.exist;
-        var expectedFields = ['label', 'id', 'key', 'value'];
-        expect(TP.T).to.include.keys(expectedFields);
+    it('Cardinality', function () {
+        expect(TP.Cardinality).to.exist;
+        var expectedFields = ['single', 'list', 'set'];
+        expect(TP.Cardinality).to.include.keys(expectedFields);
+    });
+    it('Compare', function () {
+        expect(TP.Compare).to.exist;
+        var expectedFields = ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'];
+        expect(TP.Compare).to.include.keys(expectedFields);
+    });
+    it('Direction', function () {
+        expect(TP.Direction).to.exist;
+        var expectedFields = ['OUT', 'IN', 'BOTH'];
+        expect(TP.Direction).to.include.keys(expectedFields);
     });
     it('P', function () {
         expect(TP.P).to.exist;
@@ -914,25 +924,15 @@ describe.only('export classes with useful static fields', function () {
         var expectedFields = ['first', 'last', 'all'];
         expect(TP.Pop).to.include.keys(expectedFields);
     });
-    it('Direction', function () {
-        expect(TP.Direction).to.exist;
-        var expectedFields = ['OUT', 'IN', 'BOTH'];
-        expect(TP.Direction).to.include.keys(expectedFields);
-    });
-    it('Cardinality', function () {
-        expect(TP.Cardinality).to.exist;
-        var expectedFields = ['single', 'list', 'set'];
-        expect(TP.Cardinality).to.include.keys(expectedFields);
-    });
-    it('Compare', function () {
-        expect(TP.Compare).to.exist;
-        var expectedFields = ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'];
-        expect(TP.Compare).to.include.keys(expectedFields);
-    });
     it('Scope', function () {
         expect(TP.Scope).to.exist;
         var expectedFields = ['global', 'local'];
         expect(TP.Scope).to.include.keys(expectedFields);
+    });
+    it('T', function () {
+        expect(TP.T).to.exist;
+        var expectedFields = ['label', 'id', 'key', 'value'];
+        expect(TP.T).to.include.keys(expectedFields);
     });
 });
 //# sourceMappingURL=tinkerpop-test.js.map
