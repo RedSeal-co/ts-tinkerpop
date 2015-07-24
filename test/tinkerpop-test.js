@@ -919,5 +919,10 @@ describe.only('export classes with useful static fields', function () {
         var expectedFields = ['OUT', 'IN', 'BOTH'];
         expect(TP.Direction).to.include.keys(expectedFields);
     });
+    it('Cardinality', function () {
+        expect(TP.Cardinality).to.exist;
+        var expectedFields = ['single', 'list', 'set'];
+        expect(TP.Cardinality).to.include.keys(expectedFields);
+    });
 });
 //# sourceMappingURL=tinkerpop-test.js.map

@@ -31,6 +31,7 @@ module Tinkerpop {
 
   // #### TinkerPop Classes
   export var __: Java.__.Static;
+  export var Cardinality: Java.VertexProperty$Cardinality.Static;
   export var Compare: Java.Compare.Static;
   export var Direction: Java.Direction.Static;
   export var GraphSONReader: Java.GraphSONReader.Static;
@@ -68,6 +69,7 @@ module Tinkerpop {
   export function initialize() {
     __ = autoImport('__');
     ByteArrayOutputStream = autoImport('ByteArrayOutputStream');
+    Cardinality = autoImport('VertexProperty$Cardinality');
     Compare = autoImport('Compare');
     Direction = autoImport('Direction');
     GraphSONReader = autoImport('GraphSONReader');
