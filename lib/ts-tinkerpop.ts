@@ -189,112 +189,75 @@ module Tinkerpop {
 
   // ### `function L(n: number)`
   // Produce a longValue_t literal.
-  export function L(n: number): Java.longValue_t {
-    return Java.newLong(n).longValue();
-  }
+  export import L = Java.L;
 
   // ### `function isLongValue(e: any)`
   // Checks whether an object is a longValue_t, which is the representation of Java long primitives.
-  export function isLongValue(obj: any): boolean {
-    return _.isObject(obj) && obj instanceof Number && 'longValue' in obj && _.keys(obj).length === 1;
-  }
+  export import isLongValue = Java.isLongValue;
 
   // #### `function isJavaObject(e: any)`
   // Returns true if the obj is a Java object.
   // Useful for determining the runtime type of object_t returned by many java methods.
-  export function isJavaObject(e: any): boolean {
-    return _.isObject(e) && !_.isArray(e) && !isLongValue(e) && Java.instanceOf(e, 'java.lang.Object');
-  }
+  export import isJavaObject = Java.isJavaObject;
 
   // #### `function asJavaObject(obj: Java.object_t)`
   // Useful for when in a given context an application expects that an object_t really is a Java.Object,
   // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
   export function asJavaObject(obj: Java.object_t): Java.Object {
-    if (isJavaObject(obj)) {
-      return <Java.Object> obj;
-    } else {
-      throw new Error('asJavaObject given an object that is not a Java.Object');
-    }
+    return Java.asInstanceOf(obj, 'Object');
   }
 
   // #### `function isVertex(v: any)`
   // Returns true if v is a Tinkerpop Vertex.
   export function isVertex(v: any): boolean {
-    return Java.instanceOf(v, 'org.apache.tinkerpop.gremlin.structure.Vertex');
+    return Java.instanceOf(v, 'Vertex');
   }
 
   // #### `function asVertex(v: Java.object_t)`
   // Useful for when in a given context an application expects that an object_t really is a Java.Vertex,
   // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
   export function asVertex(v: Java.object_t): Java.Vertex {
-    if (isVertex(v)) {
-      return <Java.Vertex> v;
-    } else {
-      throw new Error('asVertex given an object that is not a Vertex');
-    }
+    return Java.asInstanceOf(v, 'Vertex');
   }
 
   // #### `function isEdge(e: any)`
   // Returns true if e is a Tinkerpop Edge.
   export function isEdge(e: any): boolean {
-    return Java.instanceOf(e, 'org.apache.tinkerpop.gremlin.structure.Edge');
+    return Java.instanceOf(e, 'Edge');
   }
 
   // #### `function asEdge(e: Java.object_t)`
   // Useful for when in a given context an application expects that an object_t really is a Java.Edge,
   // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
   export function asEdge(e: Java.object_t): Java.Edge {
-    if (isEdge(e)) {
-      return <Java.Edge> e;
-    } else {
-      throw new Error('asEdge given an object that is not an Edge');
-    }
+    return Java.asInstanceOf(e, 'Edge');
   }
 
   // #### `function isTraversal(e: any)`
   // Returns true if e is a Tinkerpop Traversal.
   export function isTraversal(e: any): boolean {
-    return Java.instanceOf(e, 'org.apache.tinkerpop.gremlin.process.traversal.Traversal');
+    return Java.instanceOf(e, 'Traversal');
   }
 
   // #### `function asTraversal(e: Java.object_t)`
   // Useful for when in a given context an application expects that an object_t really is a Java.Traversal,
   // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
   export function asTraversal(e: Java.object_t): Java.Traversal {
-    if (isTraversal(e)) {
-      return <Java.Traversal> e;
-    } else {
-      throw new Error('asTraversal given an object that is not an Traversal');
-    }
+    return Java.asInstanceOf(e, 'Traversal');
   }
 
   // #### `interface ConsumeObject`
   // A function interface for Java Object consumer.
-  // See `forEach` below.
-  export interface ConsumeObject {
-    (item: Java.object_t): any | BluePromise<any>;
-  }
+  // See `forEach` below, and implementation in tsJavaModule.ts
+  export import ConsumeObject = Java.ConsumeObject;
 
   // #### `forEach(javaIterator: Java.Iterator, consumer: ConsumeObject)`
   // Applies *consumer* to each Java.Object returned by the *javaIterator*.
   // *javaIterator* may be any type that implements java.util.Iterator, including a tinkerpop Traversal.
   // *consumer* is function that will do some work on a Java.Object asychronously, returning a Promise for its completion.
   // Returns a promise that is resolved when all objects have been consumed.
-  export function forEach(javaIterator: Java.Iterator, consumer: ConsumeObject): BluePromise<void> {
-    function _eachIterator(javaIterator: Java.Iterator, consumer: ConsumeObject): BluePromise<void> {
-      return javaIterator.hasNextP()
-        .then((hasNext: boolean): BluePromise<void> => {
-          if (!hasNext) {
-            return BluePromise.resolve();
-          } else {
-            return javaIterator.nextP()
-              .then((obj: Java.object_t) => consumer(obj))
-              .then(() => _eachIterator(javaIterator, consumer));
-          }
-        });
-    }
-    return _eachIterator(javaIterator, consumer);
-  }
+  // See implementation in tsJavaModule.ts
+  export import forEach = Java.forEach;
 
   // #### `function simplifyVertexProperties(obj: any)`
   // Given *obj* which is a javascript object created by asJSON(),
