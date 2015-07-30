@@ -350,6 +350,10 @@ module Tinkerpop {
     return graph;
   }
 
+  interface ReadFile {
+    (filename: string, encoding: string, callback: (err: NodeJS.ErrnoException, data: string) => void): void;
+  }
+
   // ### `loadPrettyGraphSON(graph: Java.Graph, filename: string)`
   // Loads the graph as GraphSON, and returns promise to the graph (for fluent API).
   export function loadPrettyGraphSON(graph: Java.Graph, filename: string, callback?: GraphCallback): BluePromise<Java.Graph> {
@@ -362,8 +366,8 @@ module Tinkerpop {
     var theReader: Java.GraphSONReader;
 
     function getStream(): BluePromise<Java.InputStream> {
-      var readFileP = BluePromise.promisify(fs.readFile);
-      return readFileP(filename, { encoding: 'utf8' })
+      var readFileP = BluePromise.promisify(<ReadFile>fs.readFile);
+      return readFileP(filename, 'utf8')
         .then((jsonText: string) => {
           var jsonObjArray: any[] = JSON.parse(jsonText);
           var jsonTextArray: string[] = _.map(jsonObjArray, JSON.stringify);
@@ -439,6 +443,10 @@ module Tinkerpop {
     return graph;
   }
 
+  interface WriteFile {
+    (filename: string, data: any, callback: (err: NodeJS.ErrnoException) => void): void;
+  }
+
   // ### `savePrettyGraphSON(graph: Java.Graph, filename: string)`
   // Saves the graph as human-readable, deterministic GraphSON, and returns promise to the graph (for fluent API).
   export
@@ -453,9 +461,9 @@ module Tinkerpop {
       .then((builder: Java.GraphSONWriter$Builder): BluePromise<Java.GraphSONWriter> => builder.createP())
       .then((writer: Java.GraphSONWriter): BluePromise<void> => writer.writeGraphP(stream, graph))
       .then((): BluePromise<string> => stream.toStringP())
-      .then((ugly: string): BluePromise<void> => {
+      .then((ugly: string): BluePromise<any> => {
         var prettyString: string = _prettyGraphSONString(ugly);
-        var writeFileP = BluePromise.promisify(fs.writeFile);
+        var writeFileP = BluePromise.promisify(<WriteFile>fs.writeFile);
         return writeFileP(filename, prettyString);
       })
       .then((): Java.Graph => graph)

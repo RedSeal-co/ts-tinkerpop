@@ -22,13 +22,16 @@ import tmp = require('tmp');
 import TP = require('../lib/ts-tinkerpop');
 import util = require('util');
 
-import expect = chai.expect;
+var expect = chai.expect;
 import L = TP.L;
 import Java = TP.Java;
 
 var dlog = debug('ts-tinkerpop:test');
 
-var readFileP = BluePromise.promisify(fs.readFile);
+interface ReadFile {
+  (filename: string, encoding: string, callback: (err: NodeJS.ErrnoException, data: string) => void): void;
+}
+var readFileP = BluePromise.promisify(<ReadFile> fs.readFile);
 
 // TODO: Add sortByAll to lodash.d.ts
 interface SortByAll {
@@ -729,7 +732,7 @@ describe('GraphSON support', () => {
         g2 = makeEmptyTinker();
         return TP.loadGraphSON(g2, path);
       })
-      .then((graph: Java.Graph): BluePromise<void> => {
+      .then((graph: Java.Graph): BluePromise<any> => {
         expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
         var str: string = g2.toString();
         var expected: string = 'tinkergraph[vertices:6 edges:6]';
@@ -754,7 +757,7 @@ describe('GraphSON support', () => {
         g2 = makeEmptyTinker();
         return TP.loadPrettyGraphSON(g2, path);
       })
-      .then((graph: Java.Graph): BluePromise<void> => {
+      .then((graph: Java.Graph): BluePromise<any> => {
         expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
         var str: string = g2.toString();
         var expected: string = 'tinkergraph[vertices:6 edges:6]';
@@ -844,7 +847,7 @@ describe('Pretty GraphSON support using TheCrew', () => {
         g2 = makeEmptyTinker();
         return TP.loadPrettyGraphSON(g2, path);
       })
-      .then((graph: Java.Graph): BluePromise<void> => {
+      .then((graph: Java.Graph): BluePromise<any> => {
         expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
         var str: string = g2.toString();
         var expected: string = 'tinkergraph[vertices:6 edges:14]';
@@ -864,18 +867,18 @@ describe('Pretty GraphSON support using TheCrew', () => {
         tmpPath = _path;
         return TP.savePrettyGraphSON(g, tmpPath);
       })
-      .then((graph: Java.Graph): BluePromise<Java.Graph> => {
+      .then((graph: Java.Graph): BluePromise<string> => {
         expect(g, 'savePrettyGraphSON did not return graph').to.deep.equal(graph);
-        return readFileP(tmpPath, { encoding: 'utf8' });
+        return readFileP(tmpPath, 'utf8');
       })
-      .then((_liveContents: string): BluePromise<void> => {
+      .then((_liveContents: string): BluePromise<any> => {
         liveContents = _liveContents;
         var unlinkP = BluePromise.promisify(fs.unlink);
         return unlinkP(tmpPath);
       })
       .then((): BluePromise<string> => {
         var goldenPath = path.join(__dirname, 'data', 'thecrew.json');
-        return readFileP(goldenPath, { encoding: 'utf8' });
+        return readFileP(goldenPath, 'utf8');
       })
       .then((goldenContents: string): BluePromise<void> => {
         expect(liveContents.split('\n')).to.deep.equal(goldenContents.split('\n'));
