@@ -95,7 +95,7 @@ clean-typescript:
 
 ### tslint
 
-LINT=./node_modules/.bin/tslint --config tslint.json --file
+LINT=./node_modules/.bin/tslint --config tslint.json
 
 TS_SOURCES=$(filter-out %.d.ts, $(wildcard lib/*.ts test/*.ts)) $(JAVAPKGS_MODULE_TS)
 TS_LINTED=$(patsubst %.ts,o/%.linted,$(TS_SOURCES))

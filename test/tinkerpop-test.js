@@ -114,7 +114,10 @@ describe('Gremlin', function () {
         it('has certain names', function () {
             var distinctNamesTraversal = graph.traversal().V().values('name').dedup();
             expect(distinctNamesTraversal).to.be.ok;
-            return distinctNamesTraversal.toListP().then(function (list) { return list.toArrayP(); }).then(function (data) {
+            return distinctNamesTraversal
+                .toListP()
+                .then(function (list) { return list.toArrayP(); })
+                .then(function (data) {
                 var expected = ['lop', 'vadas', 'marko', 'peter', 'ripple', 'josh'];
                 // Sort data to ignore sequence differences.
                 expected.sort();
@@ -123,14 +126,18 @@ describe('Gremlin', function () {
             });
         });
         it('g.V().has("name", "marko") -> v.value("name")', function () {
-            return graph.traversal().V().has('name', 'marko').nextP().then(function (v) {
+            return graph.traversal().V().has('name', 'marko')
+                .nextP()
+                .then(function (v) {
                 expect(v).to.be.ok;
                 var name = v.value('name');
                 expect(name).to.be.equal('marko');
             });
         });
         it('g.V().values("name")', function () {
-            return graph.traversal().V().values('name').toListP().then(function (list) { return list.toArrayP(); }).then(function (data) {
+            return graph.traversal().V().values('name').toListP()
+                .then(function (list) { return list.toArrayP(); })
+                .then(function (data) {
                 expect(data).to.be.ok;
                 var expected = ['marko', 'vadas', 'lop', 'josh', 'ripple', 'peter'];
                 expect(data).to.deep.equal(expected);
@@ -139,7 +146,9 @@ describe('Gremlin', function () {
         it('filter() with JavaScript lambda', function () {
             var js = 'a.get().value("name") == "lop"';
             var lambda = TP.newJavaScriptLambda(js);
-            return graph.traversal().V().filter(lambda).toListP().then(function (list) { return list.toArrayP(); }).then(function (recs) {
+            return graph.traversal().V().filter(lambda).toListP()
+                .then(function (list) { return list.toArrayP(); })
+                .then(function (recs) {
                 expect(recs).to.be.ok;
                 expect(recs.length).to.equal(1);
                 var v = TP.asVertex(recs[0]);
@@ -160,8 +169,14 @@ describe('Gremlin', function () {
             // Use the result of the function as a key to the map of traversal choices.
             var groovy = 'a.value("name").length()';
             var lambda = TP.newGroovyLambda(groovy);
-            var chosen = graph.traversal().V().has('age').choose(lambda).option(5, __.in()).option(4, __.out()).option(3, __.both()).values('name');
-            return chosen.toListP().then(function (list) { return list.toArrayP(); }).then(function (actual) {
+            var chosen = graph.traversal().V().has('age').choose(lambda)
+                .option(5, __.in())
+                .option(4, __.out())
+                .option(3, __.both())
+                .values('name');
+            return chosen.toListP()
+                .then(function (list) { return list.toArrayP(); })
+                .then(function (actual) {
                 var expected = ['marko', 'ripple', 'lop'];
                 expect(actual.sort()).to.deep.equal(expected.sort());
             });
@@ -171,8 +186,14 @@ describe('Gremlin', function () {
             // Use the result of the function as a key to the map of traversal choices.
             var groovy = '{ vertex -> vertex.value("name").length() }';
             var lambda = TP.newGroovyClosure(groovy);
-            var chosen = graph.traversal().V().has('age').choose(lambda).option(5, __.in()).option(4, __.out()).option(3, __.both()).values('name');
-            return chosen.toListP().then(function (list) { return list.toArrayP(); }).then(function (actual) {
+            var chosen = graph.traversal().V().has('age').choose(lambda)
+                .option(5, __.in())
+                .option(4, __.out())
+                .option(3, __.both())
+                .values('name');
+            return chosen.toListP()
+                .then(function (list) { return list.toArrayP(); })
+                .then(function (actual) {
                 var expected = ['marko', 'ripple', 'lop'];
                 expect(actual.sort()).to.deep.equal(expected.sort());
             });
@@ -325,7 +346,11 @@ describe('Gremlin', function () {
             expect(json).to.deep.equal(expected);
         });
         it('TP.asJSON(map entries)', function () {
-            var traversal = graph.traversal().V().as('v').values('name').as('name').select('v').out().groupCount('c').by(TP.__.select('name')).cap('c').unfold();
+            var traversal = graph.traversal().V().as('v')
+                .values('name').as('name')
+                .select('v').out().groupCount('c').by(TP.__.select('name'))
+                .cap('c')
+                .unfold();
             dlog(TP.jsify(traversal.asAdmin().clone().toList()));
             var json = TP.asJSON(traversal);
             var expected = [
@@ -336,7 +361,8 @@ describe('Gremlin', function () {
             expect(sortByAll(json, ['key'])).to.deep.equal(expected);
         });
         it('TP.asJSON(path labels)', function () {
-            var traversal = graph.traversal().V().as('a').out().as('b').out().as('c').select('a', 'b', 'c').map(TP.newGroovyClosure('{ it -> it.path().labels() }'));
+            var traversal = graph.traversal().V().as('a').out().as('b').out().as('c').select('a', 'b', 'c')
+                .map(TP.newGroovyClosure('{ it -> it.path().labels() }'));
             dlog(TP.jsify(traversal.asAdmin().clone().toList()));
             var json = TP.asJSON(traversal);
             var expected = [
@@ -398,17 +424,10 @@ describe('isLongValue', function () {
         var scalars = [
             undefined,
             null,
-            0,
-            1,
-            2,
-            0.0,
-            1.1,
-            2.2,
-            'one',
-            'two',
-            'three',
-            true,
-            false,
+            0, 1, 2,
+            0.0, 1.1, 2.2,
+            'one', 'two', 'three',
+            true, false,
         ];
         _.forEach(scalars, function (scalar) { return expect(TP.isLongValue(scalar), scalar).to.be.false; });
     });
@@ -447,17 +466,10 @@ describe('isJavaObject', function () {
         var scalars = [
             undefined,
             null,
-            0,
-            1,
-            2,
-            0.0,
-            1.1,
-            2.2,
-            'one',
-            'two',
-            'three',
-            true,
-            false,
+            0, 1, 2,
+            0.0, 1.1, 2.2,
+            'one', 'two', 'three',
+            true, false,
         ];
         _.forEach(scalars, function (scalar) { return expect(TP.isJavaObject(scalar), scalar).to.be.false; });
     });
@@ -495,9 +507,12 @@ describe('isJavaObject', function () {
 describe('GraphSON support', function () {
     var g;
     beforeEach(function (done) {
-        TP.TinkerFactory.createClassicP().then(function (graph) {
+        TP.TinkerFactory.createClassicP()
+            .then(function (graph) {
             g = graph;
-        }).then(function () { return done(); }).catch(done);
+        })
+            .then(function () { return done(); })
+            .catch(done);
     });
     // Create an empty, in-memory Gremlin graph.
     function makeEmptyTinker() {
@@ -510,6 +525,8 @@ describe('GraphSON support', function () {
     it('can save and load GraphSON synchronously', function (done) {
         tmp.tmpName(function (err, path) {
             if (err) {
+                // A failure in tmpName is not a failure in gremlin-node.
+                // If this ever fails, it is likely some environmental problem.
                 throw err;
             }
             expect(TP.saveGraphSONSync(g, path), 'saveGraphSONSync did not return graph').to.deep.equal(g);
@@ -524,6 +541,8 @@ describe('GraphSON support', function () {
     it('can save and load "pretty" GraphSON synchronously', function (done) {
         tmp.tmpName(function (err, path) {
             if (err) {
+                // A failure in tmpName is not a failure in gremlin-node.
+                // If this ever fails, it is likely some environmental problem.
                 throw err;
             }
             expect(TP.savePrettyGraphSONSync(g, path), 'savePrettyGraphSONSync did not return graph').to.deep.equal(g);
@@ -538,6 +557,8 @@ describe('GraphSON support', function () {
     it('can save and load GraphSON asynchronously via callback', function (done) {
         tmp.tmpName(function (err, path) {
             if (err) {
+                // A failure in tmpName is not a failure in gremlin-node.
+                // If this ever fails, it is likely some environmental problem.
                 throw err;
             }
             TP.saveGraphSON(g, path, function (err, graph) {
@@ -558,6 +579,8 @@ describe('GraphSON support', function () {
     it('can save and load "pretty" GraphSON asynchronously via callback', function (done) {
         tmp.tmpName(function (err, path) {
             if (err) {
+                // A failure in tmpName is not a failure in gremlin-node.
+                // If this ever fails, it is likely some environmental problem.
                 throw err;
             }
             TP.savePrettyGraphSON(g, path, function (err, graph) {
@@ -579,14 +602,17 @@ describe('GraphSON support', function () {
         var tmpNameP = BluePromise.promisify(tmp.tmpName);
         var g2;
         var path;
-        return tmpNameP().then(function (_path) {
+        return tmpNameP()
+            .then(function (_path) {
             path = _path;
             return TP.saveGraphSON(g, path);
-        }).then(function (graph) {
+        })
+            .then(function (graph) {
             expect(g, 'saveGraphSON did not return graph').to.deep.equal(graph);
             g2 = makeEmptyTinker();
             return TP.loadGraphSON(g2, path);
-        }).then(function (graph) {
+        })
+            .then(function (graph) {
             expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
             var str = g2.toString();
             var expected = 'tinkergraph[vertices:6 edges:6]';
@@ -599,14 +625,17 @@ describe('GraphSON support', function () {
         var tmpNameP = BluePromise.promisify(tmp.tmpName);
         var g2;
         var path;
-        return tmpNameP().then(function (_path) {
+        return tmpNameP()
+            .then(function (_path) {
             path = _path;
             return TP.savePrettyGraphSON(g, path);
-        }).then(function (graph) {
+        })
+            .then(function (graph) {
             expect(g, 'savePrettyGraphSON did not return graph').to.deep.equal(graph);
             g2 = makeEmptyTinker();
             return TP.loadPrettyGraphSON(g2, path);
-        }).then(function (graph) {
+        })
+            .then(function (graph) {
             expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
             var str = g2.toString();
             var expected = 'tinkergraph[vertices:6 edges:6]';
@@ -619,9 +648,12 @@ describe('GraphSON support', function () {
 describe('Pretty GraphSON support using TheCrew', function () {
     var g;
     beforeEach(function (done) {
-        TP.TinkerFactory.createTheCrewP().then(function (graph) {
+        TP.TinkerFactory.createTheCrewP()
+            .then(function (graph) {
             g = graph;
-        }).then(function () { return done(); }).catch(done);
+        })
+            .then(function () { return done(); })
+            .catch(done);
     });
     // Create an empty, in-memory Gremlin graph.
     function makeEmptyTinker() {
@@ -634,6 +666,8 @@ describe('Pretty GraphSON support using TheCrew', function () {
     it('can save and load "pretty" GraphSON synchronously', function (done) {
         tmp.tmpName(function (err, path) {
             if (err) {
+                // A failure in tmpName is not a failure in gremlin-node.
+                // If this ever fails, it is likely some environmental problem.
                 throw err;
             }
             expect(TP.savePrettyGraphSONSync(g, path), 'savePrettyGraphSONSync did not return graph').to.deep.equal(g);
@@ -648,6 +682,8 @@ describe('Pretty GraphSON support using TheCrew', function () {
     it('can save and load "pretty" GraphSON asynchronously via callback', function (done) {
         tmp.tmpName(function (err, path) {
             if (err) {
+                // A failure in tmpName is not a failure in gremlin-node.
+                // If this ever fails, it is likely some environmental problem.
                 throw err;
             }
             TP.savePrettyGraphSON(g, path, function (err, graph) {
@@ -669,14 +705,17 @@ describe('Pretty GraphSON support using TheCrew', function () {
         var tmpNameP = BluePromise.promisify(tmp.tmpName);
         var g2;
         var path;
-        return tmpNameP().then(function (_path) {
+        return tmpNameP()
+            .then(function (_path) {
             path = _path;
             return TP.savePrettyGraphSON(g, path);
-        }).then(function (graph) {
+        })
+            .then(function (graph) {
             expect(g, 'savePrettyGraphSON did not return graph').to.deep.equal(graph);
             g2 = makeEmptyTinker();
             return TP.loadPrettyGraphSON(g2, path);
-        }).then(function (graph) {
+        })
+            .then(function (graph) {
             expect(g2, 'loadGraphSON did not return graph').to.deep.equal(graph);
             var str = g2.toString();
             var expected = 'tinkergraph[vertices:6 edges:14]';
@@ -689,20 +728,25 @@ describe('Pretty GraphSON support using TheCrew', function () {
         var tmpNameP = BluePromise.promisify(tmp.tmpName);
         var liveContents;
         var tmpPath;
-        return tmpNameP().then(function (_path) {
+        return tmpNameP()
+            .then(function (_path) {
             tmpPath = _path;
             return TP.savePrettyGraphSON(g, tmpPath);
-        }).then(function (graph) {
+        })
+            .then(function (graph) {
             expect(g, 'savePrettyGraphSON did not return graph').to.deep.equal(graph);
-            return readFileP(tmpPath, { encoding: 'utf8' });
-        }).then(function (_liveContents) {
+            return readFileP(tmpPath, 'utf8');
+        })
+            .then(function (_liveContents) {
             liveContents = _liveContents;
             var unlinkP = BluePromise.promisify(fs.unlink);
             return unlinkP(tmpPath);
-        }).then(function () {
+        })
+            .then(function () {
             var goldenPath = path.join(__dirname, 'data', 'thecrew.json');
-            return readFileP(goldenPath, { encoding: 'utf8' });
-        }).then(function (goldenContents) {
+            return readFileP(goldenPath, 'utf8');
+        })
+            .then(function (goldenContents) {
             expect(liveContents.split('\n')).to.deep.equal(goldenContents.split('\n'));
             return;
         });
@@ -848,10 +892,9 @@ describe('jsify', function () {
             { key: 'two', value: 'deux' },
             { key: 'long', value: '123' },
             { key: 'nested', value: [
-                { key: 'nested', value: 'NIDO' },
-                { key: 'map', value: 'CARTA' }
-            ] }
-        ]);
+                    { key: 'nested', value: 'NIDO' },
+                    { key: 'map', value: 'CARTA' }
+                ] }]);
     });
     it('converts Path to JS array of labels and objects', function () {
         var MutablePath = TP.autoImport('MutablePath');
