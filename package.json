@@ -42,6 +42,7 @@
   "tsjava": {
     "tsJavaModulePath": "lib/tsJavaModule.ts",
     "javaTypingsPath": "../typings/java/java.d.ts",
+    "debugTypingsPath": "../typings/debug/debug.d.ts",
     "classpath": [
       "target/*.jar",
       "target/**/*.jar"
