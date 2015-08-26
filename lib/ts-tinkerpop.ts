@@ -33,6 +33,7 @@ module Tinkerpop {
   export var __: Java.__.Static;
   export var Cardinality: Java.VertexProperty$Cardinality.Static;
   export var Compare: Java.Compare.Static;
+  export var Contains: Java.Contains.Static;
   export var Direction: Java.Direction.Static;
   export var GraphSONReader: Java.GraphSONReader.Static;
   export var GraphSONWriter: Java.GraphSONWriter.Static;
@@ -73,6 +74,7 @@ module Tinkerpop {
     ByteArrayOutputStream = autoImport('ByteArrayOutputStream');
     Cardinality = autoImport('VertexProperty$Cardinality');
     Compare = autoImport('Compare');
+    Contains = autoImport('Contains');
     Direction = autoImport('Direction');
     GraphSONReader = autoImport('GraphSONReader');
     GraphSONWriter = autoImport('GraphSONWriter');

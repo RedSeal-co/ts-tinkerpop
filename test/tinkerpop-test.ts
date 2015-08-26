@@ -1125,6 +1125,12 @@ describe('export classes with useful static fields', (): void => {
     expect(TP.Compare).to.include.keys(expectedFields);
   });
 
+  it('Contains', (): void => {
+    expect(TP.Contains).to.exist;
+    var expectedFields: string[] = [ 'within', 'within' ];
+    expect(TP.Contains).to.include.keys(expectedFields);
+  });
+
   it('Direction', (): void => {
     expect(TP.Direction).to.exist;
     var expectedFields: string[] = [ 'OUT', 'IN', 'BOTH' ];

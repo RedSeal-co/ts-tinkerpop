@@ -951,6 +951,11 @@ describe('export classes with useful static fields', function () {
         var expectedFields = ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'];
         expect(TP.Compare).to.include.keys(expectedFields);
     });
+    it('Contains', function () {
+        expect(TP.Contains).to.exist;
+        var expectedFields = ['within', 'within'];
+        expect(TP.Contains).to.include.keys(expectedFields);
+    });
     it('Direction', function () {
         expect(TP.Direction).to.exist;
         var expectedFields = ['OUT', 'IN', 'BOTH'];
