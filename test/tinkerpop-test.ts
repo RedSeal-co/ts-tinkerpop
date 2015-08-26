@@ -1131,6 +1131,12 @@ describe('export classes with useful static fields', (): void => {
     expect(TP.Direction).to.include.keys(expectedFields);
   });
 
+  it('Order', (): void => {
+    expect(TP.Order).to.exist;
+    var expectedFields: string[] = [ 'incr', 'decr', 'keyIncr', 'keyIncr', 'valueIncr', 'keyDecr', 'valueDecr', 'shuffle' ];
+    expect(TP.Order).to.include.keys(expectedFields);
+  });
+
   it('P', (): void => {
     expect(TP.P).to.exist;
     var functions: string[] = _.functions(TP.P);

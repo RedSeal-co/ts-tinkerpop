@@ -956,6 +956,11 @@ describe('export classes with useful static fields', function () {
         var expectedFields = ['OUT', 'IN', 'BOTH'];
         expect(TP.Direction).to.include.keys(expectedFields);
     });
+    it('Order', function () {
+        expect(TP.Order).to.exist;
+        var expectedFields = ['incr', 'decr', 'keyIncr', 'keyIncr', 'valueIncr', 'keyDecr', 'valueDecr', 'shuffle'];
+        expect(TP.Order).to.include.keys(expectedFields);
+    });
     it('P', function () {
         expect(TP.P).to.exist;
         var functions = _.functions(TP.P);

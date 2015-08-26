@@ -38,6 +38,7 @@ module Tinkerpop {
   export var GraphSONWriter: Java.GraphSONWriter.Static;
   export var GraphSONMapper: Java.GraphSONMapper.Static;
   export var GremlinGroovyScriptEngine: Java.GremlinGroovyScriptEngine.Static;
+  export var Order: Java.Order.Static
   export var P: Java.P.Static;
   export var Pop: Java.Pop.Static;
   export var Scope: Java.Scope.Static;
@@ -79,6 +80,7 @@ module Tinkerpop {
     GremlinGroovyScriptEngine = autoImport('GremlinGroovyScriptEngine');
     GroovyLambda = autoImport('GroovyLambda');
     NULL = autoImport('NullObject').getNullObject();
+    Order = autoImport('Order');
     P = autoImport('P');
     Pop = autoImport('Pop');
     Scope = autoImport('Scope');
