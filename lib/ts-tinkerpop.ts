@@ -204,10 +204,10 @@ module Tinkerpop {
   // Useful for determining the runtime type of object_t returned by many java methods.
   export import isJavaObject = Java.isJavaObject;
 
-  // #### `function asJavaObject(obj: Java.object_t)`
-  // Useful for when in a given context an application expects that an object_t really is a Java.Object,
+  // #### `function asJavaObject(obj: any)`
+  // Useful for when in a given context an application expects that a reference really is a Java.Object,
   // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
-  export function asJavaObject(obj: Java.object_t): Java.Object {
+  export function asJavaObject(obj: any): Java.Object {
     return Java.asInstanceOf(obj, 'Object');
   }
 
@@ -217,10 +217,10 @@ module Tinkerpop {
     return Java.instanceOf(v, 'Vertex');
   }
 
-  // #### `function asVertex(v: Java.object_t)`
-  // Useful for when in a given context an application expects that an object_t really is a Java.Vertex,
+  // #### `function asVertex(v: any)`
+  // Useful for when in a given context an application expects that a reference really is a Java.Vertex,
   // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
-  export function asVertex(v: Java.object_t): Java.Vertex {
+  export function asVertex(v: any): Java.Vertex {
     return Java.asInstanceOf(v, 'Vertex');
   }
 
@@ -230,10 +230,10 @@ module Tinkerpop {
     return Java.instanceOf(e, 'Edge');
   }
 
-  // #### `function asEdge(e: Java.object_t)`
-  // Useful for when in a given context an application expects that an object_t really is a Java.Edge,
+  // #### `function asEdge(e: any)`
+  // Useful for when in a given context an application expects that a reference really is a Java.Edge,
   // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
-  export function asEdge(e: Java.object_t): Java.Edge {
+  export function asEdge(e: any): Java.Edge {
     return Java.asInstanceOf(e, 'Edge');
   }
 
@@ -243,8 +243,8 @@ module Tinkerpop {
     return Java.instanceOf(e, 'Traversal');
   }
 
-  // #### `function asTraversal(e: Java.object_t)`
-  // Useful for when in a given context an application expects that an object_t really is a Java.Traversal,
+  // #### `function asTraversal(e: any)`
+  // Useful for when in a given context an application expects that a reference really is a Java.Traversal,
   // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
   export function asTraversal(e: Java.object_t): Java.Traversal {
     return Java.asInstanceOf(e, 'Traversal');
