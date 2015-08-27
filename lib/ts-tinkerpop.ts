@@ -33,11 +33,13 @@ module Tinkerpop {
   export var __: Java.__.Static;
   export var Cardinality: Java.VertexProperty$Cardinality.Static;
   export var Compare: Java.Compare.Static;
+  export var Contains: Java.Contains.Static;
   export var Direction: Java.Direction.Static;
   export var GraphSONReader: Java.GraphSONReader.Static;
   export var GraphSONWriter: Java.GraphSONWriter.Static;
   export var GraphSONMapper: Java.GraphSONMapper.Static;
   export var GremlinGroovyScriptEngine: Java.GremlinGroovyScriptEngine.Static;
+  export var Order: Java.Order.Static
   export var P: Java.P.Static;
   export var Pop: Java.Pop.Static;
   export var Scope: Java.Scope.Static;
@@ -72,6 +74,7 @@ module Tinkerpop {
     ByteArrayOutputStream = autoImport('ByteArrayOutputStream');
     Cardinality = autoImport('VertexProperty$Cardinality');
     Compare = autoImport('Compare');
+    Contains = autoImport('Contains');
     Direction = autoImport('Direction');
     GraphSONReader = autoImport('GraphSONReader');
     GraphSONWriter = autoImport('GraphSONWriter');
@@ -79,6 +82,7 @@ module Tinkerpop {
     GremlinGroovyScriptEngine = autoImport('GremlinGroovyScriptEngine');
     GroovyLambda = autoImport('GroovyLambda');
     NULL = autoImport('NullObject').getNullObject();
+    Order = autoImport('Order');
     P = autoImport('P');
     Pop = autoImport('Pop');
     Scope = autoImport('Scope');
@@ -200,10 +204,10 @@ module Tinkerpop {
   // Useful for determining the runtime type of object_t returned by many java methods.
   export import isJavaObject = Java.isJavaObject;
 
-  // #### `function asJavaObject(obj: Java.object_t)`
-  // Useful for when in a given context an application expects that an object_t really is a Java.Object,
+  // #### `function asJavaObject(obj: any)`
+  // Useful for when in a given context an application expects that a reference really is a Java.Object,
   // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
-  export function asJavaObject(obj: Java.object_t): Java.Object {
+  export function asJavaObject(obj: any): Java.Object {
     return Java.asInstanceOf(obj, 'Object');
   }
 
@@ -213,10 +217,10 @@ module Tinkerpop {
     return Java.instanceOf(v, 'Vertex');
   }
 
-  // #### `function asVertex(v: Java.object_t)`
-  // Useful for when in a given context an application expects that an object_t really is a Java.Vertex,
+  // #### `function asVertex(v: any)`
+  // Useful for when in a given context an application expects that a reference really is a Java.Vertex,
   // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
-  export function asVertex(v: Java.object_t): Java.Vertex {
+  export function asVertex(v: any): Java.Vertex {
     return Java.asInstanceOf(v, 'Vertex');
   }
 
@@ -226,10 +230,10 @@ module Tinkerpop {
     return Java.instanceOf(e, 'Edge');
   }
 
-  // #### `function asEdge(e: Java.object_t)`
-  // Useful for when in a given context an application expects that an object_t really is a Java.Edge,
+  // #### `function asEdge(e: any)`
+  // Useful for when in a given context an application expects that a reference really is a Java.Edge,
   // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
-  export function asEdge(e: Java.object_t): Java.Edge {
+  export function asEdge(e: any): Java.Edge {
     return Java.asInstanceOf(e, 'Edge');
   }
 
@@ -239,8 +243,8 @@ module Tinkerpop {
     return Java.instanceOf(e, 'Traversal');
   }
 
-  // #### `function asTraversal(e: Java.object_t)`
-  // Useful for when in a given context an application expects that an object_t really is a Java.Traversal,
+  // #### `function asTraversal(e: any)`
+  // Useful for when in a given context an application expects that a reference really is a Java.Traversal,
   // but for defensive programming purposes wants to do the runtime check rather than a simple cast.
   export function asTraversal(e: Java.object_t): Java.Traversal {
     return Java.asInstanceOf(e, 'Traversal');
