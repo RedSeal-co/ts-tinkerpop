@@ -24,7 +24,7 @@
     "hb-interpolate": "^1.0.0",
     "mocha": "^2.1.0",
     "tmp": "0.0.25",
-    "ts-java": "git://github.com/RedSeal-co/ts-java#chore/ts-java-use-tsc16",
+    "ts-java": "=1.4.0",
     "ts-pkg-installer": "=1.0.13",
     "tsd": "=0.6.5",
     "tslint": "=2.4.2",
