@@ -1,11 +1,10 @@
 /// <reference path='../typings/debug/debug.d.ts' />
 /// <reference path='../typings/json-stable-stringify/json-stable-stringify.d.ts' />
 /// <reference path='../typings/lodash/lodash.d.ts' />
-/// <reference path='../typings/power-assert/power-assert.d.ts' />
 
 import _ = require('lodash');
 import _java = require('./tsJavaModule');
-import assert = require('power-assert');
+import assert = require('assert');
 import BluePromise = require('bluebird');
 import debug = require('debug');
 import fs = require('fs');
@@ -39,7 +38,7 @@ module Tinkerpop {
   export var GraphSONWriter: Java.GraphSONWriter.Static;
   export var GraphSONMapper: Java.GraphSONMapper.Static;
   export var GremlinGroovyScriptEngine: Java.GremlinGroovyScriptEngine.Static;
-  export var Order: Java.Order.Static
+  export var Order: Java.Order.Static;
   export var P: Java.P.Static;
   export var Pop: Java.Pop.Static;
   export var Scope: Java.Scope.Static;
