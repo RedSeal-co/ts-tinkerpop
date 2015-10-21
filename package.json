@@ -3,6 +3,7 @@
   "version": "1.6.0",
   "description": "Utilities for using Tinkerpop3 via the node-java API in Typescript",
   "main": "lib/ts-tinkerpop.js",
+  "typings": "./lib/index.d.ts",
   "scripts": {
     "test": "make test",
     "install": "make install-maven",
