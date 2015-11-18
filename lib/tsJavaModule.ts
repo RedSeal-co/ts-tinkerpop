@@ -8,20 +8,19 @@
 // tsJavaModulePath:
 //   lib/tsJavaModule.ts
 // classpath:
-//   target/ts-tinkerpop-3.0.0.GA.0.jar
+//   target/ts-tinkerpop-3.0.1.GA.0.jar
 //   target/dependency/commons-configuration-1.10.jar
 //   target/dependency/commons-lang-2.6.jar
 //   target/dependency/commons-lang3-3.3.1.jar
-//   target/dependency/gremlin-core-3.0.0-incubating.jar
-//   target/dependency/gremlin-groovy-3.0.0-incubating.jar
-//   target/dependency/gremlin-shaded-3.0.0-incubating.jar
+//   target/dependency/gremlin-core-3.0.1-incubating.jar
+//   target/dependency/gremlin-groovy-3.0.1-incubating.jar
+//   target/dependency/gremlin-shaded-3.0.1-incubating.jar
 //   target/dependency/groovy-2.4.1-indy.jar
 //   target/dependency/groovy-2.4.1.jar
 //   target/dependency/groovy-console-2.4.1.jar
 //   target/dependency/groovy-groovysh-2.4.1-indy.jar
 //   target/dependency/groovy-json-2.4.1-indy.jar
 //   target/dependency/groovy-jsr223-2.4.1-indy.jar
-//   target/dependency/groovy-sandbox-1.6.jar
 //   target/dependency/groovy-swing-2.4.1.jar
 //   target/dependency/groovy-templates-2.4.1.jar
 //   target/dependency/groovy-xml-2.4.1.jar
@@ -32,6 +31,7 @@
 //   target/dependency/jackson-core-2.5.3.jar
 //   target/dependency/jackson-databind-2.5.3.jar
 //   target/dependency/javatuples-1.2.jar
+//   target/dependency/jbcrypt-0.3m.jar
 //   target/dependency/jcabi-log-0.14.jar
 //   target/dependency/jcabi-manifests-1.1.jar
 //   target/dependency/jcl-over-slf4j-1.7.12.jar
@@ -41,8 +41,8 @@
 //   target/dependency/slf4j-api-1.7.12.jar
 //   target/dependency/slf4j-log4j12-1.7.12.jar
 //   target/dependency/snakeyaml-1.15.jar
-//   target/dependency/tinkergraph-gremlin-3.0.0-incubating.jar
-//   target/ts-tinkerpop-3.0.0.GA.0.jar
+//   target/dependency/tinkergraph-gremlin-3.0.1-incubating.jar
+//   target/ts-tinkerpop-3.0.1.GA.0.jar
 // classes:
 //   groovy.lang.Binding
 //   groovy.lang.Closure
@@ -170,7 +170,7 @@ dlog('asyncOptions:', _java.asyncOptions);
 
 // JVM initialization callback which adds tsjava.classpath to the JVM classpath.
 function beforeJvm(): BluePromise<void> {
-  var moduleJars: string[] = ['target/ts-tinkerpop-3.0.0.GA.0.jar', 'target/dependency/commons-configuration-1.10.jar', 'target/dependency/commons-lang-2.6.jar', 'target/dependency/commons-lang3-3.3.1.jar', 'target/dependency/gremlin-core-3.0.0-incubating.jar', 'target/dependency/gremlin-groovy-3.0.0-incubating.jar', 'target/dependency/gremlin-shaded-3.0.0-incubating.jar', 'target/dependency/groovy-2.4.1-indy.jar', 'target/dependency/groovy-2.4.1.jar', 'target/dependency/groovy-console-2.4.1.jar', 'target/dependency/groovy-groovysh-2.4.1-indy.jar', 'target/dependency/groovy-json-2.4.1-indy.jar', 'target/dependency/groovy-jsr223-2.4.1-indy.jar', 'target/dependency/groovy-sandbox-1.6.jar', 'target/dependency/groovy-swing-2.4.1.jar', 'target/dependency/groovy-templates-2.4.1.jar', 'target/dependency/groovy-xml-2.4.1.jar', 'target/dependency/hamcrest-core-1.3.jar', 'target/dependency/hppc-0.7.1.jar', 'target/dependency/ivy-2.3.0.jar', 'target/dependency/jackson-annotations-2.5.0.jar', 'target/dependency/jackson-core-2.5.3.jar', 'target/dependency/jackson-databind-2.5.3.jar', 'target/dependency/javatuples-1.2.jar', 'target/dependency/jcabi-log-0.14.jar', 'target/dependency/jcabi-manifests-1.1.jar', 'target/dependency/jcl-over-slf4j-1.7.12.jar', 'target/dependency/jline-2.12.jar', 'target/dependency/junit-4.11.jar', 'target/dependency/log4j-1.2.17.jar', 'target/dependency/slf4j-api-1.7.12.jar', 'target/dependency/slf4j-log4j12-1.7.12.jar', 'target/dependency/snakeyaml-1.15.jar', 'target/dependency/tinkergraph-gremlin-3.0.0-incubating.jar', 'target/ts-tinkerpop-3.0.0.GA.0.jar'];
+  var moduleJars: string[] = ['target/ts-tinkerpop-3.0.1.GA.0.jar', 'target/dependency/commons-configuration-1.10.jar', 'target/dependency/commons-lang-2.6.jar', 'target/dependency/commons-lang3-3.3.1.jar', 'target/dependency/gremlin-core-3.0.1-incubating.jar', 'target/dependency/gremlin-groovy-3.0.1-incubating.jar', 'target/dependency/gremlin-shaded-3.0.1-incubating.jar', 'target/dependency/groovy-2.4.1-indy.jar', 'target/dependency/groovy-2.4.1.jar', 'target/dependency/groovy-console-2.4.1.jar', 'target/dependency/groovy-groovysh-2.4.1-indy.jar', 'target/dependency/groovy-json-2.4.1-indy.jar', 'target/dependency/groovy-jsr223-2.4.1-indy.jar', 'target/dependency/groovy-swing-2.4.1.jar', 'target/dependency/groovy-templates-2.4.1.jar', 'target/dependency/groovy-xml-2.4.1.jar', 'target/dependency/hamcrest-core-1.3.jar', 'target/dependency/hppc-0.7.1.jar', 'target/dependency/ivy-2.3.0.jar', 'target/dependency/jackson-annotations-2.5.0.jar', 'target/dependency/jackson-core-2.5.3.jar', 'target/dependency/jackson-databind-2.5.3.jar', 'target/dependency/javatuples-1.2.jar', 'target/dependency/jbcrypt-0.3m.jar', 'target/dependency/jcabi-log-0.14.jar', 'target/dependency/jcabi-manifests-1.1.jar', 'target/dependency/jcl-over-slf4j-1.7.12.jar', 'target/dependency/jline-2.12.jar', 'target/dependency/junit-4.11.jar', 'target/dependency/log4j-1.2.17.jar', 'target/dependency/slf4j-api-1.7.12.jar', 'target/dependency/slf4j-log4j12-1.7.12.jar', 'target/dependency/snakeyaml-1.15.jar', 'target/dependency/tinkergraph-gremlin-3.0.1-incubating.jar', 'target/ts-tinkerpop-3.0.1.GA.0.jar'];
   moduleJars.forEach((jarPath: string) => {
     var fullJarPath: string = path.join(__dirname, '..', jarPath);
     dlog('Adding to classpath:', fullJarPath);
@@ -410,10 +410,11 @@ export module Java {
       'IncidentToAdjacentStrategy': 'org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.IncidentToAdjacentStrategy',
       'MatchPredicateStrategy': 'org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.MatchPredicateStrategy',
       'RangeByIsCountStrategy': 'org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.RangeByIsCountStrategy',
-      'ComputerVerificationException': 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException',
       'ComputerVerificationStrategy': 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationStrategy',
       'LambdaRestrictionStrategy': 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.LambdaRestrictionStrategy',
       'ReadOnlyStrategy': 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy',
+      'StandardVerificationStrategy': 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy',
+      'VerificationException': 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException',
       'Traversal': 'org.apache.tinkerpop.gremlin.process.traversal.Traversal',
       'Traversal$Admin': 'org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin',
       'Traversal$Exceptions': 'org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions',
@@ -560,6 +561,7 @@ export module Java {
       'ElementHelper': 'org.apache.tinkerpop.gremlin.structure.util.ElementHelper',
       'FeatureDescriptor': 'org.apache.tinkerpop.gremlin.structure.util.FeatureDescriptor',
       'GraphFactory': 'org.apache.tinkerpop.gremlin.structure.util.GraphFactory',
+      'GraphFactoryClass': 'org.apache.tinkerpop.gremlin.structure.util.GraphFactoryClass',
       'GraphVariableHelper': 'org.apache.tinkerpop.gremlin.structure.util.GraphVariableHelper',
       'Host': 'org.apache.tinkerpop.gremlin.structure.util.Host',
       'StringFactory': 'org.apache.tinkerpop.gremlin.structure.util.StringFactory',
@@ -827,10 +829,11 @@ export module Java {
   export function importClass(className: 'IncidentToAdjacentStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.IncidentToAdjacentStrategy.Static;
   export function importClass(className: 'MatchPredicateStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.MatchPredicateStrategy.Static;
   export function importClass(className: 'RangeByIsCountStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.RangeByIsCountStrategy.Static;
-  export function importClass(className: 'ComputerVerificationException'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException.Static;
   export function importClass(className: 'ComputerVerificationStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationStrategy.Static;
   export function importClass(className: 'LambdaRestrictionStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.LambdaRestrictionStrategy.Static;
   export function importClass(className: 'ReadOnlyStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy.Static;
+  export function importClass(className: 'StandardVerificationStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy.Static;
+  export function importClass(className: 'VerificationException'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException.Static;
   export function importClass(className: 'Traversal'): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal.Static;
   export function importClass(className: 'Traversal$Admin'): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin.Static;
   export function importClass(className: 'Traversal$Exceptions'): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions.Static;
@@ -977,6 +980,7 @@ export module Java {
   export function importClass(className: 'ElementHelper'): Java.org.apache.tinkerpop.gremlin.structure.util.ElementHelper.Static;
   export function importClass(className: 'FeatureDescriptor'): Java.org.apache.tinkerpop.gremlin.structure.util.FeatureDescriptor.Static;
   export function importClass(className: 'GraphFactory'): Java.org.apache.tinkerpop.gremlin.structure.util.GraphFactory.Static;
+  export function importClass(className: 'GraphFactoryClass'): Java.org.apache.tinkerpop.gremlin.structure.util.GraphFactoryClass.Static;
   export function importClass(className: 'GraphVariableHelper'): Java.org.apache.tinkerpop.gremlin.structure.util.GraphVariableHelper.Static;
   export function importClass(className: 'Host'): Java.org.apache.tinkerpop.gremlin.structure.util.Host.Static;
   export function importClass(className: 'StringFactory'): Java.org.apache.tinkerpop.gremlin.structure.util.StringFactory.Static;
@@ -1241,10 +1245,11 @@ export module Java {
   export function importClass(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.IncidentToAdjacentStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.IncidentToAdjacentStrategy.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.MatchPredicateStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.MatchPredicateStrategy.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.RangeByIsCountStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.RangeByIsCountStrategy.Static;
-  export function importClass(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationStrategy.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.LambdaRestrictionStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.LambdaRestrictionStrategy.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy.Static;
+  export function importClass(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy.Static;
+  export function importClass(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.process.traversal.Traversal'): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin'): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions'): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions.Static;
@@ -1391,6 +1396,7 @@ export module Java {
   export function importClass(className: 'org.apache.tinkerpop.gremlin.structure.util.ElementHelper'): Java.org.apache.tinkerpop.gremlin.structure.util.ElementHelper.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.structure.util.FeatureDescriptor'): Java.org.apache.tinkerpop.gremlin.structure.util.FeatureDescriptor.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.structure.util.GraphFactory'): Java.org.apache.tinkerpop.gremlin.structure.util.GraphFactory.Static;
+  export function importClass(className: 'org.apache.tinkerpop.gremlin.structure.util.GraphFactoryClass'): Java.org.apache.tinkerpop.gremlin.structure.util.GraphFactoryClass.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.structure.util.GraphVariableHelper'): Java.org.apache.tinkerpop.gremlin.structure.util.GraphVariableHelper.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.structure.util.Host'): Java.org.apache.tinkerpop.gremlin.structure.util.Host.Static;
   export function importClass(className: 'org.apache.tinkerpop.gremlin.structure.util.StringFactory'): Java.org.apache.tinkerpop.gremlin.structure.util.StringFactory.Static;
@@ -1660,10 +1666,11 @@ export module Java {
   export function asInstanceOf(obj: any, className: 'IncidentToAdjacentStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.IncidentToAdjacentStrategy;
   export function asInstanceOf(obj: any, className: 'MatchPredicateStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.MatchPredicateStrategy;
   export function asInstanceOf(obj: any, className: 'RangeByIsCountStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.RangeByIsCountStrategy;
-  export function asInstanceOf(obj: any, className: 'ComputerVerificationException'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException;
   export function asInstanceOf(obj: any, className: 'ComputerVerificationStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationStrategy;
   export function asInstanceOf(obj: any, className: 'LambdaRestrictionStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.LambdaRestrictionStrategy;
   export function asInstanceOf(obj: any, className: 'ReadOnlyStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy;
+  export function asInstanceOf(obj: any, className: 'StandardVerificationStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy;
+  export function asInstanceOf(obj: any, className: 'VerificationException'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException;
   export function asInstanceOf(obj: any, className: 'Traversal'): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal;
   export function asInstanceOf(obj: any, className: 'Traversal$Admin'): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin;
   export function asInstanceOf(obj: any, className: 'Traversal$Exceptions'): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions;
@@ -1810,6 +1817,7 @@ export module Java {
   export function asInstanceOf(obj: any, className: 'ElementHelper'): Java.org.apache.tinkerpop.gremlin.structure.util.ElementHelper;
   export function asInstanceOf(obj: any, className: 'FeatureDescriptor'): Java.org.apache.tinkerpop.gremlin.structure.util.FeatureDescriptor;
   export function asInstanceOf(obj: any, className: 'GraphFactory'): Java.org.apache.tinkerpop.gremlin.structure.util.GraphFactory;
+  export function asInstanceOf(obj: any, className: 'GraphFactoryClass'): Java.org.apache.tinkerpop.gremlin.structure.util.GraphFactoryClass;
   export function asInstanceOf(obj: any, className: 'GraphVariableHelper'): Java.org.apache.tinkerpop.gremlin.structure.util.GraphVariableHelper;
   export function asInstanceOf(obj: any, className: 'Host'): Java.org.apache.tinkerpop.gremlin.structure.util.Host;
   export function asInstanceOf(obj: any, className: 'StringFactory'): Java.org.apache.tinkerpop.gremlin.structure.util.StringFactory;
@@ -2074,10 +2082,11 @@ export module Java {
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.IncidentToAdjacentStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.IncidentToAdjacentStrategy;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.MatchPredicateStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.MatchPredicateStrategy;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.RangeByIsCountStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.RangeByIsCountStrategy;
-  export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationStrategy;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.LambdaRestrictionStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.LambdaRestrictionStrategy;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy;
+  export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy;
+  export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException'): Java.org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.process.traversal.Traversal'): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin'): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions'): Java.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions;
@@ -2224,6 +2233,7 @@ export module Java {
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.structure.util.ElementHelper'): Java.org.apache.tinkerpop.gremlin.structure.util.ElementHelper;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.structure.util.FeatureDescriptor'): Java.org.apache.tinkerpop.gremlin.structure.util.FeatureDescriptor;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.structure.util.GraphFactory'): Java.org.apache.tinkerpop.gremlin.structure.util.GraphFactory;
+  export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.structure.util.GraphFactoryClass'): Java.org.apache.tinkerpop.gremlin.structure.util.GraphFactoryClass;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.structure.util.GraphVariableHelper'): Java.org.apache.tinkerpop.gremlin.structure.util.GraphVariableHelper;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.structure.util.Host'): Java.org.apache.tinkerpop.gremlin.structure.util.Host;
   export function asInstanceOf(obj: any, className: 'org.apache.tinkerpop.gremlin.structure.util.StringFactory'): Java.org.apache.tinkerpop.gremlin.structure.util.StringFactory;
@@ -2407,8 +2417,7 @@ export module Java {
   export function newInstanceA(className: 'GFunction', arg0: Java.Closure, cb: Callback<Java.GFunction>): void;
   export function newInstanceA(className: 'GSupplier', arg0: Java.Closure, cb: Callback<Java.GSupplier>): void;
   export function newInstanceA(className: 'GUnaryOperator', arg0: Java.Closure, cb: Callback<Java.GUnaryOperator>): void;
-  export function newInstanceA(className: 'GremlinGroovyScriptEngine', arg0: object_t, arg1: object_t, arg2: long_t, cb: Callback<Java.GremlinGroovyScriptEngine>): void;
-  export function newInstanceA(className: 'GremlinGroovyScriptEngine', arg0: object_t, arg1: object_t, cb: Callback<Java.GremlinGroovyScriptEngine>): void;
+  export function newInstanceA(className: 'GremlinGroovyScriptEngine', arg0: object_array_t, cb: Callback<Java.GremlinGroovyScriptEngine>): void;
   export function newInstanceA(className: 'GremlinGroovyScriptEngine', arg0: object_t, cb: Callback<Java.GremlinGroovyScriptEngine>): void;
   export function newInstanceA(className: 'GremlinGroovyScriptEngine', cb: Callback<Java.GremlinGroovyScriptEngine>): void;
   export function newInstanceA(className: 'KeyValue', arg0: object_t, arg1: object_t, cb: Callback<Java.KeyValue>): void;
@@ -2461,7 +2470,7 @@ export module Java {
   export function newInstanceA(className: 'EventStrategy$DefaultEventQueue', cb: Callback<Java.EventStrategy$DefaultEventQueue>): void;
   export function newInstanceA(className: 'EventStrategy$EventStrategyCallback', arg0: Java.EventStrategy, arg1: Java.EventStrategy$EventQueue, cb: Callback<Java.EventStrategy$EventStrategyCallback>): void;
   export function newInstanceA(className: 'EventStrategy$TransactionalEventQueue', arg0: Java.Graph, cb: Callback<Java.EventStrategy$TransactionalEventQueue>): void;
-  export function newInstanceA(className: 'ComputerVerificationException', arg0: string_t, arg1: Java.Traversal, cb: Callback<Java.ComputerVerificationException>): void;
+  export function newInstanceA(className: 'VerificationException', arg0: string_t, arg1: Java.Traversal, cb: Callback<Java.VerificationException>): void;
   export function newInstanceA(className: 'Traversal$Exceptions', cb: Callback<Java.Traversal$Exceptions>): void;
   export function newInstanceA(className: 'TraversalSideEffects$Exceptions', cb: Callback<Java.TraversalSideEffects$Exceptions>): void;
   export function newInstanceA(className: 'TraversalStrategies$GlobalCache', cb: Callback<Java.TraversalStrategies$GlobalCache>): void;
@@ -2489,7 +2498,7 @@ export module Java {
   export function newInstanceA(className: 'GraphMLWriterHelper$IndentingXMLStreamWriter', arg0: object_t, cb: Callback<Java.GraphMLWriterHelper$IndentingXMLStreamWriter>): void;
   export function newInstanceA(className: 'GraphSONIo$Builder', cb: Callback<Java.GraphSONIo$Builder>): void;
   export function newInstanceA(className: 'GryoIo$Builder', cb: Callback<Java.GryoIo$Builder>): void;
-  export function newInstanceA(className: 'GryoPool', arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.Optional, cb: Callback<Java.GryoPool>): void;
+  export function newInstanceA(className: 'GryoPool', arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.List, cb: Callback<Java.GryoPool>): void;
   export function newInstanceA(className: 'GryoPool', arg0: object_t, cb: Callback<Java.GryoPool>): void;
   export function newInstanceA(className: 'GryoPool', arg0: integer_t, cb: Callback<Java.GryoPool>): void;
   export function newInstanceA(className: 'VertexByteArrayInputStream', arg0: Java.InputStream, cb: Callback<Java.VertexByteArrayInputStream>): void;
@@ -2633,8 +2642,7 @@ export module Java {
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.groovy.function.GFunction', arg0: Java.Closure, cb: Callback<Java.GFunction>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.groovy.function.GSupplier', arg0: Java.Closure, cb: Callback<Java.GSupplier>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.groovy.function.GUnaryOperator', arg0: Java.Closure, cb: Callback<Java.GUnaryOperator>): void;
-  export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', arg0: object_t, arg1: object_t, arg2: long_t, cb: Callback<Java.GremlinGroovyScriptEngine>): void;
-  export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', arg0: object_t, arg1: object_t, cb: Callback<Java.GremlinGroovyScriptEngine>): void;
+  export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', arg0: object_array_t, cb: Callback<Java.GremlinGroovyScriptEngine>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', arg0: object_t, cb: Callback<Java.GremlinGroovyScriptEngine>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', cb: Callback<Java.GremlinGroovyScriptEngine>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.process.computer.KeyValue', arg0: object_t, arg1: object_t, cb: Callback<Java.KeyValue>): void;
@@ -2687,7 +2695,7 @@ export module Java {
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.EventStrategy$DefaultEventQueue', cb: Callback<Java.EventStrategy$DefaultEventQueue>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.EventStrategy$EventStrategyCallback', arg0: Java.EventStrategy, arg1: Java.EventStrategy$EventQueue, cb: Callback<Java.EventStrategy$EventStrategyCallback>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.EventStrategy$TransactionalEventQueue', arg0: Java.Graph, cb: Callback<Java.EventStrategy$TransactionalEventQueue>): void;
-  export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException', arg0: string_t, arg1: Java.Traversal, cb: Callback<Java.ComputerVerificationException>): void;
+  export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException', arg0: string_t, arg1: Java.Traversal, cb: Callback<Java.VerificationException>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions', cb: Callback<Java.Traversal$Exceptions>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.process.traversal.TraversalSideEffects$Exceptions', cb: Callback<Java.TraversalSideEffects$Exceptions>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategies$GlobalCache', cb: Callback<Java.TraversalStrategies$GlobalCache>): void;
@@ -2715,7 +2723,7 @@ export module Java {
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.structure.io.graphml.GraphMLWriterHelper$IndentingXMLStreamWriter', arg0: object_t, cb: Callback<Java.GraphMLWriterHelper$IndentingXMLStreamWriter>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONIo$Builder', cb: Callback<Java.GraphSONIo$Builder>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoIo$Builder', cb: Callback<Java.GryoIo$Builder>): void;
-  export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool', arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.Optional, cb: Callback<Java.GryoPool>): void;
+  export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool', arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.List, cb: Callback<Java.GryoPool>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool', arg0: object_t, cb: Callback<Java.GryoPool>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool', arg0: integer_t, cb: Callback<Java.GryoPool>): void;
   export function newInstanceA(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.VertexByteArrayInputStream', arg0: Java.InputStream, cb: Callback<Java.VertexByteArrayInputStream>): void;
@@ -2865,8 +2873,7 @@ export module Java {
   export function newInstance(className: 'GFunction', arg0: Java.Closure): Java.GFunction;
   export function newInstance(className: 'GSupplier', arg0: Java.Closure): Java.GSupplier;
   export function newInstance(className: 'GUnaryOperator', arg0: Java.Closure): Java.GUnaryOperator;
-  export function newInstance(className: 'GremlinGroovyScriptEngine', arg0: object_t, arg1: object_t, arg2: long_t): Java.GremlinGroovyScriptEngine;
-  export function newInstance(className: 'GremlinGroovyScriptEngine', arg0: object_t, arg1: object_t): Java.GremlinGroovyScriptEngine;
+  export function newInstance(className: 'GremlinGroovyScriptEngine', ...arg0: object_t[]): Java.GremlinGroovyScriptEngine;
   export function newInstance(className: 'GremlinGroovyScriptEngine', arg0: object_t): Java.GremlinGroovyScriptEngine;
   export function newInstance(className: 'GremlinGroovyScriptEngine'): Java.GremlinGroovyScriptEngine;
   export function newInstance(className: 'KeyValue', arg0: object_t, arg1: object_t): Java.KeyValue;
@@ -2919,7 +2926,7 @@ export module Java {
   export function newInstance(className: 'EventStrategy$DefaultEventQueue'): Java.EventStrategy$DefaultEventQueue;
   export function newInstance(className: 'EventStrategy$EventStrategyCallback', arg0: Java.EventStrategy, arg1: Java.EventStrategy$EventQueue): Java.EventStrategy$EventStrategyCallback;
   export function newInstance(className: 'EventStrategy$TransactionalEventQueue', arg0: Java.Graph): Java.EventStrategy$TransactionalEventQueue;
-  export function newInstance(className: 'ComputerVerificationException', arg0: string_t, arg1: Java.Traversal): Java.ComputerVerificationException;
+  export function newInstance(className: 'VerificationException', arg0: string_t, arg1: Java.Traversal): Java.VerificationException;
   export function newInstance(className: 'Traversal$Exceptions'): Java.Traversal$Exceptions;
   export function newInstance(className: 'TraversalSideEffects$Exceptions'): Java.TraversalSideEffects$Exceptions;
   export function newInstance(className: 'TraversalStrategies$GlobalCache'): Java.TraversalStrategies$GlobalCache;
@@ -2947,7 +2954,7 @@ export module Java {
   export function newInstance(className: 'GraphMLWriterHelper$IndentingXMLStreamWriter', arg0: object_t): Java.GraphMLWriterHelper$IndentingXMLStreamWriter;
   export function newInstance(className: 'GraphSONIo$Builder'): Java.GraphSONIo$Builder;
   export function newInstance(className: 'GryoIo$Builder'): Java.GryoIo$Builder;
-  export function newInstance(className: 'GryoPool', arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.Optional): Java.GryoPool;
+  export function newInstance(className: 'GryoPool', arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.List): Java.GryoPool;
   export function newInstance(className: 'GryoPool', arg0: object_t): Java.GryoPool;
   export function newInstance(className: 'GryoPool', arg0: integer_t): Java.GryoPool;
   export function newInstance(className: 'VertexByteArrayInputStream', arg0: Java.InputStream): Java.VertexByteArrayInputStream;
@@ -3091,8 +3098,7 @@ export module Java {
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.groovy.function.GFunction', arg0: Java.Closure): Java.GFunction;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.groovy.function.GSupplier', arg0: Java.Closure): Java.GSupplier;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.groovy.function.GUnaryOperator', arg0: Java.Closure): Java.GUnaryOperator;
-  export function newInstance(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', arg0: object_t, arg1: object_t, arg2: long_t): Java.GremlinGroovyScriptEngine;
-  export function newInstance(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', arg0: object_t, arg1: object_t): Java.GremlinGroovyScriptEngine;
+  export function newInstance(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', ...arg0: object_t[]): Java.GremlinGroovyScriptEngine;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', arg0: object_t): Java.GremlinGroovyScriptEngine;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine'): Java.GremlinGroovyScriptEngine;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.process.computer.KeyValue', arg0: object_t, arg1: object_t): Java.KeyValue;
@@ -3145,7 +3151,7 @@ export module Java {
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.EventStrategy$DefaultEventQueue'): Java.EventStrategy$DefaultEventQueue;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.EventStrategy$EventStrategyCallback', arg0: Java.EventStrategy, arg1: Java.EventStrategy$EventQueue): Java.EventStrategy$EventStrategyCallback;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.EventStrategy$TransactionalEventQueue', arg0: Java.Graph): Java.EventStrategy$TransactionalEventQueue;
-  export function newInstance(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException', arg0: string_t, arg1: Java.Traversal): Java.ComputerVerificationException;
+  export function newInstance(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException', arg0: string_t, arg1: Java.Traversal): Java.VerificationException;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions'): Java.Traversal$Exceptions;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.process.traversal.TraversalSideEffects$Exceptions'): Java.TraversalSideEffects$Exceptions;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategies$GlobalCache'): Java.TraversalStrategies$GlobalCache;
@@ -3173,7 +3179,7 @@ export module Java {
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.structure.io.graphml.GraphMLWriterHelper$IndentingXMLStreamWriter', arg0: object_t): Java.GraphMLWriterHelper$IndentingXMLStreamWriter;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONIo$Builder'): Java.GraphSONIo$Builder;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoIo$Builder'): Java.GryoIo$Builder;
-  export function newInstance(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool', arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.Optional): Java.GryoPool;
+  export function newInstance(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool', arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.List): Java.GryoPool;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool', arg0: object_t): Java.GryoPool;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool', arg0: integer_t): Java.GryoPool;
   export function newInstance(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.VertexByteArrayInputStream', arg0: Java.InputStream): Java.VertexByteArrayInputStream;
@@ -3323,8 +3329,7 @@ export module Java {
   export function newInstanceP(className: 'GFunction', arg0: Java.Closure): Promise<Java.GFunction>;
   export function newInstanceP(className: 'GSupplier', arg0: Java.Closure): Promise<Java.GSupplier>;
   export function newInstanceP(className: 'GUnaryOperator', arg0: Java.Closure): Promise<Java.GUnaryOperator>;
-  export function newInstanceP(className: 'GremlinGroovyScriptEngine', arg0: object_t, arg1: object_t, arg2: long_t): Promise<Java.GremlinGroovyScriptEngine>;
-  export function newInstanceP(className: 'GremlinGroovyScriptEngine', arg0: object_t, arg1: object_t): Promise<Java.GremlinGroovyScriptEngine>;
+  export function newInstanceP(className: 'GremlinGroovyScriptEngine', ...arg0: object_t[]): Promise<Java.GremlinGroovyScriptEngine>;
   export function newInstanceP(className: 'GremlinGroovyScriptEngine', arg0: object_t): Promise<Java.GremlinGroovyScriptEngine>;
   export function newInstanceP(className: 'GremlinGroovyScriptEngine'): Promise<Java.GremlinGroovyScriptEngine>;
   export function newInstanceP(className: 'KeyValue', arg0: object_t, arg1: object_t): Promise<Java.KeyValue>;
@@ -3377,7 +3382,7 @@ export module Java {
   export function newInstanceP(className: 'EventStrategy$DefaultEventQueue'): Promise<Java.EventStrategy$DefaultEventQueue>;
   export function newInstanceP(className: 'EventStrategy$EventStrategyCallback', arg0: Java.EventStrategy, arg1: Java.EventStrategy$EventQueue): Promise<Java.EventStrategy$EventStrategyCallback>;
   export function newInstanceP(className: 'EventStrategy$TransactionalEventQueue', arg0: Java.Graph): Promise<Java.EventStrategy$TransactionalEventQueue>;
-  export function newInstanceP(className: 'ComputerVerificationException', arg0: string_t, arg1: Java.Traversal): Promise<Java.ComputerVerificationException>;
+  export function newInstanceP(className: 'VerificationException', arg0: string_t, arg1: Java.Traversal): Promise<Java.VerificationException>;
   export function newInstanceP(className: 'Traversal$Exceptions'): Promise<Java.Traversal$Exceptions>;
   export function newInstanceP(className: 'TraversalSideEffects$Exceptions'): Promise<Java.TraversalSideEffects$Exceptions>;
   export function newInstanceP(className: 'TraversalStrategies$GlobalCache'): Promise<Java.TraversalStrategies$GlobalCache>;
@@ -3405,7 +3410,7 @@ export module Java {
   export function newInstanceP(className: 'GraphMLWriterHelper$IndentingXMLStreamWriter', arg0: object_t): Promise<Java.GraphMLWriterHelper$IndentingXMLStreamWriter>;
   export function newInstanceP(className: 'GraphSONIo$Builder'): Promise<Java.GraphSONIo$Builder>;
   export function newInstanceP(className: 'GryoIo$Builder'): Promise<Java.GryoIo$Builder>;
-  export function newInstanceP(className: 'GryoPool', arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.Optional): Promise<Java.GryoPool>;
+  export function newInstanceP(className: 'GryoPool', arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.List): Promise<Java.GryoPool>;
   export function newInstanceP(className: 'GryoPool', arg0: object_t): Promise<Java.GryoPool>;
   export function newInstanceP(className: 'GryoPool', arg0: integer_t): Promise<Java.GryoPool>;
   export function newInstanceP(className: 'VertexByteArrayInputStream', arg0: Java.InputStream): Promise<Java.VertexByteArrayInputStream>;
@@ -3549,8 +3554,7 @@ export module Java {
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.groovy.function.GFunction', arg0: Java.Closure): Promise<Java.GFunction>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.groovy.function.GSupplier', arg0: Java.Closure): Promise<Java.GSupplier>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.groovy.function.GUnaryOperator', arg0: Java.Closure): Promise<Java.GUnaryOperator>;
-  export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', arg0: object_t, arg1: object_t, arg2: long_t): Promise<Java.GremlinGroovyScriptEngine>;
-  export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', arg0: object_t, arg1: object_t): Promise<Java.GremlinGroovyScriptEngine>;
+  export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', ...arg0: object_t[]): Promise<Java.GremlinGroovyScriptEngine>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine', arg0: object_t): Promise<Java.GremlinGroovyScriptEngine>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine'): Promise<Java.GremlinGroovyScriptEngine>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.process.computer.KeyValue', arg0: object_t, arg1: object_t): Promise<Java.KeyValue>;
@@ -3603,7 +3607,7 @@ export module Java {
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.EventStrategy$DefaultEventQueue'): Promise<Java.EventStrategy$DefaultEventQueue>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.EventStrategy$EventStrategyCallback', arg0: Java.EventStrategy, arg1: Java.EventStrategy$EventQueue): Promise<Java.EventStrategy$EventStrategyCallback>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.decoration.EventStrategy$TransactionalEventQueue', arg0: Java.Graph): Promise<Java.EventStrategy$TransactionalEventQueue>;
-  export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException', arg0: string_t, arg1: Java.Traversal): Promise<Java.ComputerVerificationException>;
+  export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException', arg0: string_t, arg1: Java.Traversal): Promise<Java.VerificationException>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions'): Promise<Java.Traversal$Exceptions>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.process.traversal.TraversalSideEffects$Exceptions'): Promise<Java.TraversalSideEffects$Exceptions>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategies$GlobalCache'): Promise<Java.TraversalStrategies$GlobalCache>;
@@ -3631,7 +3635,7 @@ export module Java {
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.structure.io.graphml.GraphMLWriterHelper$IndentingXMLStreamWriter', arg0: object_t): Promise<Java.GraphMLWriterHelper$IndentingXMLStreamWriter>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONIo$Builder'): Promise<Java.GraphSONIo$Builder>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoIo$Builder'): Promise<Java.GryoIo$Builder>;
-  export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool', arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.Optional): Promise<Java.GryoPool>;
+  export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool', arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.List): Promise<Java.GryoPool>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool', arg0: object_t): Promise<Java.GryoPool>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool', arg0: integer_t): Promise<Java.GryoPool>;
   export function newInstanceP(className: 'org.apache.tinkerpop.gremlin.structure.io.gryo.VertexByteArrayInputStream', arg0: Java.InputStream): Promise<Java.VertexByteArrayInputStream>;
@@ -3888,10 +3892,11 @@ export module Java {
   export function newArray(className: 'IncidentToAdjacentStrategy', arg: Java.IncidentToAdjacentStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.IncidentToAdjacentStrategy>;
   export function newArray(className: 'MatchPredicateStrategy', arg: Java.MatchPredicateStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.MatchPredicateStrategy>;
   export function newArray(className: 'RangeByIsCountStrategy', arg: Java.RangeByIsCountStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.RangeByIsCountStrategy>;
-  export function newArray(className: 'ComputerVerificationException', arg: Java.ComputerVerificationException[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException>;
   export function newArray(className: 'ComputerVerificationStrategy', arg: Java.ComputerVerificationStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationStrategy>;
   export function newArray(className: 'LambdaRestrictionStrategy', arg: Java.LambdaRestrictionStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.LambdaRestrictionStrategy>;
   export function newArray(className: 'ReadOnlyStrategy', arg: Java.ReadOnlyStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy>;
+  export function newArray(className: 'StandardVerificationStrategy', arg: Java.StandardVerificationStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy>;
+  export function newArray(className: 'VerificationException', arg: Java.VerificationException[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException>;
   export function newArray(className: 'Traversal', arg: Java.Traversal[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.Traversal>;
   export function newArray(className: 'Traversal$Admin', arg: Java.Traversal$Admin[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin>;
   export function newArray(className: 'Traversal$Exceptions', arg: Java.Traversal$Exceptions[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions>;
@@ -4038,6 +4043,7 @@ export module Java {
   export function newArray(className: 'ElementHelper', arg: Java.ElementHelper[]): array_t<org.apache.tinkerpop.gremlin.structure.util.ElementHelper>;
   export function newArray(className: 'FeatureDescriptor', arg: Java.FeatureDescriptor[]): array_t<org.apache.tinkerpop.gremlin.structure.util.FeatureDescriptor>;
   export function newArray(className: 'GraphFactory', arg: Java.GraphFactory[]): array_t<org.apache.tinkerpop.gremlin.structure.util.GraphFactory>;
+  export function newArray(className: 'GraphFactoryClass', arg: Java.GraphFactoryClass[]): array_t<org.apache.tinkerpop.gremlin.structure.util.GraphFactoryClass>;
   export function newArray(className: 'GraphVariableHelper', arg: Java.GraphVariableHelper[]): array_t<org.apache.tinkerpop.gremlin.structure.util.GraphVariableHelper>;
   export function newArray(className: 'Host', arg: Java.Host[]): array_t<org.apache.tinkerpop.gremlin.structure.util.Host>;
   export function newArray(className: 'StringFactory', arg: Java.StringFactory[]): array_t<org.apache.tinkerpop.gremlin.structure.util.StringFactory>;
@@ -4302,10 +4308,11 @@ export module Java {
   export function newArray(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.IncidentToAdjacentStrategy', arg: Java.IncidentToAdjacentStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.IncidentToAdjacentStrategy>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.MatchPredicateStrategy', arg: Java.MatchPredicateStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.MatchPredicateStrategy>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.RangeByIsCountStrategy', arg: Java.RangeByIsCountStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.RangeByIsCountStrategy>;
-  export function newArray(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException', arg: Java.ComputerVerificationException[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationStrategy', arg: Java.ComputerVerificationStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationStrategy>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.LambdaRestrictionStrategy', arg: Java.LambdaRestrictionStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.LambdaRestrictionStrategy>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy', arg: Java.ReadOnlyStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy>;
+  export function newArray(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy', arg: Java.StandardVerificationStrategy[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy>;
+  export function newArray(className: 'org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException', arg: Java.VerificationException[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.process.traversal.Traversal', arg: Java.Traversal[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.Traversal>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin', arg: Java.Traversal$Admin[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions', arg: Java.Traversal$Exceptions[]): array_t<org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions>;
@@ -4452,6 +4459,7 @@ export module Java {
   export function newArray(className: 'org.apache.tinkerpop.gremlin.structure.util.ElementHelper', arg: Java.ElementHelper[]): array_t<org.apache.tinkerpop.gremlin.structure.util.ElementHelper>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.structure.util.FeatureDescriptor', arg: Java.FeatureDescriptor[]): array_t<org.apache.tinkerpop.gremlin.structure.util.FeatureDescriptor>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.structure.util.GraphFactory', arg: Java.GraphFactory[]): array_t<org.apache.tinkerpop.gremlin.structure.util.GraphFactory>;
+  export function newArray(className: 'org.apache.tinkerpop.gremlin.structure.util.GraphFactoryClass', arg: Java.GraphFactoryClass[]): array_t<org.apache.tinkerpop.gremlin.structure.util.GraphFactoryClass>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.structure.util.GraphVariableHelper', arg: Java.GraphVariableHelper[]): array_t<org.apache.tinkerpop.gremlin.structure.util.GraphVariableHelper>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.structure.util.Host', arg: Java.Host[]): array_t<org.apache.tinkerpop.gremlin.structure.util.Host>;
   export function newArray(className: 'org.apache.tinkerpop.gremlin.structure.util.StringFactory', arg: Java.StringFactory[]): array_t<org.apache.tinkerpop.gremlin.structure.util.StringFactory>;
@@ -4759,10 +4767,11 @@ export module Java {
   export import IncidentToAdjacentStrategy = org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.IncidentToAdjacentStrategy;
   export import MatchPredicateStrategy = org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.MatchPredicateStrategy;
   export import RangeByIsCountStrategy = org.apache.tinkerpop.gremlin.process.traversal.strategy.optimization.RangeByIsCountStrategy;
-  export import ComputerVerificationException = org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException;
   export import ComputerVerificationStrategy = org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationStrategy;
   export import LambdaRestrictionStrategy = org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.LambdaRestrictionStrategy;
   export import ReadOnlyStrategy = org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy;
+  export import StandardVerificationStrategy = org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy;
+  export import VerificationException = org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException;
   export import Traversal = org.apache.tinkerpop.gremlin.process.traversal.Traversal;
   export import Traversal$Admin = org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin;
   export import Traversal$Exceptions = org.apache.tinkerpop.gremlin.process.traversal.Traversal$Exceptions;
@@ -4909,6 +4918,7 @@ export module Java {
   export import ElementHelper = org.apache.tinkerpop.gremlin.structure.util.ElementHelper;
   export import FeatureDescriptor = org.apache.tinkerpop.gremlin.structure.util.FeatureDescriptor;
   export import GraphFactory = org.apache.tinkerpop.gremlin.structure.util.GraphFactory;
+  export import GraphFactoryClass = org.apache.tinkerpop.gremlin.structure.util.GraphFactoryClass;
   export import GraphVariableHelper = org.apache.tinkerpop.gremlin.structure.util.GraphVariableHelper;
   export import Host = org.apache.tinkerpop.gremlin.structure.util.Host;
   export import StringFactory = org.apache.tinkerpop.gremlin.structure.util.StringFactory;
@@ -11127,6 +11137,9 @@ export module Java {
       // public <T> T org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine.getInterface(java.lang.Class<T>)
       getInterface(arg0: Java.Class): object_t;
       getInterfaceP(arg0: Java.Class): Promise<object_t>;
+      // public java.util.Set org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine.getPlugins()
+      getPlugins(): Java.Set;
+      getPluginsP(): Promise<Java.Set>;
       // public native int java.lang.Object.hashCode()
       hashCode(): number;
       hashCodeP(): Promise<number>;
@@ -11188,12 +11201,13 @@ export module Java {
     }
     export module GremlinGroovyScriptEngine {
       export interface Static {
-        DEFAULT_SCRIPT_EVALUATION_TIMEOUT: longValue_t;
+        COMPILE_OPTIONS_VAR_TYPES: string;
         KEY_REFERENCE_TYPE: string;
         REFERENCE_TYPE_PHANTOM: string;
         REFERENCE_TYPE_WEAK: string;
         REFERENCE_TYPE_SOFT: string;
         REFERENCE_TYPE_HARD: string;
+        COMPILE_OPTIONS: object_t;
         ARGV: string;
         FILENAME: string;
         ENGINE: string;
@@ -11202,8 +11216,7 @@ export module Java {
         LANGUAGE: string;
         LANGUAGE_VERSION: string;
         class: Java.Class;
-        new (arg0: object_t, arg1: object_t, arg2: long_t): org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
-        new (arg0: object_t, arg1: object_t): org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
+        new (...arg0: object_t[]): org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
         new (arg0: object_t): org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
         new (): org.apache.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
       }
@@ -20376,6 +20389,9 @@ export module Java {
       // public final native java.lang.Class<?> java.lang.Object.getClass()
       getClass(): Java.Class;
       getClassP(): Promise<Java.Class>;
+      // public java.util.Comparator<E> org.apache.tinkerpop.gremlin.process.traversal.step.util.TraversalComparator.getComparator()
+      getComparator(): Java.Comparator;
+      getComparatorP(): Promise<Java.Comparator>;
       // public org.apache.tinkerpop.gremlin.process.traversal.Traversal.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin<S, E> org.apache.tinkerpop.gremlin.process.traversal.step.util.TraversalComparator.getTraversal()
       getTraversal(): Java.Traversal$Admin;
       getTraversalP(): Promise<Java.Traversal$Admin>;
@@ -21836,83 +21852,6 @@ export module Java {
   }
 
   export module org.apache.tinkerpop.gremlin.process.traversal.strategy.verification {
-    export interface ComputerVerificationException extends Java.java.lang.Object {
-      // public final synchronized void java.lang.Throwable.addSuppressed(java.lang.Throwable)
-      addSuppressed(arg0: object_t): void;
-      addSuppressedP(arg0: object_t): Promise<void>;
-      // public boolean java.lang.Object.equals(java.lang.Object)
-      equals(arg0: object_t): boolean;
-      equalsP(arg0: object_t): Promise<boolean>;
-      // public synchronized java.lang.Throwable java.lang.Throwable.fillInStackTrace()
-      fillInStackTrace(): object_t;
-      fillInStackTraceP(): Promise<object_t>;
-      // public synchronized java.lang.Throwable java.lang.Throwable.getCause()
-      getCause(): object_t;
-      getCauseP(): Promise<object_t>;
-      // public final native java.lang.Class<?> java.lang.Object.getClass()
-      getClass(): Java.Class;
-      getClassP(): Promise<Java.Class>;
-      // public java.lang.String java.lang.Throwable.getLocalizedMessage()
-      getLocalizedMessage(): string;
-      getLocalizedMessageP(): Promise<string>;
-      // public java.lang.String java.lang.Throwable.getMessage()
-      getMessage(): string;
-      getMessageP(): Promise<string>;
-      // public java.lang.StackTraceElement[] java.lang.Throwable.getStackTrace()
-      getStackTrace(): object_t[];
-      getStackTraceP(): Promise<object_t[]>;
-      // public final synchronized java.lang.Throwable[] java.lang.Throwable.getSuppressed()
-      getSuppressed(): object_t[];
-      getSuppressedP(): Promise<object_t[]>;
-      // public org.apache.tinkerpop.gremlin.process.traversal.Traversal org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException.getTraversal()
-      getTraversal(): Java.Traversal;
-      getTraversalP(): Promise<Java.Traversal>;
-      // public native int java.lang.Object.hashCode()
-      hashCode(): number;
-      hashCodeP(): Promise<number>;
-      // public synchronized java.lang.Throwable java.lang.Throwable.initCause(java.lang.Throwable)
-      initCause(arg0: object_t): object_t;
-      initCauseP(arg0: object_t): Promise<object_t>;
-      // public final native void java.lang.Object.notify()
-      notify(): void;
-      notifyP(): Promise<void>;
-      // public final native void java.lang.Object.notifyAll()
-      notifyAll(): void;
-      notifyAllP(): Promise<void>;
-      // public void java.lang.Throwable.printStackTrace(java.io.PrintWriter)
-      printStackTrace(arg0: object_t): void;
-      printStackTraceP(arg0: object_t): Promise<void>;
-      // public void java.lang.Throwable.printStackTrace(java.io.PrintStream)
-      printStackTrace(arg0: object_t): void;
-      printStackTraceP(arg0: object_t): Promise<void>;
-      // public void java.lang.Throwable.printStackTrace()
-      printStackTrace(): void;
-      printStackTraceP(): Promise<void>;
-      // public void java.lang.Throwable.setStackTrace(java.lang.StackTraceElement[])
-      setStackTrace(arg0: object_array_t): void;
-      setStackTraceP(arg0: object_array_t): Promise<void>;
-      // public java.lang.String java.lang.Object.toString()
-      toString(): string;
-      toStringP(): Promise<string>;
-      // public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
-      wait(arg0: long_t, arg1: integer_t): void;
-      waitP(arg0: long_t, arg1: integer_t): Promise<void>;
-      // public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
-      wait(arg0: long_t): void;
-      waitP(arg0: long_t): Promise<void>;
-      // public final void java.lang.Object.wait() throws java.lang.InterruptedException
-      wait(): void;
-      waitP(): Promise<void>;
-    }
-    export module ComputerVerificationException {
-      export interface Static {
-        class: Java.Class;
-        new (arg0: string_t, arg1: Java.Traversal): org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ComputerVerificationException;
-      }
-    }
-  }
-
-  export module org.apache.tinkerpop.gremlin.process.traversal.strategy.verification {
     export interface ComputerVerificationStrategy extends Java.java.lang.Object, Java.org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy$VerificationStrategy {
       // public abstract void org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy.apply(org.apache.tinkerpop.gremlin.process.traversal.Traversal.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin<?, ?>)
       apply(arg0: Java.Traversal$Admin): void;
@@ -22082,6 +22021,141 @@ export module Java {
         // public static org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.ReadOnlyStrategy.instance()
         instance(): Java.ReadOnlyStrategy;
         instanceP(): Promise<Java.ReadOnlyStrategy>;
+      }
+    }
+  }
+
+  export module org.apache.tinkerpop.gremlin.process.traversal.strategy.verification {
+    export interface StandardVerificationStrategy extends Java.java.lang.Object, Java.org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy$VerificationStrategy {
+      // public abstract void org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy.apply(org.apache.tinkerpop.gremlin.process.traversal.Traversal.org.apache.tinkerpop.gremlin.process.traversal.Traversal$Admin<?, ?>)
+      apply(arg0: Java.Traversal$Admin): void;
+      applyP(arg0: Java.Traversal$Admin): Promise<void>;
+      // public default java.util.Set<java.lang.Class<? extends S>> org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy.applyPost()
+      applyPost(): Java.Set;
+      applyPostP(): Promise<Java.Set>;
+      // public default java.util.Set<java.lang.Class<? extends S>> org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy.applyPrior()
+      applyPrior(): Java.Set;
+      applyPriorP(): Promise<Java.Set>;
+      // public default int org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy.compareTo(java.lang.Object)
+      compareTo(arg0: object_t): number;
+      compareToP(arg0: object_t): Promise<number>;
+      // public default int org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy.compareTo(java.lang.Class<? extends org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy>)
+      compareTo(arg0: Java.Class): number;
+      compareToP(arg0: Java.Class): Promise<number>;
+      // public boolean java.lang.Object.equals(java.lang.Object)
+      equals(arg0: object_t): boolean;
+      equalsP(arg0: object_t): Promise<boolean>;
+      // public final native java.lang.Class<?> java.lang.Object.getClass()
+      getClass(): Java.Class;
+      getClassP(): Promise<Java.Class>;
+      // public default java.lang.Class<S> org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategy.getTraversalCategory()
+      getTraversalCategory(): Java.Class;
+      getTraversalCategoryP(): Promise<Java.Class>;
+      // public native int java.lang.Object.hashCode()
+      hashCode(): number;
+      hashCodeP(): Promise<number>;
+      // public final native void java.lang.Object.notify()
+      notify(): void;
+      notifyP(): Promise<void>;
+      // public final native void java.lang.Object.notifyAll()
+      notifyAll(): void;
+      notifyAllP(): Promise<void>;
+      // public java.lang.String java.lang.Object.toString()
+      toString(): string;
+      toStringP(): Promise<string>;
+      // public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
+      wait(arg0: long_t, arg1: integer_t): void;
+      waitP(arg0: long_t, arg1: integer_t): Promise<void>;
+      // public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
+      wait(arg0: long_t): void;
+      waitP(arg0: long_t): Promise<void>;
+      // public final void java.lang.Object.wait() throws java.lang.InterruptedException
+      wait(): void;
+      waitP(): Promise<void>;
+    }
+    export module StandardVerificationStrategy {
+      export interface Static {
+        class: Java.Class;
+        // public static org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.StandardVerificationStrategy.instance()
+        instance(): Java.StandardVerificationStrategy;
+        instanceP(): Promise<Java.StandardVerificationStrategy>;
+      }
+    }
+  }
+
+  export module org.apache.tinkerpop.gremlin.process.traversal.strategy.verification {
+    export interface VerificationException extends Java.java.lang.Object {
+      // public final synchronized void java.lang.Throwable.addSuppressed(java.lang.Throwable)
+      addSuppressed(arg0: object_t): void;
+      addSuppressedP(arg0: object_t): Promise<void>;
+      // public boolean java.lang.Object.equals(java.lang.Object)
+      equals(arg0: object_t): boolean;
+      equalsP(arg0: object_t): Promise<boolean>;
+      // public synchronized java.lang.Throwable java.lang.Throwable.fillInStackTrace()
+      fillInStackTrace(): object_t;
+      fillInStackTraceP(): Promise<object_t>;
+      // public synchronized java.lang.Throwable java.lang.Throwable.getCause()
+      getCause(): object_t;
+      getCauseP(): Promise<object_t>;
+      // public final native java.lang.Class<?> java.lang.Object.getClass()
+      getClass(): Java.Class;
+      getClassP(): Promise<Java.Class>;
+      // public java.lang.String java.lang.Throwable.getLocalizedMessage()
+      getLocalizedMessage(): string;
+      getLocalizedMessageP(): Promise<string>;
+      // public java.lang.String java.lang.Throwable.getMessage()
+      getMessage(): string;
+      getMessageP(): Promise<string>;
+      // public java.lang.StackTraceElement[] java.lang.Throwable.getStackTrace()
+      getStackTrace(): object_t[];
+      getStackTraceP(): Promise<object_t[]>;
+      // public final synchronized java.lang.Throwable[] java.lang.Throwable.getSuppressed()
+      getSuppressed(): object_t[];
+      getSuppressedP(): Promise<object_t[]>;
+      // public org.apache.tinkerpop.gremlin.process.traversal.Traversal org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException.getTraversal()
+      getTraversal(): Java.Traversal;
+      getTraversalP(): Promise<Java.Traversal>;
+      // public native int java.lang.Object.hashCode()
+      hashCode(): number;
+      hashCodeP(): Promise<number>;
+      // public synchronized java.lang.Throwable java.lang.Throwable.initCause(java.lang.Throwable)
+      initCause(arg0: object_t): object_t;
+      initCauseP(arg0: object_t): Promise<object_t>;
+      // public final native void java.lang.Object.notify()
+      notify(): void;
+      notifyP(): Promise<void>;
+      // public final native void java.lang.Object.notifyAll()
+      notifyAll(): void;
+      notifyAllP(): Promise<void>;
+      // public void java.lang.Throwable.printStackTrace(java.io.PrintWriter)
+      printStackTrace(arg0: object_t): void;
+      printStackTraceP(arg0: object_t): Promise<void>;
+      // public void java.lang.Throwable.printStackTrace(java.io.PrintStream)
+      printStackTrace(arg0: object_t): void;
+      printStackTraceP(arg0: object_t): Promise<void>;
+      // public void java.lang.Throwable.printStackTrace()
+      printStackTrace(): void;
+      printStackTraceP(): Promise<void>;
+      // public void java.lang.Throwable.setStackTrace(java.lang.StackTraceElement[])
+      setStackTrace(arg0: object_array_t): void;
+      setStackTraceP(arg0: object_array_t): Promise<void>;
+      // public java.lang.String java.lang.Object.toString()
+      toString(): string;
+      toStringP(): Promise<string>;
+      // public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
+      wait(arg0: long_t, arg1: integer_t): void;
+      waitP(arg0: long_t, arg1: integer_t): Promise<void>;
+      // public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
+      wait(arg0: long_t): void;
+      waitP(arg0: long_t): Promise<void>;
+      // public final void java.lang.Object.wait() throws java.lang.InterruptedException
+      wait(): void;
+      waitP(): Promise<void>;
+    }
+    export module VerificationException {
+      export interface Static {
+        class: Java.Class;
+        new (arg0: string_t, arg1: Java.Traversal): org.apache.tinkerpop.gremlin.process.traversal.strategy.verification.VerificationException;
       }
     }
   }
@@ -25388,7 +25462,7 @@ export module Java {
       // public default org.apache.tinkerpop.gremlin.structure.Vertex org.apache.tinkerpop.gremlin.structure.Graph.addVertex(java.lang.String)
       addVertex(arg0: string_t): Java.Vertex;
       addVertexP(arg0: string_t): Promise<Java.Vertex>;
-      // public abstract void java.lang.AutoCloseable.close() throws java.lang.Exception
+      // public abstract void org.apache.tinkerpop.gremlin.structure.Graph.close() throws java.lang.Exception
       close(): void;
       closeP(): Promise<void>;
       // public abstract <C> C org.apache.tinkerpop.gremlin.structure.Graph.compute(java.lang.Class<C>) throws java.lang.IllegalArgumentException
@@ -25814,6 +25888,9 @@ export module Java {
       // public default boolean org.apache.tinkerpop.gremlin.structure.Graph$Features$GraphFeatures.supportsComputer()
       supportsComputer(): boolean;
       supportsComputerP(): Promise<boolean>;
+      // public default boolean org.apache.tinkerpop.gremlin.structure.Graph$Features$GraphFeatures.supportsConcurrentAccess()
+      supportsConcurrentAccess(): boolean;
+      supportsConcurrentAccessP(): Promise<boolean>;
       // public default boolean org.apache.tinkerpop.gremlin.structure.Graph$Features$GraphFeatures.supportsPersistence()
       supportsPersistence(): boolean;
       supportsPersistenceP(): Promise<boolean>;
@@ -25833,6 +25910,7 @@ export module Java {
         FEATURE_TRANSACTIONS: string;
         FEATURE_PERSISTENCE: string;
         FEATURE_THREADED_TRANSACTIONS: string;
+        FEATURE_CONCURRENT_ACCESS: string;
         class: Java.Class;
       }
     }
@@ -26311,6 +26389,9 @@ export module Java {
       // public abstract java.lang.Class<? extends java.lang.annotation.Annotation> java.lang.annotation.Annotation.annotationType()
       annotationType(): Java.Class;
       annotationTypeP(): Promise<Java.Class>;
+      // public abstract java.lang.Class<? extends org.apache.tinkerpop.gremlin.process.computer.GraphComputer>[] org.apache.tinkerpop.gremlin.structure.Graph$OptOut.computers()
+      computers(): Java.Class[];
+      computersP(): Promise<Java.Class[]>;
       // public boolean java.lang.Object.equals(java.lang.Object)
       equals(arg0: object_t): boolean;
       equalsP(arg0: object_t): Promise<boolean>;
@@ -27487,6 +27568,9 @@ export module Java {
       // public java.lang.String java.lang.Object.toString()
       toString(): string;
       toStringP(): Promise<string>;
+      // public org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONReader$Builder.unwrapAdjacencyList(boolean)
+      unwrapAdjacencyList(arg0: boolean_t): Java.GraphSONReader$Builder;
+      unwrapAdjacencyListP(arg0: boolean_t): Promise<Java.GraphSONReader$Builder>;
       // public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
       wait(arg0: long_t, arg1: integer_t): void;
       waitP(arg0: long_t, arg1: integer_t): Promise<void>;
@@ -27776,6 +27860,9 @@ export module Java {
       // public final void java.lang.Object.wait() throws java.lang.InterruptedException
       wait(): void;
       waitP(): Promise<void>;
+      // public org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter$Builder org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONWriter$Builder.wrapAdjacencyList(boolean)
+      wrapAdjacencyList(arg0: boolean_t): Java.GraphSONWriter$Builder;
+      wrapAdjacencyListP(arg0: boolean_t): Promise<Java.GraphSONWriter$Builder>;
     }
     export module GraphSONWriter$Builder {
       export interface Static {
@@ -28280,7 +28367,7 @@ export module Java {
         CONFIG_IO_REGISTRY: string;
         CONFIG_IO_GRYO_POOL_SIZE: string;
         class: Java.Class;
-        new (arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.Optional): org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool;
+        new (arg0: integer_t, arg1: Java.GryoPool$Type, arg2: Java.List): org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool;
         new (arg0: object_t): org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool;
         new (arg0: integer_t): org.apache.tinkerpop.gremlin.structure.io.gryo.GryoPool;
       }
@@ -30719,6 +30806,31 @@ export module Java {
   }
 
   export module org.apache.tinkerpop.gremlin.structure.util {
+    export interface GraphFactoryClass extends Java.java.lang.Object {
+      // public abstract java.lang.Class<? extends java.lang.annotation.Annotation> java.lang.annotation.Annotation.annotationType()
+      annotationType(): Java.Class;
+      annotationTypeP(): Promise<Java.Class>;
+      // public boolean java.lang.Object.equals(java.lang.Object)
+      equals(arg0: object_t): boolean;
+      equalsP(arg0: object_t): Promise<boolean>;
+      // public native int java.lang.Object.hashCode()
+      hashCode(): number;
+      hashCodeP(): Promise<number>;
+      // public java.lang.String java.lang.Object.toString()
+      toString(): string;
+      toStringP(): Promise<string>;
+      // public abstract java.lang.Class<?> org.apache.tinkerpop.gremlin.structure.util.GraphFactoryClass.value()
+      value(): Java.Class;
+      valueP(): Promise<Java.Class>;
+    }
+    export module GraphFactoryClass {
+      export interface Static {
+        class: Java.Class;
+      }
+    }
+  }
+
+  export module org.apache.tinkerpop.gremlin.structure.util {
     export interface GraphVariableHelper extends Java.java.lang.Object {
       // public boolean java.lang.Object.equals(java.lang.Object)
       equals(arg0: object_t): boolean;
@@ -31804,7 +31916,7 @@ export module Java {
       // public void org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph.clear()
       clear(): void;
       clearP(): Promise<void>;
-      // public abstract void java.lang.AutoCloseable.close() throws java.lang.Exception
+      // public abstract void org.apache.tinkerpop.gremlin.structure.Graph.close() throws java.lang.Exception
       close(): void;
       closeP(): Promise<void>;
       // public abstract <C> C org.apache.tinkerpop.gremlin.structure.Graph.compute(java.lang.Class<C>) throws java.lang.IllegalArgumentException
@@ -32144,6 +32256,9 @@ export module Java {
       // public default boolean org.apache.tinkerpop.gremlin.structure.Graph$Features$GraphFeatures.supportsComputer()
       supportsComputer(): boolean;
       supportsComputerP(): Promise<boolean>;
+      // public default boolean org.apache.tinkerpop.gremlin.structure.Graph$Features$GraphFeatures.supportsConcurrentAccess()
+      supportsConcurrentAccess(): boolean;
+      supportsConcurrentAccessP(): Promise<boolean>;
       // public default boolean org.apache.tinkerpop.gremlin.structure.Graph$Features$GraphFeatures.supportsPersistence()
       supportsPersistence(): boolean;
       supportsPersistenceP(): Promise<boolean>;
@@ -32175,6 +32290,7 @@ export module Java {
         FEATURE_TRANSACTIONS: string;
         FEATURE_PERSISTENCE: string;
         FEATURE_THREADED_TRANSACTIONS: string;
+        FEATURE_CONCURRENT_ACCESS: string;
         class: Java.Class;
       }
     }
