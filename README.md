@@ -53,7 +53,7 @@ All of the `ts-tinkerpop` helper functions are in the one source file `lib/ts-ti
 
 In addition to the helper functions, `ts-tinkerpop` exposes much of the Tinkerpop 3 Java API.
 
-`ts-tinkerpop` is currently up to date with the latest release `3.0.0-incubating`. Our intent is to track Tinkerpop releases closely.
+`ts-tinkerpop` is currently up to date with the latest release `3.0.1-incubating`. Our intent is to track Tinkerpop releases closely.  The NPM version of this module will relate to the corresponding TinkerPop version.
 
 `ts-tinkerpop` currently exposes a significant subset of the Tinkerpop 3 `gremlin-core`, `gremlin-groovy` and `tinkergraph-gremlin` packages. The set of classes exposed largely aligns with the classes automatically imported by the Gremlin Groovy Console (listed by groovy console command `:show imports`), with the notable exception that `ts-tinkerpop` currently does not expose any classes from the `gremlin-driver` package.
 
